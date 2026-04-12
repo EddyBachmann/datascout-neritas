@@ -162,8 +162,9 @@ app.get('/api/check-lora-status', async (req, res) => {
     let parsed;
     try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
 
-    console.log('check-lora-status path:', path, 'status:', fpResp.status);
-    console.log('check-lora-status data:', JSON.stringify(parsed?.data).substring(0, 500));
+    console.log('check-lora-status HTTP status:', fpResp.status);
+    console.log('check-lora-status raw body:', fpResp.body.substring(0, 800));
+    console.log('check-lora-status data:', (JSON.stringify(parsed?.data) || '').substring(0, 500));
     res.json(parsed);
   } catch (err) {
     console.error('Erro check-lora-status:', err);
