@@ -980,8 +980,10 @@ async function listarTreinosAnteriores(){
     const resp = await fetch('/api/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
     const data = await resp.json();
 
-    /* Freepik pode retornar lista em data.data ou objeto único */
-    const items = Array.isArray(data?.data) ? data.data : (data?.data ? [data.data] : []);
+    /* GET /v1/ai/loras retorna { data: { default: [...], customs: [...] } }
+       customs = LoRAs criados pelo usuário (personagens treinados) */
+    const customs = Array.isArray(data?.data?.customs) ? data.data.customs : [];
+    const items = customs.length > 0 ? customs : (Array.isArray(data?.data) ? data.data : (data?.data ? [data.data] : []));
 
     if(items.length === 0){
       alert('Nenhum treino encontrado.\n\nResposta completa:\n' + JSON.stringify(data).substring(0,400));
@@ -991,30 +993,33 @@ async function listarTreinosAnteriores(){
     let msg = '=== TREINOS ENCONTRADOS (' + items.length + ') ===\n\n';
     items.forEach((t, i) => {
       const tid = t.task_id || t.id || '?';
-      const status = t.status || '?';
+      const status = t.training?.status || t.status || '?';
       const name = t.name || t.lora_name || '?';
       const loraId = t.lora_id || t.id || tid;
-      msg += (i+1) + '. ' + name + '\n   task_id: ' + tid + '\n   status: ' + status + '\n   lora_id: ' + loraId + '\n\n';
+      msg += (i+1) + '. ' + name + '\n   id: ' + loraId + '\n   status: ' + status + '\n   type: ' + (t.type||'?') + '\n\n';
     });
 
-    /* Pegar o mais recente COMPLETED automaticamente */
-    const completed = items.filter(t => t.status === 'COMPLETED');
+    /* Pegar o mais recente completed automaticamente */
+    const completed = items.filter(t => (t.training?.status || t.status || '').toLowerCase() === 'completed');
     if(completed.length > 0){
       const best = completed[completed.length - 1];
       const loraId = best.lora_id || best.id || best.task_id;
-      const ok = confirm(msg + '✅ Encontrado treino COMPLETED!\nDeseja ativar o personagem com este LoRA?\n\nlora_id: ' + loraId);
+      const ok = confirm(msg + '✅ Encontrado LoRA COMPLETED!\nDeseja ativar o personagem com este LoRA?\n\nlora_id: ' + loraId);
       if(ok){
         localStorage.setItem('ds_lora_id', loraId);
-        localStorage.setItem('ds_lora_task_id', best.task_id || loraId);
+        localStorage.setItem('ds_lora_task_id', best.task_id || String(loraId));
         localStorage.setItem('ds_lora_name', best.name || 'roseli-perfoll-v2');
         atualizarBrandUI();
         alert('Personagem ativado com sucesso!');
       }
     } else {
-      const inProgress = items.filter(t => t.status === 'IN_PROGRESS' || t.status === 'CREATED');
+      const inProgress = items.filter(t => {
+        const s = (t.training?.status || t.status || '').toLowerCase();
+        return s === 'in_progress' || s === 'created' || s === 'processing';
+      });
       if(inProgress.length > 0){
         const best = inProgress[inProgress.length - 1];
-        const tid = best.task_id || best.id;
+        const tid = best.task_id || String(best.id);
         if(tid){
           localStorage.setItem('ds_lora_task_id', tid);
           alert(msg + '⏳ Treino ainda em andamento.\ntask_id salvo: ' + tid + '\n\nTente "Verificar status" em alguns minutos.');

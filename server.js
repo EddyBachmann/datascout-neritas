@@ -140,7 +140,7 @@ app.get('/api/check-lora-status', async (req, res) => {
     /* Se task_id fornecido, consulta status via mystic; senão lista LoRAs registrados */
     const path = task_id
       ? '/v1/ai/mystic/' + task_id
-      : '/v1/ai/loras/characters';
+      : '/v1/ai/loras';
 
     const options = {
       hostname: 'api.freepik.com',
