@@ -137,10 +137,10 @@ app.get('/api/check-lora-status', async (req, res) => {
     const task_id = req.query.task_id;
     if (!fp_key) return res.status(400).json({ error: 'Chave Freepik nao fornecida.' });
 
-    /* Se task_id fornecido, consulta status específico da task */
+    /* Se task_id fornecido, consulta status via mystic; senão lista LoRAs registrados */
     const path = task_id
       ? '/v1/ai/mystic/' + task_id
-      : '/v1/ai/mystic';
+      : '/v1/ai/loras/characters';
 
     const options = {
       hostname: 'api.freepik.com',
@@ -162,9 +162,9 @@ app.get('/api/check-lora-status', async (req, res) => {
     let parsed;
     try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
 
-    console.log('check-lora-status HTTP status:', fpResp.status);
-    console.log('check-lora-status raw body:', fpResp.body.substring(0, 800));
-    console.log('check-lora-status data:', (JSON.stringify(parsed?.data) || '').substring(0, 500));
+    console.log('check-lora-status path:', path, 'HTTP status:', fpResp.status);
+    console.log('check-lora-status raw body:', fpResp.body.substring(0, 600));
+    console.log('check-lora-status data:', (JSON.stringify(parsed?.data) || '(vazio)').substring(0, 400));
     res.json(parsed);
   } catch (err) {
     console.error('Erro check-lora-status:', err);
