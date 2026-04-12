@@ -164,6 +164,8 @@ app.get('/api/check-lora-status', async (req, res) => {
       parsed.data = [];
     }
     console.log('check-lora-status response keys:', Object.keys(parsed || {}));
+    console.log('check-lora-status data type:', typeof parsed?.data, Array.isArray(parsed?.data));
+    console.log('check-lora-status data:', JSON.stringify(parsed?.data).substring(0, 500));
     res.json(parsed);
   } catch (err) {
     console.error('Erro check-lora-status:', err);
