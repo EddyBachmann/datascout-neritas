@@ -128,7 +128,58 @@ app.post('/api/register-character', async (req, res) => {
 });
 
 /* ─────────────────────────────────────────────────────────
-   GET /api/check-lora-status
+   POST /api/generate-image
+   Proxy para Freepik POST /v1/ai/mystic — evita CORS
+   ───────────────────────────────────────────────────────── */
+app.post('/api/generate-image', async (req, res) => {
+  try {
+    const { fp_key, ...body } = req.body;
+    if (!fp_key) return res.status(400).json({ error: 'Chave Freepik nao fornecida.' });
+
+    const payload = JSON.stringify(body);
+    const options = {
+      hostname: 'api.freepik.com',
+      path: '/v1/ai/mystic',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        'x-freepik-api-key': fp_key
+      }
+    };
+
+    const fpResp = await new Promise((resolve, reject) => {
+      const reqFp = https.request(options, (r) => {
+        let data = '';
+        r.on('data', chunk => data += chunk);
+        r.on('end', () => resolve({ status: r.statusCode, body: data }));
+      });
+      reqFp.on('error', reject);
+      reqFp.write(payload);
+      reqFp.end();
+    });
+
+    console.log('generate-image HTTP status:', fpResp.status);
+    console.log('generate-image body:', fpResp.body.substring(0, 300));
+
+    let parsed;
+    try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
+
+    if (fpResp.status >= 400) {
+      return res.status(fpResp.status).json({
+        error: parsed?.message || parsed?.detail || fpResp.body,
+        freepik_response: parsed
+      });
+    }
+
+    res.json(parsed);
+  } catch (err) {
+    console.error('Erro generate-image:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
    Proxy para Freepik GET /loras — verifica status do treino
    ───────────────────────────────────────────────────────── */
 app.get('/api/check-lora-status', async (req, res) => {

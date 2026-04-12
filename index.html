@@ -1240,18 +1240,15 @@ BRIEFING: ${briefingText.substring(0,500)}`
       setProgress(15, 'Gerando imagem...');
     }
 
-    const postResp = await fetch('https://api.freepik.com/v1/ai/mystic', {
+    const postResp = await fetch('/api/generate-image', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-freepik-api-key': fpKey
-      },
-      body: JSON.stringify(postBody)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fp_key: fpKey, ...postBody })
     });
 
     if(!postResp.ok){
       const errData = await postResp.json().catch(()=>({}));
-      const errMsg = errData?.message || errData?.error?.message || errData?.detail || ('HTTP '+postResp.status);
+      const errMsg = errData?.message || errData?.error || errData?.detail || ('HTTP '+postResp.status);
       throw new Error('Freepik: ' + errMsg);
     }
 
@@ -1278,9 +1275,7 @@ BRIEFING: ${briefingText.substring(0,500)}`
       const pct = Math.min(25 + tries * 2.8, 90);
       setProgress(pct, `Gerando... ${tries * 3}s`);
 
-      const getResp = await fetch(`https://api.freepik.com/v1/ai/mystic/${taskId}`, {
-        headers: { 'x-freepik-api-key': fpKey }
-      });
+      const getResp = await fetch(`/api/check-lora-status?fp_key=${encodeURIComponent(fpKey)}&task_id=${encodeURIComponent(taskId)}`);
 
       if(!getResp.ok){
         if(getResp.status === 404 && tries < 3){ continue; }
