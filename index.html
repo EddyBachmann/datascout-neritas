@@ -139,6 +139,7 @@
             <span id="lora-btn-label">Registrar personagem</span>
           </button>
           <div style="font-size:10px;color:#aaa;margin-top:.3rem">treina rosto + corpo · feito 1x</div>
+          <button onclick="verificarStatusLora()" style="margin-top:.4rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">Verificar status</button>
         </div>
       </div>
 
@@ -966,6 +967,46 @@ async function registrarCharacterLora(){
     btn.disabled = false;
     sp.style.display = 'none';
     lbl.textContent = 'Registrar personagem';
+  }
+}
+
+async function verificarStatusLora(){
+  const fpKey = getFpKey();
+  if(!fpKey){ alert('Insira a chave Freepik primeiro.'); return; }
+
+  try {
+    const resp = await fetch('/api/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
+    const data = await resp.json();
+    const loras = data?.data || [];
+    const arr = Array.isArray(loras) ? loras : [loras];
+
+    if(!arr.length){
+      alert('Nenhum LoRA encontrado na conta Freepik.');
+      return;
+    }
+
+    const msg = arr.map(l => {
+      const nome = l.name || l.id || 'sem nome';
+      const status = l.status || 'desconhecido';
+      const id = l.id || l.lora_id || '';
+      return nome + ' — ' + status + (id ? ' (ID: '+id+')' : '');
+    }).join('\n');
+
+    const escolha = confirm('LoRAs encontrados:\n\n' + msg + '\n\nClicar OK para usar o primeiro COMPLETED encontrado.');
+    if(escolha){
+      const completed = arr.find(l => l.status === 'COMPLETED');
+      if(completed){
+        const loraId = completed.id || completed.lora_id || completed.name;
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_name', completed.name || 'roseli-perfoll-v2');
+        atualizarBrandUI();
+        alert('Personagem ativado: ' + loraId);
+      } else {
+        alert('Nenhum LoRA COMPLETED ainda. Aguarde o treinamento terminar e tente novamente.');
+      }
+    }
+  } catch(e) {
+    alert('Erro ao verificar: ' + e.message);
   }
 }
 
