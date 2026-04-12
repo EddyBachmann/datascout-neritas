@@ -1,0 +1,12 @@
+{
+  "name": "datascout-neritas",
+  "version": "1.0.0",
+  "description": "DataScout — Sistema de inteligência de conteúdo Neritas",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
