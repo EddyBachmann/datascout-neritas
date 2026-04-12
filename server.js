@@ -75,12 +75,15 @@ app.post('/api/register-character', async (req, res) => {
     if (!images || images.length < 8) return res.status(400).json({ error: 'Minimo 8 imagens.' });
 
     const payload = JSON.stringify({
-      name: name || 'dra-roseli-perfoll',
+      name: name || 'roseli-perfoll-v2',
       description: description || 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
       quality: quality || 'high',
       gender: gender || 'female',
       images: images
     });
+
+    console.log('Enviando para Freepik — imagens:', images.slice(0,2));
+    console.log('Nome:', name, 'Qualidade:', quality, 'Genero:', gender);
 
     const options = {
       hostname: 'api.freepik.com',
@@ -104,7 +107,8 @@ app.post('/api/register-character', async (req, res) => {
       reqFp.end();
     });
 
-    console.log('Freepik LoRA response:', fpResp.status, fpResp.body.substring(0, 300));
+    console.log('Freepik LoRA status:', fpResp.status);
+    console.log('Freepik LoRA body:', fpResp.body);
 
     let parsed;
     try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
