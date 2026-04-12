@@ -156,6 +156,14 @@ app.get('/api/check-lora-status', async (req, res) => {
     let parsed;
     try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
 
+    /* Garantir que data seja sempre array para o .find() no frontend */
+    if(parsed && parsed.data && !Array.isArray(parsed.data)){
+      parsed.data = [parsed.data];
+    }
+    if(parsed && !parsed.data){
+      parsed.data = [];
+    }
+    console.log('check-lora-status response keys:', Object.keys(parsed || {}));
     res.json(parsed);
   } catch (err) {
     console.error('Erro check-lora-status:', err);
