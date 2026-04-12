@@ -140,6 +140,7 @@
           </button>
           <div style="font-size:10px;color:#aaa;margin-top:.3rem">treina rosto + corpo · feito 1x</div>
           <button onclick="verificarStatusLora()" style="margin-top:.4rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">Verificar status</button>
+          <button onclick="listarTreinosAnteriores()" style="margin-top:.3rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">🔍 Buscar treinos anteriores</button>
         </div>
       </div>
 
@@ -779,7 +780,7 @@ function atualizarBrandUI(){
     if(setup) setup.style.display = 'none';
     if(ativo) ativo.style.display = 'block';
     const info = document.getElementById('lora-ativo-info');
-    if(info) info.textContent = 'Character: ' + getLoraName() + ' · ID: ' + loraId.substring(0,8) + '...';
+    if(info) info.textContent = 'Character: ' + getLoraName() + ' · ID: ' + (loraId && loraId.length > 8 ? loraId.substring(0,8) + '...' : (loraId || 'pendente'));
     const prefixEl = document.getElementById('brand-prompt-prefix-ativo');
     if(prefixEl && !prefixEl.value) prefixEl.value = prefix;
     if(badge) badge.style.display = 'inline-flex';
@@ -968,6 +969,64 @@ async function registrarCharacterLora(){
     btn.disabled = false;
     sp.style.display = 'none';
     lbl.textContent = 'Registrar personagem';
+  }
+}
+
+async function listarTreinosAnteriores(){
+  const fpKey = getFpKey();
+  if(!fpKey){ alert('Insira a chave Freepik primeiro.'); return; }
+
+  try {
+    const resp = await fetch('/api/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
+    const data = await resp.json();
+
+    /* Freepik pode retornar lista em data.data ou objeto único */
+    const items = Array.isArray(data?.data) ? data.data : (data?.data ? [data.data] : []);
+
+    if(items.length === 0){
+      alert('Nenhum treino encontrado.\n\nResposta completa:\n' + JSON.stringify(data).substring(0,400));
+      return;
+    }
+
+    let msg = '=== TREINOS ENCONTRADOS (' + items.length + ') ===\n\n';
+    items.forEach((t, i) => {
+      const tid = t.task_id || t.id || '?';
+      const status = t.status || '?';
+      const name = t.name || t.lora_name || '?';
+      const loraId = t.lora_id || t.id || tid;
+      msg += (i+1) + '. ' + name + '\n   task_id: ' + tid + '\n   status: ' + status + '\n   lora_id: ' + loraId + '\n\n';
+    });
+
+    /* Pegar o mais recente COMPLETED automaticamente */
+    const completed = items.filter(t => t.status === 'COMPLETED');
+    if(completed.length > 0){
+      const best = completed[completed.length - 1];
+      const loraId = best.lora_id || best.id || best.task_id;
+      const ok = confirm(msg + '✅ Encontrado treino COMPLETED!\nDeseja ativar o personagem com este LoRA?\n\nlora_id: ' + loraId);
+      if(ok){
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_task_id', best.task_id || loraId);
+        localStorage.setItem('ds_lora_name', best.name || 'roseli-perfoll-v2');
+        atualizarBrandUI();
+        alert('Personagem ativado com sucesso!');
+      }
+    } else {
+      const inProgress = items.filter(t => t.status === 'IN_PROGRESS' || t.status === 'CREATED');
+      if(inProgress.length > 0){
+        const best = inProgress[inProgress.length - 1];
+        const tid = best.task_id || best.id;
+        if(tid){
+          localStorage.setItem('ds_lora_task_id', tid);
+          alert(msg + '⏳ Treino ainda em andamento.\ntask_id salvo: ' + tid + '\n\nTente "Verificar status" em alguns minutos.');
+        } else {
+          alert(msg);
+        }
+      } else {
+        alert(msg);
+      }
+    }
+  } catch(e) {
+    alert('Erro ao buscar treinos: ' + e.message);
   }
 }
 
