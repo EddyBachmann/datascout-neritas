@@ -894,83 +894,69 @@ async function registrarCharacterLora(){
       images: imageUrls
     };
 
-    const postResp = await fetch('https://api.freepik.com/v1/ai/loras/characters', {
+    const postResp = await fetch('/api/register-character', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-freepik-api-key': fpKey
-      },
-      body: JSON.stringify(postBody)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fp_key: fpKey,
+        name: loraName,
+        description: 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
+        quality: 'high',
+        gender: 'female',
+        images: imageUrls
+      })
     });
 
     if(!postResp.ok){
       const errData = await postResp.json().catch(()=>({}));
-      const errMsg = errData?.message || errData?.detail || ('HTTP '+postResp.status);
-      throw new Error('Freepik LoRA: ' + errMsg);
+      throw new Error('Freepik LoRA: ' + (errData?.error || errData?.message || 'HTTP '+postResp.status));
     }
 
     const postData = await postResp.json();
     const taskId = postData?.data?.task_id || null;
 
     if(!taskId){
-      throw new Error('task_id não retornado: ' + JSON.stringify(postData).substring(0,200));
+      throw new Error('task_id nao retornado: ' + JSON.stringify(postData).substring(0,200));
     }
 
-    /* Polling do treinamento — pode levar 10–30 minutos */
-    setProgress(30, 'Treinando modelo... pode levar 10–30 minutos');
+    setProgress(30, 'Treinando modelo... pode levar 10-30 minutos');
     lbl.textContent = 'Treinando...';
 
-    const MAX_TRIES = 120; /* 120 × 15s = 30 min */
+    const MAX_TRIES = 120;
     const INTERVAL = 15000;
     let tries = 0;
 
     while(tries < MAX_TRIES){
       await sleep(INTERVAL);
       tries++;
-
       const pct = Math.min(30 + tries * 0.5, 90);
       const mins = Math.round(tries * INTERVAL / 60000);
-      setProgress(pct, `Treinando... ${mins} min decorrido${mins!==1?'s':''}`);
+      setProgress(pct, 'Treinando... ' + mins + ' min' + (mins!==1?' decorridos':' decorrido'));
 
-      const getResp = await fetch('https://api.freepik.com/v1/ai/loras', {
-        headers: { 'x-freepik-api-key': fpKey }
-      });
-
+      const getResp = await fetch('/api/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
       if(!getResp.ok){ continue; }
 
       const getData = await getResp.json();
       const loras = getData?.data || [];
-
-      /* Procurar o lora pelo nome */
       const lora = loras.find(l => l.name === loraName || l.task_id === taskId);
-
       if(!lora){ continue; }
 
       const status = lora.status || 'IN_PROGRESS';
-
       if(status === 'FAILED'){
-        throw new Error('Treinamento falhou no Freepik. Tente novamente com fotos de maior qualidade.');
+        throw new Error('Treinamento falhou. Tente com fotos de maior qualidade.');
       }
-
       if(status === 'COMPLETED'){
         setProgress(100, 'Personagem registrado com sucesso!');
-
-        /* Salvar o ID do lora */
         const loraId = lora.id || lora.lora_id || loraName;
         localStorage.setItem('ds_lora_id', loraId);
         localStorage.setItem('ds_lora_name', loraName);
-
-        /* Limpar fotos temporárias do servidor */
-        if(sessionId){
-          fetch('/api/upload-photos/' + sessionId, { method: 'DELETE' }).catch(()=>{});
-        }
-
+        if(sessionId){ fetch('/api/upload-photos/' + sessionId, { method: 'DELETE' }).catch(()=>{}); }
         atualizarBrandUI();
         return;
       }
     }
 
-    throw new Error('Tempo limite de treinamento excedido. Verifique em freepik.com/developers/dashboard se o treinamento foi concluído e insira o ID manualmente.');
+    throw new Error('Tempo limite excedido. Verifique o dashboard Freepik se o treino concluiu.');
 
   } catch(err){
     setProgress(0, '');

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const https = require('https');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -16,6 +17,10 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 app.use(express.static(path.join(__dirname)));
 app.use('/uploads', express.static(UPLOADS_DIR));
 
+/* ─────────────────────────────────────────────────────────
+   POST /api/upload-photos
+   Recebe fotos base64, salva no servidor, retorna URLs
+   ───────────────────────────────────────────────────────── */
 app.post('/api/upload-photos', (req, res) => {
   try {
     const { photos, session_id } = req.body;
@@ -57,6 +62,107 @@ app.post('/api/upload-photos', (req, res) => {
   }
 });
 
+/* ─────────────────────────────────────────────────────────
+   POST /api/register-character
+   Proxy para Freepik /loras/characters — evita CORS
+   O servidor faz a chamada ao Freepik, não o navegador
+   ───────────────────────────────────────────────────────── */
+app.post('/api/register-character', async (req, res) => {
+  try {
+    const { fp_key, name, description, quality, gender, images } = req.body;
+
+    if (!fp_key) return res.status(400).json({ error: 'Chave Freepik nao fornecida.' });
+    if (!images || images.length < 8) return res.status(400).json({ error: 'Minimo 8 imagens.' });
+
+    const payload = JSON.stringify({
+      name: name || 'dra-roseli-perfoll',
+      description: description || 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
+      quality: quality || 'high',
+      gender: gender || 'female',
+      images: images
+    });
+
+    const options = {
+      hostname: 'api.freepik.com',
+      path: '/v1/ai/loras/characters',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        'x-freepik-api-key': fp_key
+      }
+    };
+
+    const fpResp = await new Promise((resolve, reject) => {
+      const reqFp = https.request(options, (r) => {
+        let data = '';
+        r.on('data', chunk => data += chunk);
+        r.on('end', () => resolve({ status: r.statusCode, body: data }));
+      });
+      reqFp.on('error', reject);
+      reqFp.write(payload);
+      reqFp.end();
+    });
+
+    console.log('Freepik LoRA response:', fpResp.status, fpResp.body.substring(0, 300));
+
+    let parsed;
+    try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
+
+    if (fpResp.status >= 400) {
+      return res.status(fpResp.status).json({
+        error: parsed?.message || parsed?.detail || fpResp.body,
+        freepik_response: parsed
+      });
+    }
+
+    res.json(parsed);
+  } catch (err) {
+    console.error('Erro register-character:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ─────────────────────────────────────────────────────────
+   GET /api/check-lora-status
+   Proxy para Freepik GET /loras — verifica status do treino
+   ───────────────────────────────────────────────────────── */
+app.get('/api/check-lora-status', async (req, res) => {
+  try {
+    const fp_key = req.query.fp_key;
+    if (!fp_key) return res.status(400).json({ error: 'Chave Freepik nao fornecida.' });
+
+    const options = {
+      hostname: 'api.freepik.com',
+      path: '/v1/ai/loras',
+      method: 'GET',
+      headers: { 'x-freepik-api-key': fp_key }
+    };
+
+    const fpResp = await new Promise((resolve, reject) => {
+      const reqFp = https.request(options, (r) => {
+        let data = '';
+        r.on('data', chunk => data += chunk);
+        r.on('end', () => resolve({ status: r.statusCode, body: data }));
+      });
+      reqFp.on('error', reject);
+      reqFp.end();
+    });
+
+    let parsed;
+    try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
+
+    res.json(parsed);
+  } catch (err) {
+    console.error('Erro check-lora-status:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ─────────────────────────────────────────────────────────
+   DELETE /api/upload-photos/:session_id
+   Limpeza manual das fotos temporarias
+   ───────────────────────────────────────────────────────── */
 app.delete('/api/upload-photos/:session_id', (req, res) => {
   try {
     const sessionDir = path.join(UPLOADS_DIR, req.params.session_id);
