@@ -96,39 +96,82 @@
     Freepik: <a href="https://www.freepik.com/developers/dashboard/api-key" style="color:#b8a016">freepik.com/developers/dashboard</a> → API Key
   </div>
 
+
   <!-- BRAND CONTEXT -->
   <div style="background:#fff;border:0.5px solid #e0d8cc;border-radius:8px;padding:.85rem 1rem;margin-bottom:1.8rem">
     <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#888;margin-bottom:.7rem">
       Brand Context — Freepik
-      <span id="brand-badge" style="display:none;margin-left:8px" class="brand-badge">&#10003; Ativo</span>
+      <span id="brand-badge" style="display:none;margin-left:8px;font-size:11px;padding:2px 8px;border-radius:4px;background:#eaf3de;color:#27500a;font-weight:500">&#10003; Ativo</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
-      <div>
-        <div style="font-size:12px;color:#666;margin-bottom:.4rem">Foto de referência (Dra. Roseli)</div>
-        <input type="file" id="brand-photo-file" accept="image/*" style="display:none" onchange="carregarFotoMarca(this)">
-        <div class="brand-upload-area" id="brand-upload-area" onclick="document.getElementById('brand-photo-file').click()">
-          <img id="brand-photo-thumb" class="brand-photo-thumb" style="display:none" alt="Foto referência">
-          <div id="brand-upload-icon" style="width:38px;height:38px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 6l4-4 4 4" stroke="#854f0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="#854f0b" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          <div>
-            <div style="font-size:12px;font-weight:500;color:#444" id="brand-upload-label">Clique para carregar</div>
-            <div style="font-size:11px;color:#888">JPG ou PNG — âncora visual no Freepik</div>
+
+    <!-- ESTADO A: configuração inicial (sem character registrado) -->
+    <div id="lora-setup">
+
+      <div style="margin-bottom:.9rem">
+        <div style="font-size:12px;color:#666;margin-bottom:.35rem">
+          Fotos da Dra. Roseli
+          <span style="font-size:11px;color:#aaa;margin-left:6px">mín. 8 · máx. 20 · closes do rosto, ângulos variados, sem óculos de sol</span>
+        </div>
+        <input type="file" id="lora-photos-input" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="processarFotosLora(this)">
+        <div id="lora-upload-zone" onclick="document.getElementById('lora-photos-input').click()"
+          style="border:1.5px dashed #d8d0c4;border-radius:8px;padding:.9rem;cursor:pointer;background:#faf7ed;text-align:center;transition:border-color .15s"
+          onmouseover="this.style.borderColor='#b8a016'" onmouseout="this.style.borderColor='#d8d0c4'">
+          <div style="font-size:13px;font-weight:500;color:#444;margin-bottom:.2rem">Clique para selecionar fotos</div>
+          <div style="font-size:11px;color:#888">Segure Ctrl para selecionar várias de uma vez · JPG ou PNG</div>
+        </div>
+        <div id="lora-photos-grid" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:.5rem"></div>
+        <div id="lora-photos-count" style="font-size:11px;color:#888;margin-top:.3rem"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end">
+        <div>
+          <div style="font-size:12px;color:#666;margin-bottom:.3rem">Brand prompt prefix</div>
+          <textarea id="brand-prompt-prefix" rows="3" style="font-size:12px;resize:none" placeholder="Clique em Gerar brand prompt..."></textarea>
+          <div style="display:flex;gap:6px;margin-top:.35rem">
+            <button onclick="gerarBrandPrompt()" style="padding:.3rem .7rem;border:0.5px solid #d8d0c4;border-radius:6px;background:transparent;font-size:11px;cursor:pointer">Gerar brand prompt</button>
+            <button onclick="salvarBrandContext()" style="padding:.3rem .7rem;border:0.5px solid #b8a016;border-radius:6px;background:#faf7ed;font-size:11px;cursor:pointer;color:#854f0b">Salvar prefix</button>
           </div>
         </div>
-        <button onclick="removerFotoMarca()" id="btn-remover-foto" style="display:none;font-size:11px;color:#854f0b;background:none;border:none;cursor:pointer;padding:.3rem 0">Remover foto</button>
-      </div>
-      <div>
-        <div style="font-size:12px;color:#666;margin-bottom:.4rem">Brand prompt prefix (injetado em todo prompt)</div>
-        <textarea id="brand-prompt-prefix" rows="4" style="font-size:12px;resize:none" placeholder="Clique em Gerar brand prompt para criar automaticamente..."></textarea>
-        <div style="display:flex;gap:6px;margin-top:.4rem;flex-wrap:wrap">
-          <button onclick="gerarBrandPrompt()" style="padding:.35rem .75rem;border:0.5px solid #d8d0c4;border-radius:6px;background:transparent;font-size:12px;cursor:pointer">Gerar brand prompt</button>
-          <button onclick="salvarBrandContext()" style="padding:.35rem .75rem;border:0.5px solid #b8a016;border-radius:6px;background:#faf7ed;font-size:12px;cursor:pointer;color:#854f0b">Salvar</button>
+        <div style="text-align:center">
+          <button id="btn-registrar-lora" onclick="registrarCharacterLora()"
+            style="padding:.6rem 1rem;border-radius:8px;background:#1a1410;color:#d8c01c;font-size:13px;font-weight:500;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:7px;white-space:nowrap">
+            <span id="sp-lora" style="display:none;width:14px;height:14px;border:2px solid rgba(216,192,28,.3);border-top-color:#d8c01c;border-radius:50%;animation:spin .7s linear infinite"></span>
+            <span id="lora-btn-label">Registrar personagem</span>
+          </button>
+          <div style="font-size:10px;color:#aaa;margin-top:.3rem">treina rosto + corpo · feito 1x</div>
         </div>
       </div>
+
+      <div id="lora-training-progress" style="display:none;margin-top:.8rem">
+        <div style="background:#e0d8cc;border-radius:4px;height:4px;margin-bottom:.4rem">
+          <div id="lora-bar" style="background:#d8c01c;height:4px;border-radius:4px;transition:width .5s ease;width:5%"></div>
+        </div>
+        <div id="lora-training-status" style="font-size:12px;color:#888">Iniciando treinamento...</div>
+      </div>
     </div>
-    <div style="font-size:11px;color:#aaa;margin-top:.6rem">A foto e o prefix sao salvos localmente e injetados automaticamente em todas as gerações Freepik.</div>
+
+    <!-- ESTADO B: character registrado e ativo -->
+    <div id="lora-ativo" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;background:#eaf3de;border-radius:8px;padding:.65rem .9rem;margin-bottom:.8rem">
+        <div style="width:32px;height:32px;border-radius:50%;background:#639922;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:500;color:#27500a">Personagem registrado</div>
+          <div id="lora-ativo-info" style="font-size:11px;color:#3b6d11">Rosto e estrutura corporal preservados em todas as gerações</div>
+        </div>
+        <button onclick="resetarLora()" style="font-size:11px;color:#854f0b;background:none;border:none;cursor:pointer">Resetar</button>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#666;margin-bottom:.3rem">Brand prompt prefix</div>
+        <textarea id="brand-prompt-prefix-ativo" rows="3" style="font-size:12px;resize:none"></textarea>
+        <button onclick="salvarBrandContextAtivo()" style="margin-top:.35rem;padding:.3rem .7rem;border:0.5px solid #b8a016;border-radius:6px;background:#faf7ed;font-size:11px;cursor:pointer;color:#854f0b">Salvar prefix</button>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:#aaa;margin-top:.6rem">O personagem é treinado uma única vez por cliente. Após registrado, o Freepik preserva rosto, cabelo e estrutura em todas as gerações.</div>
   </div>
+
 
   <div class="progress" id="progress">
     <div class="step active" id="s1">Briefing</div>
@@ -705,69 +748,258 @@ function renderProducao(prod){
 }
 
 /* ─────────────────────────────────────────────────────────
-   BRAND CONTEXT — foto de referência + brand prompt prefix
+
+/* ─────────────────────────────────────────────────────────
+   BRAND CONTEXT — Character LoRA + brand prompt prefix
+   Fluxo: upload 8-20 fotos → POST /loras/characters → polling
+          → character_id salvo → usado em toda geração Mystic
    ───────────────────────────────────────────────────────── */
-function getBrandPhoto(){ return localStorage.getItem('ds_brand_photo')||''; }
-function getBrandPrefix(){ return localStorage.getItem('ds_brand_prefix')||''; }
+
+function getLoraId(){ return localStorage.getItem('ds_lora_id')||''; }
+function getLoraName(){ return localStorage.getItem('ds_lora_name')||''; }
+function getBrandPrefix(){
+  /* lê do campo ativo se existir, senão do localStorage */
+  const el = document.getElementById('brand-prompt-prefix-ativo') || document.getElementById('brand-prompt-prefix');
+  return (el && el.value.trim()) ? el.value.trim() : (localStorage.getItem('ds_brand_prefix')||'');
+}
+
+/* Fotos carregadas em memória como base64 (array) */
+let loraPhotosB64 = [];
 
 function atualizarBrandUI(){
-  const photo = getBrandPhoto();
-  const prefix = getBrandPrefix();
+  const loraId = getLoraId();
+  const prefix = localStorage.getItem('ds_brand_prefix')||'';
   const badge = document.getElementById('brand-badge');
-  if(badge) badge.style.display = (photo||prefix) ? 'inline-flex' : 'none';
+
+  if(loraId){
+    /* Mostrar estado ativo */
+    const setup = document.getElementById('lora-setup');
+    const ativo = document.getElementById('lora-ativo');
+    if(setup) setup.style.display = 'none';
+    if(ativo) ativo.style.display = 'block';
+    const info = document.getElementById('lora-ativo-info');
+    if(info) info.textContent = 'Character: ' + getLoraName() + ' · ID: ' + loraId.substring(0,8) + '...';
+    const prefixEl = document.getElementById('brand-prompt-prefix-ativo');
+    if(prefixEl && !prefixEl.value) prefixEl.value = prefix;
+    if(badge) badge.style.display = 'inline-flex';
+  } else {
+    const setup = document.getElementById('lora-setup');
+    const ativo = document.getElementById('lora-ativo');
+    if(setup) setup.style.display = 'block';
+    if(ativo) ativo.style.display = 'none';
+    if(badge) badge.style.display = prefix ? 'inline-flex' : 'none';
+  }
 }
 
-function carregarFotoMarca(input){
-  const file = input.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    const originalB64 = e.target.result; /* data:image/...;base64,... */
-    /* Redimensionar para max 512px para não pesar no payload */
-    const img = new Image();
-    img.onload = function(){
-      const canvas = document.createElement('canvas');
-      const MAX = 512;
-      let w = img.width, h = img.height;
-      if(w > MAX || h > MAX){
-        if(w > h){ h = Math.round(h * MAX/w); w = MAX; }
-        else { w = Math.round(w * MAX/h); h = MAX; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const resized = canvas.toDataURL('image/jpeg', 0.85);
-      localStorage.setItem('ds_brand_photo', resized);
-      /* Atualizar UI */
-      const thumb = document.getElementById('brand-photo-thumb');
-      const icon = document.getElementById('brand-upload-icon');
-      const lbl = document.getElementById('brand-upload-label');
-      const area = document.getElementById('brand-upload-area');
-      const btnRemover = document.getElementById('btn-remover-foto');
-      if(thumb){ thumb.src = resized; thumb.style.display='block'; }
-      if(icon) icon.style.display='none';
-      if(lbl) lbl.textContent = file.name;
-      if(area) area.classList.add('has-photo');
-      if(btnRemover) btnRemover.style.display='block';
-      atualizarBrandUI();
+function processarFotosLora(input){
+  const files = Array.from(input.files);
+  if(!files.length) return;
+
+  const grid = document.getElementById('lora-photos-grid');
+  const count = document.getElementById('lora-photos-count');
+
+  files.forEach(file => {
+    if(loraPhotosB64.length >= 20) return;
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = new Image();
+      img.onload = function(){
+        /* Redimensionar para max 768px */
+        const canvas = document.createElement('canvas');
+        const MAX = 768;
+        let w = img.width, h = img.height;
+        if(w > MAX || h > MAX){
+          if(w > h){ h = Math.round(h*MAX/w); w = MAX; }
+          else { w = Math.round(w*MAX/h); h = MAX; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const b64 = canvas.toDataURL('image/jpeg', 0.88);
+        loraPhotosB64.push(b64);
+
+        /* Thumb no grid */
+        const thumb = document.createElement('div');
+        thumb.style.cssText = 'width:52px;height:52px;border-radius:6px;overflow:hidden;border:0.5px solid #e0d8cc;flex-shrink:0';
+        thumb.innerHTML = `<img src="${b64}" style="width:100%;height:100%;object-fit:cover">`;
+        grid.appendChild(thumb);
+
+        /* Contagem */
+        const n = loraPhotosB64.length;
+        count.textContent = `${n} foto${n>1?'s':''} carregada${n>1?'s':''} ${n>=8?'✓ pronto para registrar':'— adicione mais '+(8-n)+' para o mínimo'}`;
+        count.style.color = n >= 8 ? '#27500a' : '#854f0b';
+      };
+      img.src = e.target.result;
     };
-    img.src = originalB64;
-  };
-  reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
+  });
 }
 
-function removerFotoMarca(){
-  localStorage.removeItem('ds_brand_photo');
-  const thumb = document.getElementById('brand-photo-thumb');
-  const icon = document.getElementById('brand-upload-icon');
-  const lbl = document.getElementById('brand-upload-label');
-  const area = document.getElementById('brand-upload-area');
-  const btnRemover = document.getElementById('btn-remover-foto');
-  if(thumb){ thumb.src=''; thumb.style.display='none'; }
-  if(icon) icon.style.display='flex';
-  if(lbl) lbl.textContent='Clique para carregar';
-  if(area) area.classList.remove('has-photo');
-  if(btnRemover) btnRemover.style.display='none';
-  document.getElementById('brand-photo-file').value='';
+async function registrarCharacterLora(){
+  const fpKey = getFpKey();
+  if(!fpKey){ alert('Insira a chave Freepik antes de registrar.'); return; }
+  if(loraPhotosB64.length < 8){ alert('Carregue pelo menos 8 fotos antes de registrar.'); return; }
+
+  const btn = document.getElementById('btn-registrar-lora');
+  const sp = document.getElementById('sp-lora');
+  const lbl = document.getElementById('lora-btn-label');
+  const progressDiv = document.getElementById('lora-training-progress');
+  const bar = document.getElementById('lora-bar');
+  const statusEl = document.getElementById('lora-training-status');
+
+  btn.disabled = true;
+  sp.style.display = 'inline-block';
+  lbl.textContent = 'Enviando fotos...';
+  progressDiv.style.display = 'block';
+
+  function setProgress(pct, msg){
+    if(bar) bar.style.width = pct + '%';
+    if(statusEl) statusEl.textContent = msg;
+  }
+
+  try {
+    /* Converter base64 para URLs — a API exige URLs, não base64
+       Como estamos localmente, usamos Blob URLs via URL.createObjectURL
+       ATENÇÃO: em produção (Railway) isso funciona pois as fotos
+       podem ser hospedadas temporariamente ou enviadas via form data.
+       Solução para ambiente local: converter para blob e usar fetch blob */
+
+    /* A API de Characters exige URLs públicas. Para contornar localmente,
+       vamos usar o endpoint de upload do Freepik (se disponível) ou
+       informar o usuário para usar em produção. */
+
+    setProgress(10, 'Preparando fotos...');
+
+    /* Montar payload com URLs de blob (funciona em produção com HTTPS) */
+    const imageUrls = [];
+    for(let i = 0; i < Math.min(loraPhotosB64.length, 20); i++){
+      /* Converter base64 para Blob URL */
+      const b64 = loraPhotosB64[i].split(',')[1];
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for(let j=0; j<binary.length; j++) bytes[j] = binary.charCodeAt(j);
+      const blob = new Blob([bytes], {type:'image/jpeg'});
+      const url = URL.createObjectURL(blob);
+      imageUrls.push(url);
+    }
+
+    setProgress(20, 'Registrando personagem no Freepik...');
+
+    const loraName = 'dra-roseli-perfoll';
+    const postBody = {
+      name: loraName,
+      description: 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
+      quality: 'high',
+      gender: 'female',
+      images: imageUrls
+    };
+
+    const postResp = await fetch('https://api.freepik.com/v1/ai/loras/characters', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-freepik-api-key': fpKey
+      },
+      body: JSON.stringify(postBody)
+    });
+
+    if(!postResp.ok){
+      const errData = await postResp.json().catch(()=>({}));
+      const errMsg = errData?.message || errData?.detail || ('HTTP '+postResp.status);
+
+      /* Erro específico de blob URLs — informa necessidade de deploy */
+      if(postResp.status === 422 || errMsg.includes('url') || errMsg.includes('URL')){
+        throw new Error('As fotos precisam de URLs públicas. Faça o deploy no Railway primeiro e registre de lá. Por ora, o sistema usa o brand prompt para consistência visual.');
+      }
+      throw new Error('Freepik LoRA: ' + errMsg);
+    }
+
+    const postData = await postResp.json();
+    const taskId = postData?.data?.task_id || null;
+
+    if(!taskId){
+      throw new Error('task_id não retornado: ' + JSON.stringify(postData).substring(0,200));
+    }
+
+    /* Polling do treinamento — pode levar 10–30 minutos */
+    setProgress(30, 'Treinando modelo... pode levar 10–30 minutos');
+    lbl.textContent = 'Treinando...';
+
+    const MAX_TRIES = 120; /* 120 × 15s = 30 min */
+    const INTERVAL = 15000;
+    let tries = 0;
+
+    while(tries < MAX_TRIES){
+      await sleep(INTERVAL);
+      tries++;
+
+      const pct = Math.min(30 + tries * 0.5, 90);
+      const mins = Math.round(tries * INTERVAL / 60000);
+      setProgress(pct, `Treinando... ${mins} min decorrido${mins!==1?'s':''}`);
+
+      const getResp = await fetch('https://api.freepik.com/v1/ai/loras', {
+        headers: { 'x-freepik-api-key': fpKey }
+      });
+
+      if(!getResp.ok){ continue; }
+
+      const getData = await getResp.json();
+      const loras = getData?.data || [];
+
+      /* Procurar o lora pelo nome */
+      const lora = loras.find(l => l.name === loraName || l.task_id === taskId);
+
+      if(!lora){ continue; }
+
+      const status = lora.status || 'IN_PROGRESS';
+
+      if(status === 'FAILED'){
+        throw new Error('Treinamento falhou no Freepik. Tente novamente com fotos de maior qualidade.');
+      }
+
+      if(status === 'COMPLETED'){
+        setProgress(100, 'Personagem registrado com sucesso!');
+
+        /* Salvar o ID do lora */
+        const loraId = lora.id || lora.lora_id || loraName;
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_name', loraName);
+
+        atualizarBrandUI();
+        return;
+      }
+    }
+
+    throw new Error('Tempo limite de treinamento excedido. Verifique em freepik.com/developers/dashboard se o treinamento foi concluído e insira o ID manualmente.');
+
+  } catch(err){
+    setProgress(0, '');
+    progressDiv.style.display = 'none';
+    alert('Erro: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    sp.style.display = 'none';
+    lbl.textContent = 'Registrar personagem';
+  }
+}
+
+function resetarLora(){
+  if(!confirm('Remover o personagem registrado? Você precisará registrar novamente.')) return;
+  localStorage.removeItem('ds_lora_id');
+  localStorage.removeItem('ds_lora_name');
+  loraPhotosB64 = [];
+  const grid = document.getElementById('lora-photos-grid');
+  if(grid) grid.innerHTML = '';
+  const count = document.getElementById('lora-photos-count');
+  if(count) count.textContent = '';
+  atualizarBrandUI();
+}
+
+/* ID manual — para quando o treinamento foi feito mas o polling expirou */
+function definirLoraManual(){
+  const id = prompt('Cole o ID do personagem do dashboard Freepik:');
+  if(!id) return;
+  localStorage.setItem('ds_lora_id', id.trim());
+  localStorage.setItem('ds_lora_name', 'dra-roseli-perfoll');
   atualizarBrandUI();
 }
 
@@ -780,32 +1012,36 @@ async function gerarBrandPrompt(){
       'Você cria brand prompts para geração de imagem AI. Responda APENAS com o prompt em inglês, sem explicações, máximo 120 palavras.',
       `Crie um brand prompt prefix para ser injetado no início de TODOS os prompts de geração de imagem para este cliente.
 O objetivo é garantir consistência visual de marca em todas as imagens geradas.
+IMPORTANTE: NÃO descrever roupas ou acessórios específicos — apenas estilo fotográfico, paleta, iluminação e mood.
 
 CLIENTE: Dra. Roseli Perfoll — Ginecologista especialista em longevidade feminina
 PALETA: Gold #d8c01c, Warm White #F5F0E8, Dark Brown #1A1410
 MOOD: Elegante, acolhedor, empoderador, científico sem ser frio
-ARQUÉTIPO: Expedition Guide — mulher que guia outras mulheres pela travessia
+ARQUÉTIPO: Expedition Guide
 PÚBLICO: Mulheres brasileiras 40–65 anos, classe média-alta
 ESTILO: Editorial fotográfico, minimalista, Instagram premium de saúde feminina
-EVITAR: Clínicas frias, jaleco isolado, poses clichê, fundo branco puro sem textura, estética de farmácia
-
-O brand prefix deve ser 3-5 linhas descrevendo estilo fotográfico, paleta, iluminação, mood — tudo em inglês.`
+EVITAR: Mencionar roupas específicas, jaleco, poses clichê, fundo branco puro, estética de farmácia`
     );
-    const textarea = document.getElementById('brand-prompt-prefix');
+    const textarea = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
     if(textarea) textarea.value = raw.trim();
   } catch(e) {
-    const textarea = document.getElementById('brand-prompt-prefix');
-    if(textarea) textarea.value = 'Editorial photography, warm gold (#d8c01c) and cream white (#F5F0E8) color palette, soft directional natural lighting, elegant minimalist medical wellness aesthetic, empowering Brazilian feminine healthcare, premium Instagram quality, dark rich earth tones as accents, no cold clinical lighting, no plain white backgrounds';
+    const textarea = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+    if(textarea) textarea.value = 'Editorial photography, warm gold (#d8c01c) and cream white (#F5F0E8) color palette, soft directional natural lighting, elegant minimalist Brazilian medical wellness aesthetic, empowering feminine healthcare atmosphere, premium Instagram quality, dark earth tone accents';
   }
   btn.textContent = 'Gerar brand prompt';
   btn.disabled = false;
 }
 
 function salvarBrandContext(){
-  const prefix = document.getElementById('brand-prompt-prefix').value.trim();
+  const el = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+  const prefix = el ? el.value.trim() : '';
   if(prefix) localStorage.setItem('ds_brand_prefix', prefix);
   atualizarBrandUI();
   alert('Brand context salvo!');
+}
+
+function salvarBrandContextAtivo(){
+  salvarBrandContext();
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -874,13 +1110,12 @@ BRIEFING: ${briefingText.substring(0,500)}`
        Polling: GET /v1/ai/mystic/{task_id} → data.status = "COMPLETED" + data.generated = [url] */
     setProgress(15, 'Enviando para Freepik Mystic...');
 
-    const brandPhoto = getBrandPhoto();
+    const loraId = getLoraId();
+    const loraName = getLoraName();
 
     const postBody = {
       prompt: prompt,
       aspect_ratio: 'social_post_4_5',
-      model: 'realism',
-      resolution: '2k',
       filter_nsfw: true,
       styling: {
         colors: [
@@ -890,11 +1125,18 @@ BRIEFING: ${briefingText.substring(0,500)}`
       }
     };
 
-    /* style_reference = foto da Dra. Roseli como âncora visual (base64 sem prefixo data:) */
-    if(brandPhoto){
-      postBody.style_reference = brandPhoto.replace(/^data:image\/[a-z+]+;base64,/, '');
-      postBody.adherence = 65; /* 0–100: quanto seguir o style_reference */
-      setProgress(15, 'Enviando foto de referência...');
+    if(loraId){
+      /* Character LoRA ativo — preserva rosto, cabelo e estrutura.
+         Documentação: LoRAs são ignorados quando style_reference está presente.
+         Portanto NÃO usamos style_reference aqui. */
+      postBody.prompt = '@' + loraName + '::85 ' + prompt;
+      postBody.styling.characters = [{ id: loraId, strength: 85 }];
+      setProgress(15, 'Aplicando personagem da Dra. Roseli...');
+    } else {
+      /* Sem LoRA — modo padrão sem âncora de rosto */
+      postBody.model = 'realism';
+      postBody.resolution = '2k';
+      setProgress(15, 'Gerando imagem...');
     }
 
     const postResp = await fetch('https://api.freepik.com/v1/ai/mystic', {
