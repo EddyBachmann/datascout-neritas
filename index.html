@@ -857,33 +857,34 @@ async function registrarCharacterLora(){
   }
 
   try {
-    /* Converter base64 para URLs — a API exige URLs, não base64
-       Como estamos localmente, usamos Blob URLs via URL.createObjectURL
-       ATENÇÃO: em produção (Railway) isso funciona pois as fotos
-       podem ser hospedadas temporariamente ou enviadas via form data.
-       Solução para ambiente local: converter para blob e usar fetch blob */
+    setProgress(10, 'Enviando fotos para o servidor...');
 
-    /* A API de Characters exige URLs públicas. Para contornar localmente,
-       vamos usar o endpoint de upload do Freepik (se disponível) ou
-       informar o usuário para usar em produção. */
+    /* 1. Enviar fotos para o backend Railway — retorna URLs públicas reais */
+    const uploadResp = await fetch('/api/upload-photos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        photos: loraPhotosB64.slice(0, 20),
+        session_id: 'roseli-' + Date.now()
+      })
+    });
 
-    setProgress(10, 'Preparando fotos...');
-
-    /* Montar payload com URLs de blob (funciona em produção com HTTPS) */
-    const imageUrls = [];
-    for(let i = 0; i < Math.min(loraPhotosB64.length, 20); i++){
-      /* Converter base64 para Blob URL */
-      const b64 = loraPhotosB64[i].split(',')[1];
-      const binary = atob(b64);
-      const bytes = new Uint8Array(binary.length);
-      for(let j=0; j<binary.length; j++) bytes[j] = binary.charCodeAt(j);
-      const blob = new Blob([bytes], {type:'image/jpeg'});
-      const url = URL.createObjectURL(blob);
-      imageUrls.push(url);
+    if(!uploadResp.ok){
+      const err = await uploadResp.json().catch(()=>({}));
+      throw new Error('Upload de fotos falhou: ' + (err.error || 'HTTP ' + uploadResp.status));
     }
 
-    setProgress(20, 'Registrando personagem no Freepik...');
+    const uploadData = await uploadResp.json();
+    const imageUrls = uploadData.urls || [];
+    const sessionId = uploadData.session_id;
 
+    if(!imageUrls.length){
+      throw new Error('Nenhuma URL retornada pelo servidor.');
+    }
+
+    setProgress(20, 'Fotos hospedadas. Registrando no Freepik...');
+
+    /* 2. Enviar URLs reais ao Freepik para treinar o Character LoRA */
     const loraName = 'dra-roseli-perfoll';
     const postBody = {
       name: loraName,
@@ -905,11 +906,6 @@ async function registrarCharacterLora(){
     if(!postResp.ok){
       const errData = await postResp.json().catch(()=>({}));
       const errMsg = errData?.message || errData?.detail || ('HTTP '+postResp.status);
-
-      /* Erro específico de blob URLs — informa necessidade de deploy */
-      if(postResp.status === 422 || errMsg.includes('url') || errMsg.includes('URL')){
-        throw new Error('As fotos precisam de URLs públicas. Faça o deploy no Railway primeiro e registre de lá. Por ora, o sistema usa o brand prompt para consistência visual.');
-      }
       throw new Error('Freepik LoRA: ' + errMsg);
     }
 
@@ -963,6 +959,11 @@ async function registrarCharacterLora(){
         const loraId = lora.id || lora.lora_id || loraName;
         localStorage.setItem('ds_lora_id', loraId);
         localStorage.setItem('ds_lora_name', loraName);
+
+        /* Limpar fotos temporárias do servidor */
+        if(sessionId){
+          fetch('/api/upload-photos/' + sessionId, { method: 'DELETE' }).catch(()=>{});
+        }
 
         atualizarBrandUI();
         return;
