@@ -180,6 +180,8 @@ app.post('/api/generate-image', async (req, res) => {
 });
 
 
+/* ─────────────────────────────────────────────────────────
+   GET /api/check-lora-status
    Proxy para Freepik GET /loras — verifica status do treino
    ───────────────────────────────────────────────────────── */
 app.get('/api/check-lora-status', async (req, res) => {
