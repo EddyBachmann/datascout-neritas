@@ -134,11 +134,17 @@ app.post('/api/register-character', async (req, res) => {
 app.get('/api/check-lora-status', async (req, res) => {
   try {
     const fp_key = req.query.fp_key;
+    const task_id = req.query.task_id;
     if (!fp_key) return res.status(400).json({ error: 'Chave Freepik nao fornecida.' });
+
+    /* Se task_id fornecido, consulta status específico da task */
+    const path = task_id
+      ? '/v1/ai/mystic/' + task_id
+      : '/v1/ai/mystic';
 
     const options = {
       hostname: 'api.freepik.com',
-      path: '/v1/ai/loras',
+      path: path,
       method: 'GET',
       headers: { 'x-freepik-api-key': fp_key }
     };
@@ -156,15 +162,7 @@ app.get('/api/check-lora-status', async (req, res) => {
     let parsed;
     try { parsed = JSON.parse(fpResp.body); } catch(e) { parsed = { raw: fpResp.body }; }
 
-    /* Garantir que data seja sempre array para o .find() no frontend */
-    if(parsed && parsed.data && !Array.isArray(parsed.data)){
-      parsed.data = [parsed.data];
-    }
-    if(parsed && !parsed.data){
-      parsed.data = [];
-    }
-    console.log('check-lora-status response keys:', Object.keys(parsed || {}));
-    console.log('check-lora-status data type:', typeof parsed?.data, Array.isArray(parsed?.data));
+    console.log('check-lora-status path:', path, 'status:', fpResp.status);
     console.log('check-lora-status data:', JSON.stringify(parsed?.data).substring(0, 500));
     res.json(parsed);
   } catch (err) {

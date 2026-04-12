@@ -915,6 +915,7 @@ async function registrarCharacterLora(){
 
     const postData = await postResp.json();
     const taskId = postData?.data?.task_id || null;
+    if(taskId) localStorage.setItem('ds_lora_task_id', taskId);
 
     if(!taskId){
       throw new Error('task_id nao retornado: ' + JSON.stringify(postData).substring(0,200));
@@ -975,35 +976,43 @@ async function verificarStatusLora(){
   if(!fpKey){ alert('Insira a chave Freepik primeiro.'); return; }
 
   try {
-    const resp = await fetch('/api/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
-    const data = await resp.json();
-    const loras = data?.data || [];
-    const arr = Array.isArray(loras) ? loras : [loras];
+    /* Tentar usar task_id salvo para consulta direta */
+    const savedTaskId = localStorage.getItem('ds_lora_task_id');
+    const url = savedTaskId
+      ? '/api/check-lora-status?fp_key=' + encodeURIComponent(fpKey) + '&task_id=' + encodeURIComponent(savedTaskId)
+      : '/api/check-lora-status?fp_key=' + encodeURIComponent(fpKey);
 
-    if(!arr.length){
-      alert('Nenhum LoRA encontrado na conta Freepik.');
-      return;
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    /* Tratar resposta de task única ou lista */
+    let taskInfo = null;
+    if(data?.data?.task_id){
+      /* Resposta de task única */
+      taskInfo = data.data;
+    } else if(Array.isArray(data?.data)){
+      /* Lista de tasks — pegar a mais recente com status LoRA */
+      taskInfo = data.data[data.data.length - 1];
     }
 
-    const msg = arr.map(l => {
-      const nome = l.name || l.id || 'sem nome';
-      const status = l.status || 'desconhecido';
-      const id = l.id || l.lora_id || '';
-      return nome + ' — ' + status + (id ? ' (ID: '+id+')' : '');
-    }).join('\n');
+    const status = taskInfo?.status || 'desconhecido';
+    const taskId = taskInfo?.task_id || savedTaskId || 'sem ID';
+    const loraId = taskInfo?.lora_id || taskInfo?.id || taskId;
 
-    const escolha = confirm('LoRAs encontrados:\n\n' + msg + '\n\nClicar OK para usar o primeiro COMPLETED encontrado.');
-    if(escolha){
-      const completed = arr.find(l => l.status === 'COMPLETED');
-      if(completed){
-        const loraId = completed.id || completed.lora_id || completed.name;
+    const msg = 'Status do treinamento: ' + status + '\nTask ID: ' + taskId + '\n\n';
+
+    if(status === 'COMPLETED'){
+      const ok = confirm(msg + 'Treinamento concluído! Clique OK para ativar o personagem.');
+      if(ok){
         localStorage.setItem('ds_lora_id', loraId);
-        localStorage.setItem('ds_lora_name', completed.name || 'roseli-perfoll-v2');
+        localStorage.setItem('ds_lora_name', 'roseli-perfoll-v2');
         atualizarBrandUI();
-        alert('Personagem ativado: ' + loraId);
-      } else {
-        alert('Nenhum LoRA COMPLETED ainda. Aguarde o treinamento terminar e tente novamente.');
+        alert('Personagem ativado com sucesso!');
       }
+    } else if(status === 'IN_PROGRESS' || status === 'CREATED'){
+      alert(msg + 'Ainda treinando. Tente novamente em alguns minutos.');
+    } else {
+      alert(msg + 'Resposta completa:\n' + JSON.stringify(data).substring(0, 300));
     }
   } catch(e) {
     alert('Erro ao verificar: ' + e.message);
