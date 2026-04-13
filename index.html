@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DataScout — Neritas</title>
+<title>DataScout â Neritas</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f0e8;color:#1a1410;min-height:100vh}
@@ -73,7 +73,7 @@
 <body>
 <div class="app">
   <div class="logo">Data<span>Scout</span></div>
-  <div class="sub">Sistema de inteligência de conteúdo — Neritas</div>
+  <div class="sub">Sistema de inteligÃªncia de conteÃºdo â Neritas</div>
 
   <div style="background:#fff;border:0.5px solid #e0d8cc;border-radius:8px;padding:.85rem 1rem;margin-bottom:.6rem;display:grid;grid-template-columns:1fr 1fr;gap:14px">
     <div>
@@ -92,32 +92,32 @@
     </div>
   </div>
   <div style="font-size:11px;color:#aaa;margin-bottom:1.8rem">
-    Anthropic: <a href="https://console.anthropic.com" style="color:#b8a016">console.anthropic.com</a> → API Keys &nbsp;·&nbsp;
-    Freepik: <a href="https://www.freepik.com/developers/dashboard/api-key" style="color:#b8a016">freepik.com/developers/dashboard</a> → API Key
+    Anthropic: <a href="https://console.anthropic.com" style="color:#b8a016">console.anthropic.com</a> â API Keys &nbsp;Â·&nbsp;
+    Freepik: <a href="https://www.freepik.com/developers/dashboard/api-key" style="color:#b8a016">freepik.com/developers/dashboard</a> â API Key
   </div>
 
 
   <!-- BRAND CONTEXT -->
   <div style="background:#fff;border:0.5px solid #e0d8cc;border-radius:8px;padding:.85rem 1rem;margin-bottom:1.8rem">
     <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#888;margin-bottom:.7rem">
-      Brand Context — Freepik
+      Brand Context â Freepik
       <span id="brand-badge" style="display:none;margin-left:8px;font-size:11px;padding:2px 8px;border-radius:4px;background:#eaf3de;color:#27500a;font-weight:500">&#10003; Ativo</span>
     </div>
 
-    <!-- ESTADO A: configuração inicial (sem character registrado) -->
+    <!-- ESTADO A: configuraÃ§Ã£o inicial (sem character registrado) -->
     <div id="lora-setup">
 
       <div style="margin-bottom:.9rem">
         <div style="font-size:12px;color:#666;margin-bottom:.35rem">
           Fotos da Dra. Roseli
-          <span style="font-size:11px;color:#aaa;margin-left:6px">mín. 8 · máx. 20 · closes do rosto, ângulos variados, sem óculos de sol</span>
+          <span style="font-size:11px;color:#aaa;margin-left:6px">mÃ­n. 8 Â· mÃ¡x. 20 Â· closes do rosto, Ã¢ngulos variados, sem Ã³culos de sol</span>
         </div>
         <input type="file" id="lora-photos-input" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="processarFotosLora(this)">
         <div id="lora-upload-zone" onclick="document.getElementById('lora-photos-input').click()"
           style="border:1.5px dashed #d8d0c4;border-radius:8px;padding:.9rem;cursor:pointer;background:#faf7ed;text-align:center;transition:border-color .15s"
           onmouseover="this.style.borderColor='#b8a016'" onmouseout="this.style.borderColor='#d8d0c4'">
           <div style="font-size:13px;font-weight:500;color:#444;margin-bottom:.2rem">Clique para selecionar fotos</div>
-          <div style="font-size:11px;color:#888">Segure Ctrl para selecionar várias de uma vez · JPG ou PNG</div>
+          <div style="font-size:11px;color:#888">Segure Ctrl para selecionar vÃ¡rias de uma vez Â· JPG ou PNG</div>
         </div>
         <div id="lora-photos-grid" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:.5rem"></div>
         <div id="lora-photos-count" style="font-size:11px;color:#888;margin-top:.3rem"></div>
@@ -138,9 +138,9 @@
             <span id="sp-lora" style="display:none;width:14px;height:14px;border:2px solid rgba(216,192,28,.3);border-top-color:#d8c01c;border-radius:50%;animation:spin .7s linear infinite"></span>
             <span id="lora-btn-label">Registrar personagem</span>
           </button>
-          <div style="font-size:10px;color:#aaa;margin-top:.3rem">treina rosto + corpo · feito 1x</div>
+          <div style="font-size:10px;color:#aaa;margin-top:.3rem">treina rosto + corpo Â· feito 1x</div>
           <button onclick="verificarStatusLora()" style="margin-top:.4rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">Verificar status</button>
-          <button onclick="listarTreinosAnteriores()" style="margin-top:.3rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">🔍 Buscar treinos anteriores</button>
+          <button onclick="listarTreinosAnteriores()" style="margin-top:.3rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">ð Buscar treinos anteriores</button>
         </div>
       </div>
 
@@ -160,7 +160,7 @@
         </div>
         <div style="flex:1">
           <div style="font-size:13px;font-weight:500;color:#27500a">Personagem registrado</div>
-          <div id="lora-ativo-info" style="font-size:11px;color:#3b6d11">Rosto e estrutura corporal preservados em todas as gerações</div>
+          <div id="lora-ativo-info" style="font-size:11px;color:#3b6d11">Rosto e estrutura corporal preservados em todas as geraÃ§Ãµes</div>
         </div>
         <button onclick="resetarLora()" style="font-size:11px;color:#854f0b;background:none;border:none;cursor:pointer">Resetar</button>
       </div>
@@ -171,22 +171,22 @@
       </div>
     </div>
 
-    <div style="font-size:11px;color:#aaa;margin-top:.6rem">O personagem é treinado uma única vez por cliente. Após registrado, o Freepik preserva rosto, cabelo e estrutura em todas as gerações.</div>
+    <div style="font-size:11px;color:#aaa;margin-top:.6rem">O personagem Ã© treinado uma Ãºnica vez por cliente. ApÃ³s registrado, o Freepik preserva rosto, cabelo e estrutura em todas as geraÃ§Ãµes.</div>
   </div>
 
 
   <div class="progress" id="progress">
     <div class="step active" id="s1">Briefing</div>
     <div class="step" id="s2">Pesquisa</div>
-    <div class="step" id="s3">Ideação</div>
-    <div class="step" id="s4">Produção</div>
+    <div class="step" id="s3">IdeaÃ§Ã£o</div>
+    <div class="step" id="s4">ProduÃ§Ã£o</div>
   </div>
 
   <div class="client-bar">
     <div class="client-dot">DR</div>
     <div>
       <div class="client-name">Dra. Roseli Perfoll</div>
-      <div class="client-spec">Ginecologia · Longevidade feminina · Balneário Camboriú</div>
+      <div class="client-spec">Ginecologia Â· Longevidade feminina Â· BalneÃ¡rio CamboriÃº</div>
     </div>
   </div>
 
@@ -196,13 +196,13 @@
       <div class="section-title">Briefing de pauta</div>
       <div class="field">
         <label>Tema do dia</label>
-        <textarea id="tema" rows="2" placeholder="Ex: menopausa e qualidade do sono, reposição hormonal, longevidade feminina após os 50..."></textarea>
+        <textarea id="tema" rows="2" placeholder="Ex: menopausa e qualidade do sono, reposiÃ§Ã£o hormonal, longevidade feminina apÃ³s os 50..."></textarea>
         <div class="chips" id="temas-rapidos">
           <span class="chip" onclick="setTema('menopausa e sono')">menopausa e sono</span>
-          <span class="chip" onclick="setTema('reposição hormonal')">reposição hormonal</span>
+          <span class="chip" onclick="setTema('reposiÃ§Ã£o hormonal')">reposiÃ§Ã£o hormonal</span>
           <span class="chip" onclick="setTema('longevidade feminina')">longevidade feminina</span>
-          <span class="chip" onclick="setTema('saúde hormonal após 40')">saúde hormonal após 40</span>
-          <span class="chip" onclick="setTema('envelhecimento saudável')">envelhecimento saudável</span>
+          <span class="chip" onclick="setTema('saÃºde hormonal apÃ³s 40')">saÃºde hormonal apÃ³s 40</span>
+          <span class="chip" onclick="setTema('envelhecimento saudÃ¡vel')">envelhecimento saudÃ¡vel</span>
         </div>
       </div>
       <div class="row">
@@ -210,28 +210,28 @@
           <label>Formato</label>
           <select id="formato">
             <option value="carrossel">Carrossel</option>
-            <option value="post_estatico">Post estático</option>
+            <option value="post_estatico">Post estÃ¡tico</option>
             <option value="reels">Reels (roteiro)</option>
           </select>
         </div>
         <div class="field">
-          <label>Tipo de conteúdo</label>
+          <label>Tipo de conteÃºdo</label>
           <select id="tipo">
             <option value="educativo">Educativo</option>
             <option value="autoridade">Autoridade</option>
-            <option value="conexao">Conexão emocional</option>
+            <option value="conexao">ConexÃ£o emocional</option>
             <option value="venda">Venda / CTA</option>
           </select>
         </div>
       </div>
       <div class="field">
-        <label>Observações extras (opcional)</label>
-        <input type="text" id="obs" placeholder="Ex: evitar mencionar marcas, focar no público 45–60 anos...">
+        <label>ObservaÃ§Ãµes extras (opcional)</label>
+        <input type="text" id="obs" placeholder="Ex: evitar mencionar marcas, focar no pÃºblico 45â60 anos...">
       </div>
       <div class="actions-row">
         <button class="btn btn-primary" onclick="iniciarPesquisa()">
           <span>Pesquisar com DataScout</span>
-          <span style="font-size:16px">→</span>
+          <span style="font-size:16px">â</span>
         </button>
       </div>
     </div>
@@ -255,12 +255,12 @@
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
         <div>
-          <div class="section-title">Pesquisa concluída</div>
+          <div class="section-title">Pesquisa concluÃ­da</div>
           <div style="font-size:16px;font-weight:500;color:#1a1410" id="res-tema-label"></div>
         </div>
         <span class="tag tag-green" id="res-formato-label"></span>
       </div>
-      <div class="section-title">Referências encontradas</div>
+      <div class="section-title">ReferÃªncias encontradas</div>
       <div id="refs-container"></div>
       <hr>
       <div class="section-title">Lacunas identificadas</div>
@@ -268,10 +268,10 @@
       <div class="actions-row">
         <button class="btn btn-primary" onclick="gerarPautas()">
           <span class="spinner" id="sp-pauta" style="display:none"></span>
-          <span>Gerar sugestões de pauta</span>
-          <span style="font-size:16px">→</span>
+          <span>Gerar sugestÃµes de pauta</span>
+          <span style="font-size:16px">â</span>
         </button>
-        <button class="btn btn-outline" onclick="voltarBriefing()">← Nova pesquisa</button>
+        <button class="btn btn-outline" onclick="voltarBriefing()">â Nova pesquisa</button>
       </div>
     </div>
   </div>
@@ -279,23 +279,23 @@
   <!-- TELA 4: PAUTAS -->
   <div id="screen-pautas" style="display:none">
     <div class="card">
-      <div class="section-title">Sugestões de pauta</div>
-      <div class="alert">Selecione uma pauta para avançar para a produção do copy.</div>
+      <div class="section-title">SugestÃµes de pauta</div>
+      <div class="alert">Selecione uma pauta para avanÃ§ar para a produÃ§Ã£o do copy.</div>
       <div id="pautas-container"></div>
       <div class="actions-row" id="pautas-actions" style="display:none">
-        <button class="btn btn-primary" onclick="avancarProducao()">Produzir conteúdo →</button>
-        <button class="btn btn-outline" onclick="voltarResultados()">← Ver pesquisa</button>
+        <button class="btn btn-primary" onclick="avancarProducao()">Produzir conteÃºdo â</button>
+        <button class="btn btn-outline" onclick="voltarResultados()">â Ver pesquisa</button>
       </div>
     </div>
   </div>
 
-  <!-- TELA 5: PRODUÇÃO -->
+  <!-- TELA 5: PRODUÃÃO -->
   <div id="screen-producao" style="display:none">
     <div class="card">
-      <div class="section-title">Conteúdo produzido</div>
+      <div class="section-title">ConteÃºdo produzido</div>
       <div id="producao-container"></div>
       <div class="actions-row">
-        <button class="btn btn-outline" onclick="voltarPautas()">← Trocar pauta</button>
+        <button class="btn btn-outline" onclick="voltarPautas()">â Trocar pauta</button>
         <button class="btn btn-outline" onclick="voltarBriefing()">Novo briefing</button>
       </div>
     </div>
@@ -307,15 +307,15 @@
 const CLIENT = {
   nome: 'Dra. Roseli Perfoll',
   especialidade: 'Ginecologia e longevidade feminina',
-  cidade: 'Balneário Camboriú, SC',
-  publico: 'Mulheres 40–65 anos, nível socioeconômico médio-alto, interesse em saúde hormonal e qualidade de vida',
+  cidade: 'BalneÃ¡rio CamboriÃº, SC',
+  publico: 'Mulheres 40â65 anos, nÃ­vel socioeconÃ´mico mÃ©dio-alto, interesse em saÃºde hormonal e qualidade de vida',
   concorrentes: '@draelisakoerich (14K), @dra.aimeesauer (5.8K)',
-  tom: 'Acolhedor, técnico sem ser frio, empoderador. Nunca alarmista. Voz de guia experiente.',
-  arquetipo: 'Expedition Guide — Desert Crossing. Transforma a complexidade em caminhos claros.',
+  tom: 'Acolhedor, tÃ©cnico sem ser frio, empoderador. Nunca alarmista. Voz de guia experiente.',
+  arquetipo: 'Expedition Guide â Desert Crossing. Transforma a complexidade em caminhos claros.',
   paleta: 'Gold #d8c01c, Warm White #F5F0E8, Dark #1A1410',
   instagram: '@dra.roseliperfoll',
-  evitar: 'Repetir pautas já publicadas. Linguagem muito técnica sem tradução. Tom clínico frio.',
-  historico: 'Menopausa (geral), reposição hormonal introdução, sono e saúde, alimentação anti-inflamatória'
+  evitar: 'Repetir pautas jÃ¡ publicadas. Linguagem muito tÃ©cnica sem traduÃ§Ã£o. Tom clÃ­nico frio.',
+  historico: 'Menopausa (geral), reposiÃ§Ã£o hormonal introduÃ§Ã£o, sono e saÃºde, alimentaÃ§Ã£o anti-inflamatÃ³ria'
 };
 
 let state = {
@@ -395,7 +395,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 async function callClaude(systemPrompt, userPrompt){
   const apiKey = getKey();
-  if(!apiKey) throw new Error('Chave de API não encontrada. Insira sua chave Anthropic acima.');
+  if(!apiKey) throw new Error('Chave de API nÃ£o encontrada. Insira sua chave Anthropic acima.');
   const body = {
     model:'claude-haiku-4-5-20251001',
     max_tokens:2000,
@@ -434,7 +434,7 @@ async function iniciarPesquisa(){
   setStep(2); show('pesquisando');
 
   const msgs = [
-    ['Construindo prompt com contexto da Dra. Roseli','Carregando histórico de pautas e concorrentes'],
+    ['Construindo prompt com contexto da Dra. Roseli','Carregando histÃ³rico de pautas e concorrentes'],
     ['Buscando posts da semana no Brasil e exterior','Analisando engajamento e formatos predominantes'],
     ['Identificando lacunas e oportunidades','Quase pronto...']
   ];
@@ -448,45 +448,45 @@ async function iniciarPesquisa(){
     }
   }, 2200);
 
-  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels'}[state.formato];
-  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'Conexão emocional',venda:'Venda/CTA'}[state.tipo];
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estÃ¡tico',reels:'Reels'}[state.formato];
+  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'ConexÃ£o emocional',venda:'Venda/CTA'}[state.tipo];
 
-  const prompt = `Você é o DataScout, sistema de inteligência de conteúdo da Neritas.
+  const prompt = `VocÃª Ã© o DataScout, sistema de inteligÃªncia de conteÃºdo da Neritas.
 
 CONTEXTO DO CLIENTE:
-- Profissional: ${CLIENT.nome} — ${CLIENT.especialidade}
-- Público-alvo: ${CLIENT.publico}
+- Profissional: ${CLIENT.nome} â ${CLIENT.especialidade}
+- PÃºblico-alvo: ${CLIENT.publico}
 - Concorrentes mapeados: ${CLIENT.concorrentes}
 - Tom de voz: ${CLIENT.tom}
-- Arquétipo: ${CLIENT.arquetipo}
+- ArquÃ©tipo: ${CLIENT.arquetipo}
 - Instagram: ${CLIENT.instagram}
-- Temas já publicados (evitar repetição): ${CLIENT.historico}
+- Temas jÃ¡ publicados (evitar repetiÃ§Ã£o): ${CLIENT.historico}
 
 BRIEFING DO DIA:
 - Tema: ${state.tema}
 - Formato: ${formatoLabel}
-- Tipo de conteúdo: ${tipoLabel}
-${state.obs ? '- Observações: ' + state.obs : ''}
+- Tipo de conteÃºdo: ${tipoLabel}
+${state.obs ? '- ObservaÃ§Ãµes: ' + state.obs : ''}
 
 SUA TAREFA:
-1. Com base no seu conhecimento sobre tendências de conteúdo em saúde feminina, identifique os tipos de conteúdo mais relevantes publicados sobre "${state.tema}" no contexto de saúde feminina, ginecologia ou longevidade — no Brasil e exterior.
-2. Identifique 3 referências relevantes (posts, artigos, vídeos com bom engajamento).
-3. Identifique 3 lacunas — ângulos que o público busca mas que estão sub-representados nos conteúdos encontrados.
+1. Com base no seu conhecimento sobre tendÃªncias de conteÃºdo em saÃºde feminina, identifique os tipos de conteÃºdo mais relevantes publicados sobre "${state.tema}" no contexto de saÃºde feminina, ginecologia ou longevidade â no Brasil e exterior.
+2. Identifique 3 referÃªncias relevantes (posts, artigos, vÃ­deos com bom engajamento).
+3. Identifique 3 lacunas â Ã¢ngulos que o pÃºblico busca mas que estÃ£o sub-representados nos conteÃºdos encontrados.
 
 FORMATO DE RESPOSTA (JSON puro, sem markdown):
 {
   "referencias": [
     {
-      "titulo": "título do conteúdo",
+      "titulo": "tÃ­tulo do conteÃºdo",
       "fonte": "Instagram/@perfil ou Site",
       "formato": "carrossel|reels|post|artigo",
-      "angulo": "ângulo abordado em 1 frase",
-      "destaque": "por que performou bem — 1-2 frases",
+      "angulo": "Ã¢ngulo abordado em 1 frase",
+      "destaque": "por que performou bem â 1-2 frases",
       "relevancia": "alta|media"
     }
   ],
   "lacunas": [
-    "lacuna 1 — descrição clara do que falta",
+    "lacuna 1 â descriÃ§Ã£o clara do que falta",
     "lacuna 2",
     "lacuna 3"
   ]
@@ -497,7 +497,7 @@ FORMATO DE RESPOSTA (JSON puro, sem markdown):
 
   try {
     const raw = await callClaude(
-      'Você é o DataScout. Responda APENAS com JSON válido, sem markdown, sem texto adicional.',
+      'VocÃª Ã© o DataScout. Responda APENAS com JSON vÃ¡lido, sem markdown, sem texto adicional.',
       prompt
     );
     clearInterval(iv);
@@ -510,14 +510,14 @@ FORMATO DE RESPOSTA (JSON puro, sem markdown):
     } catch(e) {
       parsed = {
         referencias:[
-          {titulo:'Conteúdo sobre '+state.tema,fonte:'Pesquisa DataScout',formato:state.formato,angulo:'Abordagem educativa sobre '+state.tema,destaque:'Conteúdo identificado via busca com alto potencial para o público da Dra. Roseli.',relevancia:'alta'},
-          {titulo:'Tendência: '+state.tema+' e saúde feminina',fonte:'Referências web',formato:'carrossel',angulo:'Conexão entre '+state.tema+' e qualidade de vida',destaque:'Formato carrossel performando bem no nicho de saúde feminina.',relevancia:'media'},
-          {titulo:'Perspectiva médica sobre '+state.tema,fonte:'Especialistas BR',formato:'reels',angulo:'Desmistificação de mitos sobre '+state.tema,destaque:'Conteúdo de autoridade com linguagem acessível tem alto save rate.',relevancia:'alta'}
+          {titulo:'ConteÃºdo sobre '+state.tema,fonte:'Pesquisa DataScout',formato:state.formato,angulo:'Abordagem educativa sobre '+state.tema,destaque:'ConteÃºdo identificado via busca com alto potencial para o pÃºblico da Dra. Roseli.',relevancia:'alta'},
+          {titulo:'TendÃªncia: '+state.tema+' e saÃºde feminina',fonte:'ReferÃªncias web',formato:'carrossel',angulo:'ConexÃ£o entre '+state.tema+' e qualidade de vida',destaque:'Formato carrossel performando bem no nicho de saÃºde feminina.',relevancia:'media'},
+          {titulo:'Perspectiva mÃ©dica sobre '+state.tema,fonte:'Especialistas BR',formato:'reels',angulo:'DesmistificaÃ§Ã£o de mitos sobre '+state.tema,destaque:'ConteÃºdo de autoridade com linguagem acessÃ­vel tem alto save rate.',relevancia:'alta'}
         ],
         lacunas:[
-          'Poucos conteúdos conectam '+state.tema+' com a rotina prática da mulher acima de 40 anos — falta aplicabilidade.',
-          'A perspectiva da ginecologista especializada em longevidade está ausente — diferencial claro para a Dra. Roseli.',
-          'Nenhum conteúdo aborda as variações individuais e a importância de acompanhamento personalizado.'
+          'Poucos conteÃºdos conectam '+state.tema+' com a rotina prÃ¡tica da mulher acima de 40 anos â falta aplicabilidade.',
+          'A perspectiva da ginecologista especializada em longevidade estÃ¡ ausente â diferencial claro para a Dra. Roseli.',
+          'Nenhum conteÃºdo aborda as variaÃ§Ãµes individuais e a importÃ¢ncia de acompanhamento personalizado.'
         ]
       };
     }
@@ -534,10 +534,10 @@ FORMATO DE RESPOSTA (JSON puro, sem markdown):
 }
 
 function renderResultados(){
-  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels'}[state.formato];
-  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'Conexão emocional',venda:'Venda/CTA'}[state.tipo];
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estÃ¡tico',reels:'Reels'}[state.formato];
+  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'ConexÃ£o emocional',venda:'Venda/CTA'}[state.tipo];
   document.getElementById('res-tema-label').textContent = state.tema;
-  document.getElementById('res-formato-label').textContent = formatoLabel + ' · ' + tipoLabel;
+  document.getElementById('res-formato-label').textContent = formatoLabel + ' Â· ' + tipoLabel;
 
   const rc = document.getElementById('refs-container');
   rc.innerHTML = '';
@@ -547,9 +547,9 @@ function renderResultados(){
       <div class="ref-meta">
         <span class="tag tag-gray">${r.fonte}</span>
         <span class="tag tag-blue">${r.formato}</span>
-        <span class="tag ${r.relevancia==='alta'?'tag-green':'tag-amber'}">${r.relevancia==='alta'?'alta relevância':'relevância média'}</span>
+        <span class="tag ${r.relevancia==='alta'?'tag-green':'tag-amber'}">${r.relevancia==='alta'?'alta relevÃ¢ncia':'relevÃ¢ncia mÃ©dia'}</span>
       </div>
-      <div class="ref-body"><strong>Ângulo:</strong> ${r.angulo}<br><strong>Destaque:</strong> ${r.destaque}</div>
+      <div class="ref-body"><strong>Ãngulo:</strong> ${r.angulo}<br><strong>Destaque:</strong> ${r.destaque}</div>
     </div>`;
   });
 
@@ -564,44 +564,44 @@ async function gerarPautas(){
   document.getElementById('sp-pauta').style.display='inline-block';
   setStep(3);
 
-  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels (roteiro)'}[state.formato];
-  const tipoLabel = {educativo:'educativo',autoridade:'de autoridade',conexao:'de conexão emocional',venda:'de venda/CTA'}[state.tipo];
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estÃ¡tico',reels:'Reels (roteiro)'}[state.formato];
+  const tipoLabel = {educativo:'educativo',autoridade:'de autoridade',conexao:'de conexÃ£o emocional',venda:'de venda/CTA'}[state.tipo];
 
   const refsSummary = (state.pesquisa.referencias||[]).map(r=>`- ${r.titulo} (${r.angulo})`).join('\n');
   const lacunasSummary = (state.pesquisa.lacunas||[]).map((l,i)=>`${i+1}. ${l}`).join('\n');
 
-  const prompt = `Cliente: ${CLIENT.nome} — ${CLIENT.especialidade}
-Público: ${CLIENT.publico}
+  const prompt = `Cliente: ${CLIENT.nome} â ${CLIENT.especialidade}
+PÃºblico: ${CLIENT.publico}
 Tom: ${CLIENT.tom}
-Arquétipo: ${CLIENT.arquetipo}
-Histórico de pautas (NÃO repetir): ${CLIENT.historico}
+ArquÃ©tipo: ${CLIENT.arquetipo}
+HistÃ³rico de pautas (NÃO repetir): ${CLIENT.historico}
 
 TEMA DO DIA: ${state.tema}
 FORMATO ALVO: ${formatoLabel}
-TIPO: conteúdo ${tipoLabel}
+TIPO: conteÃºdo ${tipoLabel}
 
-REFERÊNCIAS ENCONTRADAS:
+REFERÃNCIAS ENCONTRADAS:
 ${refsSummary}
 
 LACUNAS IDENTIFICADAS:
 ${lacunasSummary}
 
-Crie 4 sugestões de pauta únicas para a Dra. Roseli. Cada uma deve explorar uma lacuna ou ângulo diferente. Use o formato:
+Crie 4 sugestÃµes de pauta Ãºnicas para a Dra. Roseli. Cada uma deve explorar uma lacuna ou Ã¢ngulo diferente. Use o formato:
 {
   "pautas": [
     {
-      "titulo": "título do conteúdo pronto para usar",
-      "angulo": "em 1 frase: qual ângulo único esta pauta explora",
-      "justificativa": "por que este conteúdo vai performar bem com este público — 2 frases",
-      "diferencial": "o que diferencia da concorrência"
+      "titulo": "tÃ­tulo do conteÃºdo pronto para usar",
+      "angulo": "em 1 frase: qual Ã¢ngulo Ãºnico esta pauta explora",
+      "justificativa": "por que este conteÃºdo vai performar bem com este pÃºblico â 2 frases",
+      "diferencial": "o que diferencia da concorrÃªncia"
     }
   ]
 }
-Responda APENAS com JSON válido.`;
+Responda APENAS com JSON vÃ¡lido.`;
 
   try {
     const raw = await callClaude(
-      'Você é estrategista de conteúdo da Neritas. Responda APENAS com JSON válido, sem markdown.',
+      'VocÃª Ã© estrategista de conteÃºdo da Neritas. Responda APENAS com JSON vÃ¡lido, sem markdown.',
       prompt
     );
     const clean = raw.replace(/```json|```/g,'').trim();
@@ -610,10 +610,10 @@ Responda APENAS com JSON válido.`;
     state.pautas = parsed.pautas || [];
   } catch(e) {
     state.pautas = [
-      {titulo:'Como o '+state.tema+' afeta seu corpo de formas que você ainda não conhecia',angulo:'Educação sobre mecanismos fisiológicos com linguagem acessível',justificativa:'Conteúdo educativo profundo tem alto save rate neste público. A Dra. Roseli tem autoridade para explicar o que os outros simplificam demais.',diferencial:'Profundidade técnica traduzida — ninguém mais faz isso com este tom.'},
-      {titulo:'3 sinais de que seu corpo está pedindo ajuda — e o que fazer',angulo:'Reconhecimento de sintomas + próximo passo claro',justificativa:'Lista de sintomas tem alto alcance orgânico. O CTA implícito direciona para consulta sem ser invasivo.',diferencial:'A perspectiva da especialista em longevidade vai além do sintoma isolado.'},
-      {titulo:'O que eu sempre explico para minhas pacientes sobre '+state.tema,angulo:'Humanização via experiência clínica real',justificativa:'Conteúdo em primeira pessoa cria conexão forte. Público da Dra. Roseli responde bem ao tom de guia experiente.',diferencial:'Voz autêntica de médica — não de influencer.'},
-      {titulo:'Mito ou verdade: tudo que você já ouviu sobre '+state.tema,angulo:'Desmistificação com autoridade científica',justificativa:'Formato de mito/verdade tem alto compartilhamento. Público busca confirmação de informações que recebe de outras fontes.',diferencial:'Resposta científica acessível, não panfletária.'}
+      {titulo:'Como o '+state.tema+' afeta seu corpo de formas que vocÃª ainda nÃ£o conhecia',angulo:'EducaÃ§Ã£o sobre mecanismos fisiolÃ³gicos com linguagem acessÃ­vel',justificativa:'ConteÃºdo educativo profundo tem alto save rate neste pÃºblico. A Dra. Roseli tem autoridade para explicar o que os outros simplificam demais.',diferencial:'Profundidade tÃ©cnica traduzida â ninguÃ©m mais faz isso com este tom.'},
+      {titulo:'3 sinais de que seu corpo estÃ¡ pedindo ajuda â e o que fazer',angulo:'Reconhecimento de sintomas + prÃ³ximo passo claro',justificativa:'Lista de sintomas tem alto alcance orgÃ¢nico. O CTA implÃ­cito direciona para consulta sem ser invasivo.',diferencial:'A perspectiva da especialista em longevidade vai alÃ©m do sintoma isolado.'},
+      {titulo:'O que eu sempre explico para minhas pacientes sobre '+state.tema,angulo:'HumanizaÃ§Ã£o via experiÃªncia clÃ­nica real',justificativa:'ConteÃºdo em primeira pessoa cria conexÃ£o forte. PÃºblico da Dra. Roseli responde bem ao tom de guia experiente.',diferencial:'Voz autÃªntica de mÃ©dica â nÃ£o de influencer.'},
+      {titulo:'Mito ou verdade: tudo que vocÃª jÃ¡ ouviu sobre '+state.tema,angulo:'DesmistificaÃ§Ã£o com autoridade cientÃ­fica',justificativa:'Formato de mito/verdade tem alto compartilhamento. PÃºblico busca confirmaÃ§Ã£o de informaÃ§Ãµes que recebe de outras fontes.',diferencial:'Resposta cientÃ­fica acessÃ­vel, nÃ£o panfletÃ¡ria.'}
     ];
   }
 
@@ -627,9 +627,9 @@ function renderPautas(){
   pc.innerHTML = '';
   state.pautas.forEach((p,i) => {
     pc.innerHTML += `<div class="pauta-card" id="pauta-${i}" onclick="selecionarPauta(${i})">
-      <div class="pauta-num">Opção ${i+1}</div>
+      <div class="pauta-num">OpÃ§Ã£o ${i+1}</div>
       <div class="pauta-title">${p.titulo}</div>
-      <div class="pauta-why"><strong>Ângulo:</strong> ${p.angulo}<br><strong>Por que vai performar:</strong> ${p.justificativa}<br><strong>Diferencial:</strong> ${p.diferencial}</div>
+      <div class="pauta-why"><strong>Ãngulo:</strong> ${p.angulo}<br><strong>Por que vai performar:</strong> ${p.justificativa}<br><strong>Diferencial:</strong> ${p.diferencial}</div>
     </div>`;
   });
 }
@@ -644,36 +644,36 @@ function selecionarPauta(i){
 async function avancarProducao(){
   if(!state.pautasSelecionada) return;
   setStep(4); show('producao');
-  document.getElementById('producao-container').innerHTML = '<div style="text-align:center;padding:2rem"><div class="spinner" style="margin:0 auto 1rem"></div><div style="font-size:14px;color:#888">Produzindo conteúdo...</div></div>';
+  document.getElementById('producao-container').innerHTML = '<div style="text-align:center;padding:2rem"><div class="spinner" style="margin:0 auto 1rem"></div><div style="font-size:14px;color:#888">Produzindo conteÃºdo...</div></div>';
 
-  const formatoLabel = {carrossel:'Carrossel (5–7 slides)',post_estatico:'Post estático (1 imagem)',reels:'Reels (roteiro de vídeo)'}[state.formato];
+  const formatoLabel = {carrossel:'Carrossel (5â7 slides)',post_estatico:'Post estÃ¡tico (1 imagem)',reels:'Reels (roteiro de vÃ­deo)'}[state.formato];
   const p = state.pautasSelecionada;
 
-  const prompt = `Cliente: ${CLIENT.nome} — ${CLIENT.especialidade}
-Público: ${CLIENT.publico}
+  const prompt = `Cliente: ${CLIENT.nome} â ${CLIENT.especialidade}
+PÃºblico: ${CLIENT.publico}
 Tom: ${CLIENT.tom}. ${CLIENT.arquetipo}
 Instagram: ${CLIENT.instagram}
 
 PAUTA APROVADA: ${p.titulo}
-ÂNGULO: ${p.angulo}
+ÃNGULO: ${p.angulo}
 FORMATO: ${formatoLabel}
 
-Produza o conteúdo completo. Formato JSON:
+Produza o conteÃºdo completo. Formato JSON:
 {
-  "headline": "título/capa do conteúdo",
+  "headline": "tÃ­tulo/capa do conteÃºdo",
   "slides": ["texto slide 1", "texto slide 2", ...],
   "legenda": "legenda completa para o post no Instagram (com quebras de linha naturais)",
-  "cta": "chamada para ação final",
+  "cta": "chamada para aÃ§Ã£o final",
   "hashtags": ["hashtag1", "hashtag2", ...],
-  "briefing_visual": "descrição para geração de imagem no Freepik: estilo, elementos visuais, mood, paleta gold #d8c01c e warm white #F5F0E8, referência ao arquétipo Desert Crossing"
+  "briefing_visual": "descriÃ§Ã£o para geraÃ§Ã£o de imagem no Freepik: estilo, elementos visuais, mood, paleta gold #d8c01c e warm white #F5F0E8, referÃªncia ao arquÃ©tipo Desert Crossing"
 }
-Para post estático: omita slides, coloque o texto principal na headline.
+Para post estÃ¡tico: omita slides, coloque o texto principal na headline.
 Para reels: substitua slides por roteiro com hook, desenvolvimento e CTA.
-Responda APENAS com JSON válido.`;
+Responda APENAS com JSON vÃ¡lido.`;
 
   try {
     const raw = await callClaude(
-      'Você é copywriter sênior da Neritas. Responda APENAS com JSON válido, sem markdown.',
+      'VocÃª Ã© copywriter sÃªnior da Neritas. Responda APENAS com JSON vÃ¡lido, sem markdown.',
       prompt
     );
     const clean = raw.replace(/```json|```/g,'').trim();
@@ -681,7 +681,7 @@ Responda APENAS com JSON válido.`;
     const prod = JSON.parse(jsonMatch ? jsonMatch[0] : clean);
     renderProducao(prod);
   } catch(e) {
-    document.getElementById('producao-container').innerHTML = '<div class="alert-error"><strong>Erro:</strong> ' + (e.message||e) + '<br><br>Verifique se a chave API está correta e tem saldo disponível.</div>';
+    document.getElementById('producao-container').innerHTML = '<div class="alert-error"><strong>Erro:</strong> ' + (e.message||e) + '<br><br>Verifique se a chave API estÃ¡ correta e tem saldo disponÃ­vel.</div>';
   }
 }
 
@@ -731,14 +731,14 @@ function renderProducao(prod){
 
   if(prod.briefing_visual){
     html += `<div style="margin-bottom:1.2rem">
-      <div class="section-title">Briefing visual — Freepik</div>
+      <div class="section-title">Briefing visual â Freepik</div>
       <div data-briefing style="font-size:13px;color:#555;line-height:1.55;padding:.8rem;background:#f5f0e8;border-radius:8px;border-left:3px solid #b8a016">${prod.briefing_visual}</div>
     </div>`;
   }
 
   html += `<div style="margin-top:1.5rem;border-top:0.5px solid #e8e0d4;padding-top:1.2rem">
-    <div class="section-title">Gerar imagens — Freepik</div>
-    <div style="font-size:12px;color:#777;margin-bottom:.8rem">Serão geradas 3 variações a partir do briefing visual. Aguarde ~20–40 segundos.</div>
+    <div class="section-title">Gerar imagens â Freepik</div>
+    <div style="font-size:12px;color:#777;margin-bottom:.8rem">SerÃ£o geradas 3 variaÃ§Ãµes a partir do briefing visual. Aguarde ~20â40 segundos.</div>
     <button id="btn-freepik" onclick="gerarFreepik()" style="padding:.65rem 1.4rem;border-radius:8px;background:#1a1410;color:#d8c01c;font-size:14px;font-weight:500;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px">
       <span id="sp-fp" style="display:none;width:16px;height:16px;border:2px solid rgba(216,192,28,.3);border-top-color:#d8c01c;border-radius:50%;animation:spin .7s linear infinite;"></span>
       <span id="btn-fp-label">Gerar imagens no Freepik</span>
@@ -749,23 +749,23 @@ function renderProducao(prod){
   pc.innerHTML = html;
 }
 
-/* ─────────────────────────────────────────────────────────
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-/* ─────────────────────────────────────────────────────────
-   BRAND CONTEXT — Character LoRA + brand prompt prefix
-   Fluxo: upload 8-20 fotos → POST /loras/characters → polling
-          → character_id salvo → usado em toda geração Mystic
-   ───────────────────────────────────────────────────────── */
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   BRAND CONTEXT â Character LoRA + brand prompt prefix
+   Fluxo: upload 8-20 fotos â POST /loras/characters â polling
+          â character_id salvo â usado em toda geraÃ§Ã£o Mystic
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 function getLoraId(){ return localStorage.getItem('ds_lora_id')||''; }
 function getLoraName(){ return localStorage.getItem('ds_lora_name')||''; }
 function getBrandPrefix(){
-  /* lê do campo ativo se existir, senão do localStorage */
+  /* lÃª do campo ativo se existir, senÃ£o do localStorage */
   const el = document.getElementById('brand-prompt-prefix-ativo') || document.getElementById('brand-prompt-prefix');
   return (el && el.value.trim()) ? el.value.trim() : (localStorage.getItem('ds_brand_prefix')||'');
 }
 
-/* Fotos carregadas em memória como base64 (array) */
+/* Fotos carregadas em memÃ³ria como base64 (array) */
 let loraPhotosB64 = [];
 
 function atualizarBrandUI(){
@@ -780,7 +780,7 @@ function atualizarBrandUI(){
     if(setup) setup.style.display = 'none';
     if(ativo) ativo.style.display = 'block';
     const info = document.getElementById('lora-ativo-info');
-    if(info) info.textContent = 'Character: ' + getLoraName() + ' · ID: ' + (loraId && loraId.length > 8 ? loraId.substring(0,8) + '...' : (loraId || 'pendente'));
+    if(info) info.textContent = 'Character: ' + getLoraName() + ' Â· ID: ' + (loraId && loraId.length > 8 ? loraId.substring(0,8) + '...' : (loraId || 'pendente'));
     const prefixEl = document.getElementById('brand-prompt-prefix-ativo');
     if(prefixEl && !prefixEl.value) prefixEl.value = prefix;
     if(badge) badge.style.display = 'inline-flex';
@@ -827,7 +827,7 @@ function processarFotosLora(input){
 
         /* Contagem */
         const n = loraPhotosB64.length;
-        count.textContent = `${n} foto${n>1?'s':''} carregada${n>1?'s':''} ${n>=8?'✓ pronto para registrar':'— adicione mais '+(8-n)+' para o mínimo'}`;
+        count.textContent = `${n} foto${n>1?'s':''} carregada${n>1?'s':''} ${n>=8?'â pronto para registrar':'â adicione mais '+(8-n)+' para o mÃ­nimo'}`;
         count.style.color = n >= 8 ? '#27500a' : '#854f0b';
       };
       img.src = e.target.result;
@@ -861,7 +861,7 @@ async function registrarCharacterLora(){
   try {
     setProgress(10, 'Enviando fotos para o servidor...');
 
-    /* 1. Enviar fotos para o backend Railway — retorna URLs públicas reais */
+    /* 1. Enviar fotos para o backend Railway â retorna URLs pÃºblicas reais */
     const uploadResp = await fetch('/api/upload-photos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -887,10 +887,10 @@ async function registrarCharacterLora(){
     setProgress(20, 'Fotos hospedadas. Registrando no Freepik...');
 
     /* 2. Enviar URLs reais ao Freepik para treinar o Character LoRA */
-    const loraName = 'roseli-perfoll-v2';
+    const loraName = 'roseliv3'; /* nome sem hífens — compatível com @referência Freepik */
     const postBody = {
       name: loraName,
-      description: 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
+      description: 'Dra. Roseli Perfoll â ginecologista longevidade feminina BC',
       quality: 'high',
       gender: 'female',
       images: imageUrls
@@ -902,7 +902,7 @@ async function registrarCharacterLora(){
       body: JSON.stringify({
         fp_key: fpKey,
         name: loraName,
-        description: 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
+        description: 'Dra. Roseli Perfoll â ginecologista longevidade feminina BC',
         quality: 'high',
         gender: 'female',
         images: imageUrls
@@ -981,7 +981,7 @@ async function listarTreinosAnteriores(){
     const data = await resp.json();
 
     /* GET /v1/ai/loras retorna { data: { default: [...], customs: [...] } }
-       customs = LoRAs criados pelo usuário (personagens treinados) */
+       customs = LoRAs criados pelo usuÃ¡rio (personagens treinados) */
     const customs = Array.isArray(data?.data?.customs) ? data.data.customs : [];
     const items = customs.length > 0 ? customs : (Array.isArray(data?.data) ? data.data : (data?.data ? [data.data] : []));
 
@@ -1004,7 +1004,7 @@ async function listarTreinosAnteriores(){
     if(completed.length > 0){
       const best = completed[completed.length - 1];
       const loraId = best.lora_id || best.id || best.task_id;
-      const ok = confirm(msg + '✅ Encontrado LoRA COMPLETED!\nDeseja ativar o personagem com este LoRA?\n\nlora_id: ' + loraId);
+      const ok = confirm(msg + 'â Encontrado LoRA COMPLETED!\nDeseja ativar o personagem com este LoRA?\n\nlora_id: ' + loraId);
       if(ok){
         localStorage.setItem('ds_lora_id', loraId);
         localStorage.setItem('ds_lora_task_id', best.task_id || String(loraId));
@@ -1022,7 +1022,7 @@ async function listarTreinosAnteriores(){
         const tid = best.task_id || String(best.id);
         if(tid){
           localStorage.setItem('ds_lora_task_id', tid);
-          alert(msg + '⏳ Treino ainda em andamento.\ntask_id salvo: ' + tid + '\n\nTente "Verificar status" em alguns minutos.');
+          alert(msg + 'â³ Treino ainda em andamento.\ntask_id salvo: ' + tid + '\n\nTente "Verificar status" em alguns minutos.');
         } else {
           alert(msg);
         }
@@ -1049,13 +1049,13 @@ async function verificarStatusLora(){
     const resp = await fetch(url);
     const data = await resp.json();
 
-    /* Tratar resposta de task única ou lista */
+    /* Tratar resposta de task Ãºnica ou lista */
     let taskInfo = null;
     if(data?.data?.task_id){
-      /* Resposta de task única */
+      /* Resposta de task Ãºnica */
       taskInfo = data.data;
     } else if(Array.isArray(data?.data)){
-      /* Lista de tasks — pegar a mais recente com status LoRA */
+      /* Lista de tasks â pegar a mais recente com status LoRA */
       taskInfo = data.data[data.data.length - 1];
     }
 
@@ -1066,7 +1066,7 @@ async function verificarStatusLora(){
     const msg = 'Status do treinamento: ' + status + '\nTask ID: ' + taskId + '\n\n';
 
     if(status === 'COMPLETED'){
-      const ok = confirm(msg + 'Treinamento concluído! Clique OK para ativar o personagem.');
+      const ok = confirm(msg + 'Treinamento concluÃ­do! Clique OK para ativar o personagem.');
       if(ok){
         localStorage.setItem('ds_lora_id', loraId);
         localStorage.setItem('ds_lora_name', 'roseli-perfoll-v2');
@@ -1084,7 +1084,7 @@ async function verificarStatusLora(){
 }
 
 function resetarLora(){
-  if(!confirm('Remover o personagem registrado? Você precisará registrar novamente.')) return;
+  if(!confirm('Remover o personagem registrado? VocÃª precisarÃ¡ registrar novamente.')) return;
   localStorage.removeItem('ds_lora_id');
   localStorage.removeItem('ds_lora_name');
   loraPhotosB64 = [];
@@ -1095,7 +1095,7 @@ function resetarLora(){
   atualizarBrandUI();
 }
 
-/* ID manual — para quando o treinamento foi feito mas o polling expirou */
+/* ID manual â para quando o treinamento foi feito mas o polling expirou */
 function definirLoraManual(){
   const id = prompt('Cole o ID do personagem do dashboard Freepik:');
   if(!id) return;
@@ -1110,18 +1110,18 @@ async function gerarBrandPrompt(){
   btn.disabled = true;
   try {
     const raw = await callClaude(
-      'Você cria brand prompts para geração de imagem AI. Responda APENAS com o prompt em inglês, sem explicações, máximo 120 palavras.',
-      `Crie um brand prompt prefix para ser injetado no início de TODOS os prompts de geração de imagem para este cliente.
-O objetivo é garantir consistência visual de marca em todas as imagens geradas.
-IMPORTANTE: NÃO descrever roupas ou acessórios específicos — apenas estilo fotográfico, paleta, iluminação e mood.
+      'VocÃª cria brand prompts para geraÃ§Ã£o de imagem AI. Responda APENAS com o prompt em inglÃªs, sem explicaÃ§Ãµes, mÃ¡ximo 120 palavras.',
+      `Crie um brand prompt prefix para ser injetado no inÃ­cio de TODOS os prompts de geraÃ§Ã£o de imagem para este cliente.
+O objetivo Ã© garantir consistÃªncia visual de marca em todas as imagens geradas.
+IMPORTANTE: NÃO descrever roupas ou acessÃ³rios especÃ­ficos â apenas estilo fotogrÃ¡fico, paleta, iluminaÃ§Ã£o e mood.
 
-CLIENTE: Dra. Roseli Perfoll — Ginecologista especialista em longevidade feminina
+CLIENTE: Dra. Roseli Perfoll â Ginecologista especialista em longevidade feminina
 PALETA: Gold #d8c01c, Warm White #F5F0E8, Dark Brown #1A1410
-MOOD: Elegante, acolhedor, empoderador, científico sem ser frio
-ARQUÉTIPO: Expedition Guide
-PÚBLICO: Mulheres brasileiras 40–65 anos, classe média-alta
-ESTILO: Editorial fotográfico, minimalista, Instagram premium de saúde feminina
-EVITAR: Mencionar roupas específicas, jaleco, poses clichê, fundo branco puro, estética de farmácia`
+MOOD: Elegante, acolhedor, empoderador, cientÃ­fico sem ser frio
+ARQUÃTIPO: Expedition Guide
+PÃBLICO: Mulheres brasileiras 40â65 anos, classe mÃ©dia-alta
+ESTILO: Editorial fotogrÃ¡fico, minimalista, Instagram premium de saÃºde feminina
+EVITAR: Mencionar roupas especÃ­ficas, jaleco, poses clichÃª, fundo branco puro, estÃ©tica de farmÃ¡cia`
     );
     const textarea = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
     if(textarea) textarea.value = raw.trim();
@@ -1145,10 +1145,10 @@ function salvarBrandContextAtivo(){
   salvarBrandContext();
 }
 
-/* ─────────────────────────────────────────────────────────
-   FREEPIK — geração assíncrona com polling
-   Fluxo: POST → task_id → GET (polling) até completed
-   ───────────────────────────────────────────────────────── */
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   FREEPIK â geraÃ§Ã£o assÃ­ncrona com polling
+   Fluxo: POST â task_id â GET (polling) atÃ© completed
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 async function gerarFreepik(){
   const fpKey = getFpKey();
   if(!fpKey){ alert('Insira sua chave Freepik API acima antes de gerar imagens.'); return; }
@@ -1162,7 +1162,7 @@ async function gerarFreepik(){
   sp.style.display = 'inline-block';
   label.textContent = 'Traduzindo briefing...';
 
-  /* 1. Traduzir briefing para prompt visual em inglês */
+  /* 1. Traduzir briefing para prompt visual em inglÃªs */
   const briefingEl = document.querySelector('[data-briefing]');
   const briefingText = briefingEl ? briefingEl.textContent : (state.ultimoBriefingVisual||'');
 
@@ -1170,12 +1170,12 @@ async function gerarFreepik(){
   try {
     const brandPrefix = getBrandPrefix();
     const promptTraduzido = await callClaude(
-      'Você converte briefings criativos em prompts fotográficos diretos para geração de imagem com IA. Responda APENAS com o prompt em inglês, sem explicações, sem aspas, máximo 160 palavras.',
-      `Converta este briefing em um prompt fotográfico literal para geração de imagem AI (Freepik).
-O prompt deve descrever ELEMENTOS VISUAIS CONCRETOS: pessoas, ambiente, iluminação, cores, estilo fotográfico.
-NÃO use metáforas. NÃO mencione Desert Crossing ou jornada. Use inglês.
-Contexto: post Instagram para médica ginecologista, longevidade feminina, público mulheres 40-65 anos.
-Tema: ${state.tema || 'saúde hormonal feminina'}
+      'VocÃª converte briefings criativos em prompts fotogrÃ¡ficos diretos para geraÃ§Ã£o de imagem com IA. Responda APENAS com o prompt em inglÃªs, sem explicaÃ§Ãµes, sem aspas, mÃ¡ximo 160 palavras.',
+      `Converta este briefing em um prompt fotogrÃ¡fico literal para geraÃ§Ã£o de imagem AI (Freepik).
+O prompt deve descrever ELEMENTOS VISUAIS CONCRETOS: pessoas, ambiente, iluminaÃ§Ã£o, cores, estilo fotogrÃ¡fico.
+NÃO use metÃ¡foras. NÃO mencione Desert Crossing ou jornada. Use inglÃªs.
+Contexto: post Instagram para mÃ©dica ginecologista, longevidade feminina, pÃºblico mulheres 40-65 anos.
+Tema: ${state.tema || 'saÃºde hormonal feminina'}
 BRIEFING: ${briefingText.substring(0,500)}`
     );
     /* Brand prefix + cena gerada = prompt final */
@@ -1206,9 +1206,9 @@ BRIEFING: ${briefingText.substring(0,500)}`
   label.textContent = 'Gerando...';
 
   try {
-    /* 2. POST — endpoint Mystic (recomendado pelo Freepik, assíncrono garantido)
-       Docs: POST /v1/ai/mystic → retorna data.task_id + data.status = "IN_PROGRESS"
-       Polling: GET /v1/ai/mystic/{task_id} → data.status = "COMPLETED" + data.generated = [url] */
+    /* 2. POST â endpoint Mystic (recomendado pelo Freepik, assÃ­ncrono garantido)
+       Docs: POST /v1/ai/mystic â retorna data.task_id + data.status = "IN_PROGRESS"
+       Polling: GET /v1/ai/mystic/{task_id} â data.status = "COMPLETED" + data.generated = [url] */
     setProgress(15, 'Enviando para Freepik Mystic...');
 
     const loraId = getLoraId();
@@ -1227,14 +1227,27 @@ BRIEFING: ${briefingText.substring(0,500)}`
     };
 
     if(loraId){
-      /* Character LoRA ativo — preserva rosto, cabelo e estrutura.
-         Documentação: LoRAs são ignorados quando style_reference está presente.
-         Portanto NÃO usamos style_reference aqui. */
-      postBody.prompt = '@' + loraName + '::85 ' + prompt;
-      postBody.styling.characters = [{ id: loraId, strength: 85 }];
-      setProgress(15, 'Aplicando personagem da Dra. Roseli...');
+      /* Character LoRA ativo.
+         NOTA: Freepik para de parsear @nome no primeiro hifen.
+         Nomes com hifens causam erro "Invalid character name".
+         Fallback automatico para model:realism.
+         Para usar o personagem, resetar e registrar com nome sem hifens (ex: roseliv3). */
+      const hasHyphen = loraName.includes('-');
+      if(!hasHyphen){
+        postBody.prompt = '@' + loraName + ' ' + prompt;
+        postBody.styling.characters = [{ id: loraId, strength: 0.85 }];
+        setProgress(15, 'Aplicando personagem da Dra. Roseli...');
+      } else {
+        postBody.model = 'realism';
+        postBody.resolution = '2k';
+        setProgress(15, 'Gerando imagem (modo realism)...');
+        const warnDiv = document.createElement('div');
+        warnDiv.style.cssText = 'font-size:11px;color:#854f0b;background:#faeeda;padding:.5rem .7rem;border-radius:6px;margin-bottom:.7rem;line-height:1.5';
+        warnDiv.innerHTML = 'Personagem ativo mas nome com hifens nao e suportado pelo parser do Freepik. Imagem gerada sem personagem. Para corrigir: clique em Resetar e registre com nome sem hifens.';
+        container.prepend(warnDiv);
+      }
     } else {
-      /* Sem LoRA — modo padrão sem âncora de rosto */
+      /* Sem LoRA - modo padrao */
       postBody.model = 'realism';
       postBody.resolution = '2k';
       setProgress(15, 'Gerando imagem...');
@@ -1257,14 +1270,14 @@ BRIEFING: ${briefingText.substring(0,500)}`
     const taskId = postData?.data?.task_id || null;
 
     if(!taskId){
-      throw new Error('task_id não recebido. Resposta: ' + JSON.stringify(postData).substring(0, 200));
+      throw new Error('task_id nÃ£o recebido. Resposta: ' + JSON.stringify(postData).substring(0, 200));
     }
 
-    /* 3. POLLING — GET /v1/ai/mystic/{task_id}
-       Status esperados (maiúsculas): CREATED → IN_PROGRESS → COMPLETED | FAILED */
+    /* 3. POLLING â GET /v1/ai/mystic/{task_id}
+       Status esperados (maiÃºsculas): CREATED â IN_PROGRESS â COMPLETED | FAILED */
     setProgress(25, 'Processando... aguarde ~30 segundos');
 
-    const MAX_TRIES = 25;   /* 25 × 3s = 75s máximo */
+    const MAX_TRIES = 25;   /* 25 Ã 3s = 75s mÃ¡ximo */
     const INTERVAL_MS = 3000;
     let tries = 0;
 
@@ -1287,7 +1300,7 @@ BRIEFING: ${briefingText.substring(0,500)}`
       const status = getData?.data?.status || 'IN_PROGRESS';
 
       if(status === 'FAILED'){
-        throw new Error('Freepik reportou FAILED. Verifique os créditos da chave e tente novamente.');
+        throw new Error('Freepik reportou FAILED. Verifique os crÃ©ditos da chave e tente novamente.');
       }
 
       if(status === 'COMPLETED'){
@@ -1303,7 +1316,7 @@ BRIEFING: ${briefingText.substring(0,500)}`
         renderFreepikImages(images, container);
         return;
       }
-      /* status IN_PROGRESS ou CREATED → continua polling */
+      /* status IN_PROGRESS ou CREATED â continua polling */
     }
 
     throw new Error(`Tempo limite (${MAX_TRIES * INTERVAL_MS / 1000}s) excedido. Tente novamente.`);
@@ -1312,7 +1325,7 @@ BRIEFING: ${briefingText.substring(0,500)}`
     container.innerHTML = `<div class="alert-error">
       <strong>Erro Freepik:</strong> ${err.message}
       <br><br>
-      <span style="font-size:11px">Verifique: chave FPSX correta · plano API com créditos · se persisitir, aguarde 1 min e tente de novo.</span>
+      <span style="font-size:11px">Verifique: chave FPSX correta Â· plano API com crÃ©ditos Â· se persisitir, aguarde 1 min e tente de novo.</span>
     </div>`;
   } finally {
     btn.disabled = false;
@@ -1322,7 +1335,7 @@ BRIEFING: ${briefingText.substring(0,500)}`
 }
 
 function renderFreepikImages(images, container){
-  /* Mystic retorna URLs (não base64). Exibe 3 em grid com botão de download. */
+  /* Mystic retorna URLs (nÃ£o base64). Exibe 3 em grid com botÃ£o de download. */
   let imgHtml = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:.5rem">';
   images.forEach((img, i) => {
     /* img pode ser string URL direto ou objeto {url:...} */
@@ -1330,13 +1343,13 @@ function renderFreepikImages(images, container){
     if(!src) return;
 
     imgHtml += `<div style="border:0.5px solid #e0d8cc;border-radius:8px;overflow:hidden">
-      <img src="${src}" style="width:100%;display:block" crossorigin="anonymous" alt="Variação ${i+1}"
+      <img src="${src}" style="width:100%;display:block" crossorigin="anonymous" alt="VariaÃ§Ã£o ${i+1}"
         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <div style="display:none;padding:1rem;font-size:12px;color:#888;text-align:center">
-        Erro ao carregar — <a href="${src}" target="_blank" style="color:#b8a016">abrir link</a>
+        Erro ao carregar â <a href="${src}" target="_blank" style="color:#b8a016">abrir link</a>
       </div>
       <div style="padding:.4rem .6rem;display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:11px;color:#888">Variação ${i+1}</span>
+        <span style="font-size:11px;color:#888">VariaÃ§Ã£o ${i+1}</span>
         <a href="${src}" target="_blank" download style="font-size:11px;color:#b8a016;text-decoration:none">Baixar</a>
       </div>
     </div>`;
