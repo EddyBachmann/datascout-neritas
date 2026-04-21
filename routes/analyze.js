@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 const SYSTEM_PROMPT = `Você é um especialista em prospecção B2B para agências de marketing digital.
@@ -10,32 +11,70 @@ Retorne EXCLUSIVAMENTE um JSON válido (sem markdown, sem texto extra, sem bloco
   "setor": "setor de atuação · cidade (se identificável)",
   "score": número inteiro de 0 a 100,
   "temperatura": "quente" ou "morno" ou "frio",
-  "insight": "uma frase curta e perspicaz resumindo o principal achado (ex: 'Site parado há meses e sem presença em ads — terreno fértil para uma proposta.')",
+  "insight": "uma frase curta e perspicaz resumindo o principal achado",
   "dores": ["problema identificado 1", "problema identificado 2", "problema identificado 3"],
-  "abordagem": "roteiro completo de prospecção personalizado para esta empresa, com: abertura personalizada, identificação da dor principal, proposta de valor da agência, pergunta de qualificação e próximos passos"
+  "abordagem": "roteiro completo de prospecção personalizado"
 }
 
-CRITÉRIOS DE SCORE (some os pontos dos critérios que se aplicam ao site analisado):
-- Site desatualizado, sem blog ativo ou design claramente antiquado: +20 pontos
-- Sem presença em anúncios pagos visíveis (sem menção a Google Ads, Meta Ads, campanhas): +20 pontos
-- Formulário quebrado, ausente ou sem CTA claro e convincente: +15 pontos
-- Sem links para redes sociais ou redes claramente desatualizadas/abandonadas: +15 pontos
-- Sem SEO básico (título genérico, sem meta descrição, sem estrutura de headings): +15 pontos
-- Setor onde concorrentes claramente investem mais em marketing digital: +15 pontos
+CRITÉRIOS DE SCORE:
+- Site desatualizado, sem blog ativo ou design antiquado: +20 pontos
+- Sem presença em anúncios pagos visíveis: +20 pontos
+- Formulário quebrado, ausente ou sem CTA claro: +15 pontos
+- Sem links para redes sociais ou redes abandonadas: +15 pontos
+- Sem SEO básico: +15 pontos
+- Setor onde concorrentes investem mais em marketing: +15 pontos
 
 Score 70–100 → temperatura "quente"
 Score 40–69 → temperatura "morno"
 Score 0–39  → temperatura "frio"
 
 IMPORTANTE:
-- Seja honesto na avaliação — nem toda empresa é uma oportunidade quente
-- O insight deve ser uma observação perspicaz em linguagem humana, não uma lista de problemas
-- A abordagem deve soar natural e personalizada para esta empresa específica, não genérica
+- Seja honesto na avaliação
+- O insight deve ser perspicaz em linguagem humana
+- A abordagem deve soar natural e personalizada
 - Responda SEMPRE em português do Brasil
-- Retorne APENAS o JSON — nenhum texto antes ou depois`;
+- Retorne APENAS o JSON`;
 
+/**
+ * Helper function to extract JSON from response text
+ */
+function extractJsonFromResponse(text) {
+  const start = text.indexOf('{');
+  const end = text.lastIndexOf('}');
+  
+  if (start === -1 || end === -1 || end <= start) {
+    throw new Error('Nenhum objeto JSON encontrado na resposta');
+  }
+  
+  return JSON.parse(text.slice(start, end + 1));
+}
+
+/**
+ * Normalize lead data with defaults and validations
+ */
+function normalizeLead(lead) {
+  lead.score = Math.min(100, Math.max(0, parseInt(lead.score) || 0));
+  
+  if (!['quente', 'morno', 'frio'].includes(lead.temperatura)) {
+    lead.temperatura = lead.score >= 70 ? 'quente' : lead.score >= 40 ? 'morno' : 'frio';
+  }
+  
+  lead.dores = Array.isArray(lead.dores) ? lead.dores.slice(0, 5) : [];
+  lead.empresa = lead.empresa || 'Empresa sem nome';
+  lead.setor = lead.setor || 'Setor não identificado';
+  lead.insight = lead.insight || '';
+  lead.abordagem = lead.abordagem || '';
+  
+  return lead;
+}
+
+/**
+ * POST /api/analyze
+ * Analyzes website content for B2B prospecting
+ */
 router.post('/', async (req, res) => {
   console.log('[analyze] req.body:', JSON.stringify(req.body));
+  
   const { content, url, title } = req.body;
 
   if (!content) {
@@ -69,41 +108,36 @@ ${content}`;
     }
 
     if (!rawResponse) {
-      return res.status(500).json({ error: 'Nenhuma resposta gerada. Verifique se o Claude Code está autenticado.' });
+      return res.status(500).json({ 
+        error: 'Nenhuma resposta gerada. Verifique se o Claude Code está autenticado.' 
+      });
     }
 
     let lead;
     try {
-      const start = rawResponse.indexOf('{');
-      const end = rawResponse.lastIndexOf('}');
-      if (start === -1 || end === -1 || end <= start) {
-        throw new Error('Nenhum objeto JSON encontrado na resposta');
-      }
-      lead = JSON.parse(rawResponse.slice(start, end + 1));
+      lead = extractJsonFromResponse(rawResponse);
     } catch (parseErr) {
       console.error('[analyze] Erro ao parsear JSON:', parseErr.message);
       return res.status(500).json({ error: 'Resposta inválida do Claude. Tente novamente.' });
     }
 
-    lead.score = Math.min(100, Math.max(0, parseInt(lead.score) || 0));
-    if (!['quente', 'morno', 'frio'].includes(lead.temperatura)) {
-      lead.temperatura = lead.score >= 70 ? 'quente' : lead.score >= 40 ? 'morno' : 'frio';
-    }
-    lead.dores = Array.isArray(lead.dores) ? lead.dores.slice(0, 5) : [];
-    lead.empresa = lead.empresa || 'Empresa sem nome';
-    lead.setor = lead.setor || 'Setor não identificado';
-    lead.insight = lead.insight || '';
-    lead.abordagem = lead.abordagem || '';
+    lead = normalizeLead(lead);
 
     res.json({ lead });
   } catch (err) {
     const name = err.constructor?.name || '';
+    
     if (name === 'CLINotFoundError') {
-      return res.status(500).json({ error: 'Claude Code CLI não encontrado. Instale com: npm install -g @anthropic-ai/claude-code' });
+      return res.status(500).json({ 
+        error: 'Claude Code CLI não encontrado. Instale com: npm install -g @anthropic-ai/claude-code' 
+      });
     }
     if (name === 'CLIConnectionError') {
-      return res.status(500).json({ error: 'Erro de conexão com o Claude CLI. Execute: claude login' });
+      return res.status(500).json({ 
+        error: 'Erro de conexão com o Claude CLI. Execute: claude login' 
+      });
     }
+    
     console.error('Erro na análise:', err.message);
     res.status(500).json({ error: 'Erro interno ao analisar conteúdo.' });
   }
