@@ -1,0 +1,27 @@
+{
+  "nome": "Dra. Roseli Perfoll",
+  "especialidade": "Ginecologia e longevidade feminina",
+  "cidade": "Balneário Camboriú, SC",
+  "instagram": "@dra.roseliperfoll",
+  "publico": "Mulheres 40–65 anos, nível socioeconômico médio-alto, interesse em saúde hormonal e qualidade de vida",
+  "concorrentes": "@draelisakoerich (14K), @dra.aimeesauer (5.8K)",
+  "tom": "Acolhedor, técnico sem ser frio, empoderador. Nunca alarmista. Voz de guia experiente.",
+  "arquetipo": "Expedition Guide — Desert Crossing. Transforma a complexidade em caminhos claros.",
+  "paleta": "Gold #d8c01c, Warm White #F5F0E8, Dark #1A1410",
+  "evitar": "Repetir pautas já publicadas. Linguagem muito técnica sem tradução. Tom clínico frio.",
+  "historico": "Menopausa (geral), reposição hormonal introdução, sono e saúde, alimentação anti-inflamatória",
+  "identidade_visual": {
+    "bg_escuro": "#1A1410",
+    "bg_claro": "#F5F0E8",
+    "acento": "#d8c01c",
+    "texto": "#F5F0E8",
+    "muted": "#9A8F7A",
+    "fonte_titulo": "Blacker Sans Display",
+    "fonte_corpo": "RoxboroughCF",
+    "mood": "medical luxury, feminine authority, longevity, elegant, warm dark",
+    "negativo": "neon, cold whites, sans-serif headlines, bright bg, casual aesthetics"
+  },
+  "loraId": "",
+  "loraStatus": "pendente",
+  "registradoEm": null
+}

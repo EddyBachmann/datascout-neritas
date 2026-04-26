@@ -1,0 +1,21 @@
+{
+  "name": "datascout-backend",
+  "version": "1.0.0",
+  "description": "Backend do DataScout - coleta e análise de dados web",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.3",
+    "apify-client": "^2.23.0",
+    "axios": "^1.6.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

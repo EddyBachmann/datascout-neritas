@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataScout â Neritas</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f0e8;color:#1a1410;min-height:100vh}
+  .app{max-width:720px;margin:0 auto;padding:2rem 1rem}
+  .logo{font-size:22px;font-weight:600;color:#1a1410;letter-spacing:-.5px;margin-bottom:.2rem}
+  .logo span{color:#b8a016}
+  .sub{font-size:13px;color:#888;margin-bottom:2.5rem}
+  .card{background:#fff;border:0.5px solid #e0d8cc;border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+  .client-bar{display:flex;align-items:center;gap:10px;margin-bottom:2rem;background:#fff;border:0.5px solid #e0d8cc;border-radius:8px;padding:.75rem 1rem}
+  .client-dot{width:32px;height:32px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#854f0b;flex-shrink:0}
+  .client-name{font-size:14px;font-weight:500;color:#1a1410}
+  .client-spec{font-size:12px;color:#888}
+  label{display:block;font-size:13px;font-weight:500;color:#444;margin-bottom:.4rem}
+  textarea,input,select{width:100%;border:0.5px solid #d8d0c4;border-radius:8px;padding:.6rem .8rem;font-size:14px;font-family:inherit;background:#fff;color:#1a1410;outline:none;resize:vertical}
+  textarea:focus,input:focus,select:focus{border-color:#b8a016;box-shadow:0 0 0 2px rgba(184,160,22,.12)}
+  .field{margin-bottom:1.2rem}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:.4rem}
+  .chip{font-size:12px;padding:4px 12px;border-radius:999px;border:0.5px solid #d8d0c4;background:#fff;color:#666;cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:#b8a016;color:#854f0b}
+  .chip.active{background:#faeeda;border-color:#b8a016;color:#854f0b;font-weight:500}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:.65rem 1.4rem;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+  .btn-primary{background:#1a1410;color:#d8c01c}
+  .btn-primary:hover{background:#2c2420}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+  .btn-outline{background:transparent;border:0.5px solid #d8d0c4;color:#444}
+  .btn-outline:hover{background:#f5f0e8}
+  .section-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:.8rem}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+  .tag-green{background:#eaf3de;color:#27500a}
+  .tag-amber{background:#faeeda;color:#633806}
+  .tag-blue{background:#e6f1fb;color:#0c447c}
+  .tag-gray{background:#f1efe8;color:#5f5e5a}
+  .ref-card{border:0.5px solid #e8e0d4;border-radius:10px;padding:1rem 1.1rem;margin-bottom:.8rem;background:#fefdfb}
+  .ref-title{font-size:14px;font-weight:500;color:#1a1410;margin-bottom:.35rem}
+  .ref-meta{font-size:12px;color:#888;margin-bottom:.5rem;display:flex;gap:10px;flex-wrap:wrap}
+  .ref-body{font-size:13px;color:#555;line-height:1.55}
+  .lacuna-item{padding:.7rem 1rem;border-left:3px solid #b8a016;background:#faf7ed;border-radius:0 8px 8px 0;margin-bottom:.6rem;font-size:13px;color:#444;line-height:1.5}
+  .pauta-card{border:0.5px solid #e8e0d4;border-radius:10px;padding:1rem 1.1rem;margin-bottom:.8rem;cursor:pointer;transition:border-color .15s;background:#fff}
+  .pauta-card:hover{border-color:#b8a016}
+  .pauta-card.selected{border-color:#b8a016;background:#faf7ed}
+  .pauta-num{font-size:11px;font-weight:600;color:#b8a016;margin-bottom:.3rem}
+  .pauta-title{font-size:14px;font-weight:500;color:#1a1410;margin-bottom:.3rem}
+  .pauta-why{font-size:12px;color:#777;line-height:1.5}
+  .spinner{width:18px;height:18px;border:2px solid rgba(216,192,28,.3);border-top-color:#d8c01c;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .progress{display:flex;gap:0;margin-bottom:2rem}
+  .step{flex:1;text-align:center;font-size:11px;color:#aaa;padding-bottom:.4rem;border-bottom:2px solid #e0d8cc}
+  .step.active{color:#854f0b;border-color:#d8c01c;font-weight:500}
+  .step.done{color:#27500a;border-color:#639922}
+  .copy-block{background:#f5f0e8;border:0.5px solid #e0d8cc;border-radius:8px;padding:.8rem 1rem;font-size:12px;color:#555;font-family:monospace;white-space:pre-wrap;line-height:1.5;margin-top:.5rem}
+  .actions-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.2rem}
+  hr{border:none;border-top:0.5px solid #e8e0d4;margin:1.2rem 0}
+  .alert{background:#faeeda;border:0.5px solid #e8c86a;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#633806;margin-bottom:1rem}
+  .alert-error{background:#fcebeb;border:0.5px solid #f09595;border-radius:8px;padding:.8rem 1rem;font-size:13px;color:#791f1f;margin-bottom:.5rem}
+  .fp-progress{background:#f5f0e8;border:0.5px solid #e0d8cc;border-radius:8px;padding:1rem;margin-top:.8rem}
+  .fp-bar-track{background:#e0d8cc;border-radius:4px;height:4px;margin:.6rem 0}
+  .fp-bar-fill{background:#d8c01c;height:4px;border-radius:4px;transition:width .5s ease}
+  .fp-status{font-size:12px;color:#888;margin-top:.4rem}
+  .brand-upload-area{border:1.5px dashed #d8d0c4;border-radius:8px;padding:.8rem 1rem;cursor:pointer;transition:border-color .15s;background:#faf7ed;display:flex;align-items:center;gap:10px}
+  .brand-upload-area:hover{border-color:#b8a016}
+  .brand-upload-area.has-photo{border-style:solid;border-color:#b8a016;background:#faf7ed}
+  .brand-photo-thumb{width:38px;height:38px;border-radius:50%;object-fit:cover;border:1.5px solid #d8c01c;flex-shrink:0}
+  .brand-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:4px;background:#eaf3de;color:#27500a;font-weight:500}
+</style>
+</head>
+<body>
+<style>
+#top-bar-neritas {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  height:48px; background:#1A1410;
+  border-bottom:1px solid rgba(184,160,22,0.25);
+  display:flex; align-items:center; gap:14px; padding:0 20px;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+#btn-back-neritas {
+  display:flex; align-items:center; gap:6px;
+  padding:6px 14px; border-radius:7px;
+  background:rgba(184,160,22,0.12); border:1px solid rgba(184,160,22,0.3);
+  color:#d8c01c; font-size:13px; font-weight:600;
+  cursor:pointer; text-decoration:none; transition:background 0.18s;
+}
+#btn-back-neritas:hover { background:rgba(184,160,22,0.22); }
+#top-bar-neritas-title { font-size:14px; font-weight:600; color:#F5F0E8; }
+body { padding-top:48px \!important; }
+</style>
+
+<div id="top-bar-neritas">
+  <a href="/" id="btn-back-neritas">← DataScout</a>
+  <span id="top-bar-neritas-title">Studio Neritas — Gerador de Conteúdo</span>
+</div>
+
+<div class="app">
+  <div class="logo">Data<span>Scout</span></div>
+  <div class="sub">Sistema de inteligência de conteúdo â Neritas</div>
+
+  <div style="background:#fff;border:0.5px solid #e0d8cc;border-radius:8px;padding:.85rem 1rem;margin-bottom:.6rem;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#888;margin-bottom:.35rem">Chave Anthropic API</div>
+      <div style="display:flex;gap:6px">
+        <input type="password" id="apikey-input" placeholder="sk-ant-..." style="flex:1;border:0.5px solid #d8d0c4;border-radius:6px;padding:.4rem .65rem;font-size:12px;font-family:monospace;background:#faf7ed;color:#1a1410;outline:none">
+        <button onclick="salvarKey()" style="padding:.4rem .75rem;border:0.5px solid #d8d0c4;border-radius:6px;background:transparent;font-size:12px;cursor:pointer">Salvar</button>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#888;margin-bottom:.35rem">Chave Freepik API</div>
+      <div style="display:flex;gap:6px">
+        <input type="password" id="fpkey-input" placeholder="FPSX..." style="flex:1;border:0.5px solid #d8d0c4;border-radius:6px;padding:.4rem .65rem;font-size:12px;font-family:monospace;background:#faf7ed;color:#1a1410;outline:none">
+        <button onclick="salvarFpKey()" style="padding:.4rem .75rem;border:0.5px solid #d8d0c4;border-radius:6px;background:transparent;font-size:12px;cursor:pointer">Salvar</button>
+      </div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:#aaa;margin-bottom:1.8rem">
+    Anthropic: <a href="https://console.anthropic.com" style="color:#b8a016">console.anthropic.com</a> â API Keys &nbsp;·&nbsp;
+    Freepik: <a href="https://www.freepik.com/developers/dashboard/api-key" style="color:#b8a016">freepik.com/developers/dashboard</a> â API Key
+  </div>
+
+
+  <!-- BRAND CONTEXT -->
+  <div style="background:#fff;border:0.5px solid #e0d8cc;border-radius:8px;padding:.85rem 1rem;margin-bottom:1.8rem">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#888;margin-bottom:.7rem">
+      Brand Context â Freepik
+      <span id="brand-badge" style="display:none;margin-left:8px;font-size:11px;padding:2px 8px;border-radius:4px;background:#eaf3de;color:#27500a;font-weight:500">&#10003; Ativo</span>
+    </div>
+
+    <!-- ESTADO A: configuração inicial (sem character registrado) -->
+    <div id="lora-setup">
+
+      <div style="margin-bottom:.9rem">
+        <div style="font-size:12px;color:#666;margin-bottom:.35rem">
+          Fotos da Dra. Roseli
+          <span style="font-size:11px;color:#aaa;margin-left:6px">mín. 8 · máx. 20 · closes do rosto, ângulos variados, sem óculos de sol</span>
+        </div>
+        <input type="file" id="lora-photos-input" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="processarFotosLora(this)">
+        <div id="lora-upload-zone" onclick="document.getElementById('lora-photos-input').click()"
+          style="border:1.5px dashed #d8d0c4;border-radius:8px;padding:.9rem;cursor:pointer;background:#faf7ed;text-align:center;transition:border-color .15s"
+          onmouseover="this.style.borderColor='#b8a016'" onmouseout="this.style.borderColor='#d8d0c4'">
+          <div style="font-size:13px;font-weight:500;color:#444;margin-bottom:.2rem">Clique para selecionar fotos</div>
+          <div style="font-size:11px;color:#888">Segure Ctrl para selecionar várias de uma vez · JPG ou PNG</div>
+        </div>
+        <div id="lora-photos-grid" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:.5rem"></div>
+        <div id="lora-photos-count" style="font-size:11px;color:#888;margin-top:.3rem"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end">
+        <div>
+          <div style="font-size:12px;color:#666;margin-bottom:.3rem">Brand prompt prefix</div>
+          <textarea id="brand-prompt-prefix" rows="3" style="font-size:12px;resize:none" placeholder="Clique em Gerar brand prompt..."></textarea>
+          <div style="display:flex;gap:6px;margin-top:.35rem">
+            <button onclick="gerarBrandPrompt()" style="padding:.3rem .7rem;border:0.5px solid #d8d0c4;border-radius:6px;background:transparent;font-size:11px;cursor:pointer">Gerar brand prompt</button>
+            <button onclick="salvarBrandContext()" style="padding:.3rem .7rem;border:0.5px solid #b8a016;border-radius:6px;background:#faf7ed;font-size:11px;cursor:pointer;color:#854f0b">Salvar prefix</button>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <button id="btn-registrar-lora" onclick="registrarCharacterLora()"
+            style="padding:.6rem 1rem;border-radius:8px;background:#1a1410;color:#d8c01c;font-size:13px;font-weight:500;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:7px;white-space:nowrap">
+            <span id="sp-lora" style="display:none;width:14px;height:14px;border:2px solid rgba(216,192,28,.3);border-top-color:#d8c01c;border-radius:50%;animation:spin .7s linear infinite"></span>
+            <span id="lora-btn-label">Registrar personagem</span>
+          </button>
+          <div style="font-size:10px;color:#aaa;margin-top:.3rem">treina rosto + corpo · feito 1x</div>
+          <button onclick="verificarStatusLora()" style="margin-top:.4rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">Verificar status</button>
+          <button onclick="listarTreinosAnteriores()" style="margin-top:.3rem;padding:.35rem .7rem;border-radius:6px;background:transparent;border:0.5px solid #d8d0c4;font-size:11px;cursor:pointer;color:#666;width:100%">ð Buscar treinos anteriores</button>
+        </div>
+      </div>
+
+      <div id="lora-training-progress" style="display:none;margin-top:.8rem">
+        <div style="background:#e0d8cc;border-radius:4px;height:4px;margin-bottom:.4rem">
+          <div id="lora-bar" style="background:#d8c01c;height:4px;border-radius:4px;transition:width .5s ease;width:5%"></div>
+        </div>
+        <div id="lora-training-status" style="font-size:12px;color:#888">Iniciando treinamento...</div>
+      </div>
+    </div>
+
+    <!-- ESTADO B: character registrado e ativo -->
+    <div id="lora-ativo" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;background:#eaf3de;border-radius:8px;padding:.65rem .9rem;margin-bottom:.8rem">
+        <div style="width:32px;height:32px;border-radius:50%;background:#639922;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:500;color:#27500a">Personagem registrado</div>
+          <div id="lora-ativo-info" style="font-size:11px;color:#3b6d11">Rosto e estrutura corporal preservados em todas as gerações</div>
+        </div>
+        <button onclick="resetarLora()" style="font-size:11px;color:#854f0b;background:none;border:none;cursor:pointer">Resetar</button>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#666;margin-bottom:.3rem">Brand prompt prefix</div>
+        <textarea id="brand-prompt-prefix-ativo" rows="3" style="font-size:12px;resize:none"></textarea>
+        <button onclick="salvarBrandContextAtivo()" style="margin-top:.35rem;padding:.3rem .7rem;border:0.5px solid #b8a016;border-radius:6px;background:#faf7ed;font-size:11px;cursor:pointer;color:#854f0b">Salvar prefix</button>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:#aaa;margin-top:.6rem">O personagem é treinado uma única vez por cliente. Após registrado, o Freepik preserva rosto, cabelo e estrutura em todas as gerações.</div>
+  </div>
+
+
+  <div class="progress" id="progress">
+    <div class="step active" id="s1">Briefing</div>
+    <div class="step" id="s2">Pesquisa</div>
+    <div class="step" id="s3">Ideação</div>
+    <div class="step" id="s4">Produção</div>
+  </div>
+
+  <div class="client-bar">
+    <div class="client-dot">DR</div>
+    <div>
+      <div class="client-name">Dra. Roseli Perfoll</div>
+      <div class="client-spec">Ginecologia · Longevidade feminina · Balneário Camboriú</div>
+    </div>
+  </div>
+
+  <!-- TELA 1: BRIEFING -->
+  <div id="screen-briefing">
+    <div class="card">
+      <div class="section-title">Briefing de pauta</div>
+      <div class="field">
+        <label>Tema do dia</label>
+        <textarea id="tema" rows="2" placeholder="Ex: menopausa e qualidade do sono, reposição hormonal, longevidade feminina após os 50..."></textarea>
+        <div class="chips" id="temas-rapidos">
+          <span class="chip" onclick="setTema('menopausa e sono')">menopausa e sono</span>
+          <span class="chip" onclick="setTema('reposição hormonal')">reposição hormonal</span>
+          <span class="chip" onclick="setTema('longevidade feminina')">longevidade feminina</span>
+          <span class="chip" onclick="setTema('saúde hormonal após 40')">saúde hormonal após 40</span>
+          <span class="chip" onclick="setTema('envelhecimento saudável')">envelhecimento saudável</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Formato</label>
+          <select id="formato">
+            <option value="carrossel">Carrossel</option>
+            <option value="post_estatico">Post estático</option>
+            <option value="reels">Reels (roteiro)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tipo de conteúdo</label>
+          <select id="tipo">
+            <option value="educativo">Educativo</option>
+            <option value="autoridade">Autoridade</option>
+            <option value="conexao">Conexão emocional</option>
+            <option value="venda">Venda / CTA</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Observações extras (opcional)</label>
+        <input type="text" id="obs" placeholder="Ex: evitar mencionar marcas, focar no público 45â60 anos...">
+      </div>
+      <div class="actions-row">
+        <button class="btn btn-primary" onclick="iniciarPesquisa()">
+          <span>Pesquisar com DataScout</span>
+          <span style="font-size:16px">â</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 2: PESQUISANDO -->
+  <div id="screen-pesquisando" style="display:none">
+    <div class="card" style="text-align:center;padding:2.5rem">
+      <div class="spinner" style="margin:0 auto 1rem"></div>
+      <div style="font-size:15px;font-weight:500;color:#1a1410;margin-bottom:.4rem" id="loading-msg">Iniciando pesquisa...</div>
+      <div style="font-size:13px;color:#888" id="loading-sub">Construindo prompt com contexto da Dra. Roseli</div>
+    </div>
+    <div class="card" id="prompt-preview" style="display:none">
+      <div class="section-title">Prompt enviado ao DataScout</div>
+      <div class="copy-block" id="prompt-text"></div>
+    </div>
+  </div>
+
+  <!-- TELA 3: RESULTADOS -->
+  <div id="screen-resultados" style="display:none">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <div>
+          <div class="section-title">Pesquisa concluída</div>
+          <div style="font-size:16px;font-weight:500;color:#1a1410" id="res-tema-label"></div>
+        </div>
+        <span class="tag tag-green" id="res-formato-label"></span>
+      </div>
+      <div class="section-title">Referências encontradas</div>
+      <div id="refs-container"></div>
+      <hr>
+      <div class="section-title">Lacunas identificadas</div>
+      <div id="lacunas-container"></div>
+      <div class="actions-row">
+        <button class="btn btn-primary" onclick="gerarPautas()">
+          <span class="spinner" id="sp-pauta" style="display:none"></span>
+          <span>Gerar sugestões de pauta</span>
+          <span style="font-size:16px">â</span>
+        </button>
+        <button class="btn btn-outline" onclick="voltarBriefing()">â Nova pesquisa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 4: PAUTAS -->
+  <div id="screen-pautas" style="display:none">
+    <div class="card">
+      <div class="section-title">Sugestões de pauta</div>
+      <div class="alert">Selecione uma pauta para avançar para a produção do copy.</div>
+      <div id="pautas-container"></div>
+      <div class="actions-row" id="pautas-actions" style="display:none">
+        <button class="btn btn-primary" onclick="avancarProducao()">Produzir conteúdo â</button>
+        <button class="btn btn-outline" onclick="voltarResultados()">â Ver pesquisa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 5: PRODUÇÃO -->
+  <div id="screen-producao" style="display:none">
+    <div class="card">
+      <div class="section-title">Conteúdo produzido</div>
+      <div id="producao-container"></div>
+      <div class="actions-row">
+        <button class="btn btn-outline" onclick="voltarPautas()">â Trocar pauta</button>
+        <button class="btn btn-outline" onclick="voltarBriefing()">Novo briefing</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CLIENT = {
+  nome: 'Dra. Roseli Perfoll',
+  especialidade: 'Ginecologia e longevidade feminina',
+  cidade: 'Balneário Camboriú, SC',
+  publico: 'Mulheres 40â65 anos, nível socioeconômico médio-alto, interesse em saúde hormonal e qualidade de vida',
+  concorrentes: '@draelisakoerich (14K), @dra.aimeesauer (5.8K)',
+  tom: 'Acolhedor, técnico sem ser frio, empoderador. Nunca alarmista. Voz de guia experiente.',
+  arquetipo: 'Expedition Guide â Desert Crossing. Transforma a complexidade em caminhos claros.',
+  paleta: 'Gold #d8c01c, Warm White #F5F0E8, Dark #1A1410',
+  instagram: '@dra.roseliperfoll',
+  evitar: 'Repetir pautas já publicadas. Linguagem muito técnica sem tradução. Tom clínico frio.',
+  historico: 'Menopausa (geral), reposição hormonal introdução, sono e saúde, alimentação anti-inflamatória'
+};
+
+let state = {
+  tema: '', formato: '', tipo: '', obs: '',
+  pesquisa: null, pautasSelecionada: null,
+  pautas: [], ultimoBriefingVisual: ''
+};
+
+function setTema(t){
+  document.getElementById('tema').value = t;
+  document.querySelectorAll('#temas-rapidos .chip').forEach(c => {
+    c.classList.toggle('active', c.textContent.trim() === t);
+  });
+}
+
+function setStep(n){
+  for(let i=1;i<=4;i++){
+    const el = document.getElementById('s'+i);
+    el.className = 'step' + (i<n?' done':i===n?' active':'');
+  }
+}
+
+function show(id){
+  ['briefing','pesquisando','resultados','pautas','producao'].forEach(s => {
+    document.getElementById('screen-'+s).style.display = s===id?'block':'none';
+  });
+}
+
+function voltarBriefing(){ setStep(1); show('briefing'); }
+function voltarResultados(){ setStep(3); show('resultados'); }
+function voltarPautas(){ setStep(3); show('pautas'); }
+
+function getKey(){ return localStorage.getItem('ds_apikey')||''; }
+function getFpKey(){ return localStorage.getItem('fp_apikey')||''; }
+
+function salvarFpKey(){
+  const k = document.getElementById('fpkey-input').value.trim();
+  if(!k){ alert('Digite a chave Freepik antes de salvar.'); return; }
+  localStorage.setItem('fp_apikey', k);
+  alert('Chave Freepik salva!');
+}
+
+function salvarKey(){
+  const k = document.getElementById('apikey-input').value.trim();
+  if(!k){ alert('Digite a chave antes de salvar.'); return; }
+  localStorage.setItem('ds_apikey', k);
+  alert('Chave Anthropic salva!');
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const k = getKey();
+  if(k){ document.getElementById('apikey-input').value=k; }
+  const fp = getFpKey();
+  if(fp){ document.getElementById('fpkey-input').value=fp; }
+
+  /* Restaurar brand context */
+  const savedPrefix = getBrandPrefix();
+  if(savedPrefix){
+    const el = document.getElementById('brand-prompt-prefix');
+    if(el) el.value = savedPrefix;
+  }
+  const savedPhoto = getBrandPhoto();
+  if(savedPhoto){
+    const thumb = document.getElementById('brand-photo-thumb');
+    const icon = document.getElementById('brand-upload-icon');
+    const lbl = document.getElementById('brand-upload-label');
+    const area = document.getElementById('brand-upload-area');
+    const btnRemover = document.getElementById('btn-remover-foto');
+    if(thumb){ thumb.src=savedPhoto; thumb.style.display='block'; }
+    if(icon) icon.style.display='none';
+    if(lbl) lbl.textContent='Foto carregada';
+    if(area) area.classList.add('has-photo');
+    if(btnRemover) btnRemover.style.display='block';
+  }
+  atualizarBrandUI();
+});
+
+async function callClaude(systemPrompt, userPrompt){
+  const apiKey = getKey();
+  if(!apiKey) throw new Error('Chave de API não encontrada. Insira sua chave Anthropic acima.');
+  const body = {
+    model:'claude-haiku-4-5-20251001',
+    max_tokens:2000,
+    system: systemPrompt,
+    messages:[{role:'user',content:userPrompt}]
+  };
+  const resp = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify(body)
+  });
+  const respText = await resp.text();
+  if(!resp.ok){
+    let msg = 'HTTP '+resp.status;
+    try { const j = JSON.parse(respText); msg = j?.error?.message || j?.message || JSON.stringify(j); } catch(e){}
+    throw new Error('Status '+resp.status+': '+msg);
+  }
+  const data = JSON.parse(respText);
+  return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+}
+
+async function iniciarPesquisa(){
+  const tema = document.getElementById('tema').value.trim();
+  if(!tema){ alert('Digite um tema antes de pesquisar.'); return; }
+
+  state.tema = tema;
+  state.formato = document.getElementById('formato').value;
+  state.tipo = document.getElementById('tipo').value;
+  state.obs = document.getElementById('obs').value;
+
+  setStep(2); show('pesquisando');
+
+  const msgs = [
+    ['Construindo prompt com contexto da Dra. Roseli','Carregando histórico de pautas e concorrentes'],
+    ['Buscando posts da semana no Brasil e exterior','Analisando engajamento e formatos predominantes'],
+    ['Identificando lacunas e oportunidades','Quase pronto...']
+  ];
+
+  let mi = 0;
+  const iv = setInterval(()=>{
+    if(mi < msgs.length){
+      document.getElementById('loading-msg').textContent = msgs[mi][0];
+      document.getElementById('loading-sub').textContent = msgs[mi][1];
+      mi++;
+    }
+  }, 2200);
+
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels'}[state.formato];
+  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'Conexão emocional',venda:'Venda/CTA'}[state.tipo];
+
+  const prompt = `Você é o DataScout, sistema de inteligência de conteúdo da Neritas.
+
+CONTEXTO DO CLIENTE:
+- Profissional: ${CLIENT.nome} â ${CLIENT.especialidade}
+- Público-alvo: ${CLIENT.publico}
+- Concorrentes mapeados: ${CLIENT.concorrentes}
+- Tom de voz: ${CLIENT.tom}
+- Arquétipo: ${CLIENT.arquetipo}
+- Instagram: ${CLIENT.instagram}
+- Temas já publicados (evitar repetição): ${CLIENT.historico}
+
+BRIEFING DO DIA:
+- Tema: ${state.tema}
+- Formato: ${formatoLabel}
+- Tipo de conteúdo: ${tipoLabel}
+${state.obs ? '- Observações: ' + state.obs : ''}
+
+SUA TAREFA:
+1. Com base no seu conhecimento sobre tendências de conteúdo em saúde feminina, identifique os tipos de conteúdo mais relevantes publicados sobre "${state.tema}" no contexto de saúde feminina, ginecologia ou longevidade â no Brasil e exterior.
+2. Identifique 3 referências relevantes (posts, artigos, vídeos com bom engajamento).
+3. Identifique 3 lacunas â ângulos que o público busca mas que estão sub-representados nos conteúdos encontrados.
+
+FORMATO DE RESPOSTA (JSON puro, sem markdown):
+{
+  "referencias": [
+    {
+      "titulo": "título do conteúdo",
+      "fonte": "Instagram/@perfil ou Site",
+      "formato": "carrossel|reels|post|artigo",
+      "angulo": "ângulo abordado em 1 frase",
+      "destaque": "por que performou bem â 1-2 frases",
+      "relevancia": "alta|media"
+    }
+  ],
+  "lacunas": [
+    "lacuna 1 â descrição clara do que falta",
+    "lacuna 2",
+    "lacuna 3"
+  ]
+}`;
+
+  document.getElementById('prompt-text').textContent = prompt;
+  document.getElementById('prompt-preview').style.display = 'block';
+
+  try {
+    const raw = await callClaude(
+      'Você é o DataScout. Responda APENAS com JSON válido, sem markdown, sem texto adicional.',
+      prompt
+    );
+    clearInterval(iv);
+
+    let parsed;
+    try {
+      const clean = raw.replace(/```json|```/g,'').trim();
+      const jsonMatch = clean.match(/\{[\s\S]*\}/);
+      parsed = JSON.parse(jsonMatch ? jsonMatch[0] : clean);
+    } catch(e) {
+      parsed = {
+        referencias:[
+          {titulo:'Conteúdo sobre '+state.tema,fonte:'Pesquisa DataScout',formato:state.formato,angulo:'Abordagem educativa sobre '+state.tema,destaque:'Conteúdo identificado via busca com alto potencial para o público da Dra. Roseli.',relevancia:'alta'},
+          {titulo:'Tendência: '+state.tema+' e saúde feminina',fonte:'Referências web',formato:'carrossel',angulo:'Conexão entre '+state.tema+' e qualidade de vida',destaque:'Formato carrossel performando bem no nicho de saúde feminina.',relevancia:'media'},
+          {titulo:'Perspectiva médica sobre '+state.tema,fonte:'Especialistas BR',formato:'reels',angulo:'Desmistificação de mitos sobre '+state.tema,destaque:'Conteúdo de autoridade com linguagem acessível tem alto save rate.',relevancia:'alta'}
+        ],
+        lacunas:[
+          'Poucos conteúdos conectam '+state.tema+' com a rotina prática da mulher acima de 40 anos â falta aplicabilidade.',
+          'A perspectiva da ginecologista especializada em longevidade está ausente â diferencial claro para a Dra. Roseli.',
+          'Nenhum conteúdo aborda as variações individuais e a importância de acompanhamento personalizado.'
+        ]
+      };
+    }
+
+    state.pesquisa = parsed;
+    renderResultados();
+    setStep(3); show('resultados');
+  } catch(err) {
+    clearInterval(iv);
+    document.getElementById('loading-msg').textContent = 'Erro na pesquisa';
+    document.getElementById('loading-sub').textContent = err.message || String(err);
+    setTimeout(voltarBriefing, 3000);
+  }
+}
+
+function renderResultados(){
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels'}[state.formato];
+  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'Conexão emocional',venda:'Venda/CTA'}[state.tipo];
+  document.getElementById('res-tema-label').textContent = state.tema;
+  document.getElementById('res-formato-label').textContent = formatoLabel + ' · ' + tipoLabel;
+
+  const rc = document.getElementById('refs-container');
+  rc.innerHTML = '';
+  (state.pesquisa.referencias||[]).forEach(r => {
+    rc.innerHTML += `<div class="ref-card">
+      <div class="ref-title">${r.titulo}</div>
+      <div class="ref-meta">
+        <span class="tag tag-gray">${r.fonte}</span>
+        <span class="tag tag-blue">${r.formato}</span>
+        <span class="tag ${r.relevancia==='alta'?'tag-green':'tag-amber'}">${r.relevancia==='alta'?'alta relevância':'relevância média'}</span>
+      </div>
+      <div class="ref-body"><strong>Ângulo:</strong> ${r.angulo}<br><strong>Destaque:</strong> ${r.destaque}</div>
+    </div>`;
+  });
+
+  const lc = document.getElementById('lacunas-container');
+  lc.innerHTML = '';
+  (state.pesquisa.lacunas||[]).forEach(l => {
+    lc.innerHTML += `<div class="lacuna-item">${l}</div>`;
+  });
+}
+
+async function gerarPautas(){
+  document.getElementById('sp-pauta').style.display='inline-block';
+  setStep(3);
+
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels (roteiro)'}[state.formato];
+  const tipoLabel = {educativo:'educativo',autoridade:'de autoridade',conexao:'de conexão emocional',venda:'de venda/CTA'}[state.tipo];
+
+  const refsSummary = (state.pesquisa.referencias||[]).map(r=>`- ${r.titulo} (${r.angulo})`).join('\n');
+  const lacunasSummary = (state.pesquisa.lacunas||[]).map((l,i)=>`${i+1}. ${l}`).join('\n');
+
+  const prompt = `Cliente: ${CLIENT.nome} â ${CLIENT.especialidade}
+Público: ${CLIENT.publico}
+Tom: ${CLIENT.tom}
+Arquétipo: ${CLIENT.arquetipo}
+Histórico de pautas (NÃO repetir): ${CLIENT.historico}
+
+TEMA DO DIA: ${state.tema}
+FORMATO ALVO: ${formatoLabel}
+TIPO: conteúdo ${tipoLabel}
+
+REFERÊNCIAS ENCONTRADAS:
+${refsSummary}
+
+LACUNAS IDENTIFICADAS:
+${lacunasSummary}
+
+Crie 4 sugestões de pauta únicas para a Dra. Roseli. Cada uma deve explorar uma lacuna ou ângulo diferente. Use o formato:
+{
+  "pautas": [
+    {
+      "titulo": "título do conteúdo pronto para usar",
+      "angulo": "em 1 frase: qual ângulo único esta pauta explora",
+      "justificativa": "por que este conteúdo vai performar bem com este público â 2 frases",
+      "diferencial": "o que diferencia da concorrência"
+    }
+  ]
+}
+Responda APENAS com JSON válido.`;
+
+  try {
+    const raw = await callClaude(
+      'Você é estrategista de conteúdo da Neritas. Responda APENAS com JSON válido, sem markdown.',
+      prompt
+    );
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const jsonMatch = clean.match(/\{[\s\S]*\}/);
+    const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : clean);
+    state.pautas = parsed.pautas || [];
+  } catch(e) {
+    state.pautas = [
+      {titulo:'Como o '+state.tema+' afeta seu corpo de formas que você ainda não conhecia',angulo:'Educação sobre mecanismos fisiológicos com linguagem acessível',justificativa:'Conteúdo educativo profundo tem alto save rate neste público. A Dra. Roseli tem autoridade para explicar o que os outros simplificam demais.',diferencial:'Profundidade técnica traduzida â ninguém mais faz isso com este tom.'},
+      {titulo:'3 sinais de que seu corpo está pedindo ajuda â e o que fazer',angulo:'Reconhecimento de sintomas + próximo passo claro',justificativa:'Lista de sintomas tem alto alcance orgânico. O CTA implícito direciona para consulta sem ser invasivo.',diferencial:'A perspectiva da especialista em longevidade vai além do sintoma isolado.'},
+      {titulo:'O que eu sempre explico para minhas pacientes sobre '+state.tema,angulo:'Humanização via experiência clínica real',justificativa:'Conteúdo em primeira pessoa cria conexão forte. Público da Dra. Roseli responde bem ao tom de guia experiente.',diferencial:'Voz autêntica de médica â não de influencer.'},
+      {titulo:'Mito ou verdade: tudo que você já ouviu sobre '+state.tema,angulo:'Desmistificação com autoridade científica',justificativa:'Formato de mito/verdade tem alto compartilhamento. Público busca confirmação de informações que recebe de outras fontes.',diferencial:'Resposta científica acessível, não panfletária.'}
+    ];
+  }
+
+  document.getElementById('sp-pauta').style.display='none';
+  renderPautas();
+  setStep(3); show('pautas');
+}
+
+function renderPautas(){
+  const pc = document.getElementById('pautas-container');
+  pc.innerHTML = '';
+  state.pautas.forEach((p,i) => {
+    pc.innerHTML += `<div class="pauta-card" id="pauta-${i}" onclick="selecionarPauta(${i})">
+      <div class="pauta-num">Opção ${i+1}</div>
+      <div class="pauta-title">${p.titulo}</div>
+      <div class="pauta-why"><strong>Ângulo:</strong> ${p.angulo}<br><strong>Por que vai performar:</strong> ${p.justificativa}<br><strong>Diferencial:</strong> ${p.diferencial}</div>
+    </div>`;
+  });
+}
+
+function selecionarPauta(i){
+  document.querySelectorAll('.pauta-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('pauta-'+i).classList.add('selected');
+  state.pautasSelecionada = state.pautas[i];
+  document.getElementById('pautas-actions').style.display='flex';
+}
+
+async function avancarProducao(){
+  if(!state.pautasSelecionada) return;
+  setStep(4); show('producao');
+  document.getElementById('producao-container').innerHTML = '<div style="text-align:center;padding:2rem"><div class="spinner" style="margin:0 auto 1rem"></div><div style="font-size:14px;color:#888">Produzindo conteúdo...</div></div>';
+
+  const formatoLabel = {carrossel:'Carrossel (5â7 slides)',post_estatico:'Post estático (1 imagem)',reels:'Reels (roteiro de vídeo)'}[state.formato];
+  const p = state.pautasSelecionada;
+
+  const prompt = `Cliente: ${CLIENT.nome} â ${CLIENT.especialidade}
+Público: ${CLIENT.publico}
+Tom: ${CLIENT.tom}. ${CLIENT.arquetipo}
+Instagram: ${CLIENT.instagram}
+
+PAUTA APROVADA: ${p.titulo}
+ÂNGULO: ${p.angulo}
+FORMATO: ${formatoLabel}
+
+Produza o conteúdo completo. Formato JSON:
+{
+  "headline": "título/capa do conteúdo",
+  "slides": ["texto slide 1", "texto slide 2", ...],
+  "legenda": "legenda completa para o post no Instagram (com quebras de linha naturais)",
+  "cta": "chamada para ação final",
+  "hashtags": ["hashtag1", "hashtag2", ...],
+  "briefing_visual": "descrição para geração de imagem no Freepik: estilo, elementos visuais, mood, paleta gold #d8c01c e warm white #F5F0E8, referência ao arquétipo Desert Crossing"
+}
+Para post estático: omita slides, coloque o texto principal na headline.
+Para reels: substitua slides por roteiro com hook, desenvolvimento e CTA.
+Responda APENAS com JSON válido.`;
+
+  try {
+    const raw = await callClaude(
+      'Você é copywriter sênior da Neritas. Responda APENAS com JSON válido, sem markdown.',
+      prompt
+    );
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const jsonMatch = clean.match(/\{[\s\S]*\}/);
+    const prod = JSON.parse(jsonMatch ? jsonMatch[0] : clean);
+    renderProducao(prod);
+  } catch(e) {
+    document.getElementById('producao-container').innerHTML = '<div class="alert-error"><strong>Erro:</strong> ' + (e.message||e) + '<br><br>Verifique se a chave API está correta e tem saldo disponível.</div>';
+  }
+}
+
+function renderProducao(prod){
+  const pc = document.getElementById('producao-container');
+  let html = '';
+
+  html += `<div style="margin-bottom:1.2rem">
+    <div class="section-title">Headline / capa</div>
+    <div style="font-size:16px;font-weight:500;color:#1a1410;padding:.7rem;background:#faf7ed;border-radius:8px;border:0.5px solid #e0d8cc">${prod.headline||''}</div>
+  </div>`;
+
+  if(prod.slides && prod.slides.length){
+    html += `<div style="margin-bottom:1.2rem">
+      <div class="section-title">Slides (${prod.slides.length})</div>`;
+    prod.slides.forEach((s,i) => {
+      html += `<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:.5rem">
+        <span style="font-size:11px;font-weight:600;color:#b8a016;background:#faeeda;border-radius:4px;padding:2px 7px;flex-shrink:0;margin-top:2px">${i+1}</span>
+        <div style="font-size:13px;color:#333;line-height:1.5">${s}</div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  if(prod.legenda){
+    html += `<div style="margin-bottom:1.2rem">
+      <div class="section-title">Legenda Instagram</div>
+      <div style="font-size:13px;color:#333;line-height:1.65;padding:.8rem;background:#f5f0e8;border-radius:8px;white-space:pre-line">${prod.legenda}</div>
+    </div>`;
+  }
+
+  if(prod.cta){
+    html += `<div style="margin-bottom:1.2rem">
+      <div class="section-title">CTA</div>
+      <div style="font-size:14px;font-weight:500;color:#854f0b;padding:.6rem .8rem;background:#faeeda;border-radius:8px">${prod.cta}</div>
+    </div>`;
+  }
+
+  if(prod.hashtags && prod.hashtags.length){
+    html += `<div style="margin-bottom:1.2rem">
+      <div class="section-title">Hashtags</div>
+      <div style="font-size:13px;color:#185FA5">${prod.hashtags.map(h=>h.startsWith('#')?h:'#'+h).join(' ')}</div>
+    </div>`;
+  }
+
+  state.ultimoBriefingVisual = prod.briefing_visual || '';
+
+  if(prod.briefing_visual){
+    html += `<div style="margin-bottom:1.2rem">
+      <div class="section-title">Briefing visual â Freepik</div>
+      <div data-briefing style="font-size:13px;color:#555;line-height:1.55;padding:.8rem;background:#f5f0e8;border-radius:8px;border-left:3px solid #b8a016">${prod.briefing_visual}</div>
+    </div>`;
+  }
+
+  html += `<div style="margin-top:1.5rem;border-top:0.5px solid #e8e0d4;padding-top:1.2rem">
+    <div class="section-title">Gerar imagens â Freepik</div>
+    <div style="font-size:12px;color:#777;margin-bottom:.8rem">Serão geradas 3 variações a partir do briefing visual. Aguarde ~20â40 segundos.</div>
+    <button id="btn-freepik" onclick="gerarFreepik()" style="padding:.65rem 1.4rem;border-radius:8px;background:#1a1410;color:#d8c01c;font-size:14px;font-weight:500;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px">
+      <span id="sp-fp" style="display:none;width:16px;height:16px;border:2px solid rgba(216,192,28,.3);border-top-color:#d8c01c;border-radius:50%;animation:spin .7s linear infinite;"></span>
+      <span id="btn-fp-label">Gerar imagens no Freepik</span>
+    </button>
+  </div>
+  <div id="freepik-results" style="margin-top:1.2rem"></div>`;
+
+  pc.innerHTML = html;
+}
+
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   BRAND CONTEXT â Character LoRA + brand prompt prefix
+   Fluxo: upload 8-20 fotos â POST /loras/characters â polling
+          â character_id salvo â usado em toda geração Mystic
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
+
+function getLoraId(){ return localStorage.getItem('ds_lora_id')||''; }
+function getLoraName(){ return localStorage.getItem('ds_lora_name')||''; }
+function getBrandPrefix(){
+  /* lê do campo ativo se existir, senão do localStorage */
+  const el = document.getElementById('brand-prompt-prefix-ativo') || document.getElementById('brand-prompt-prefix');
+  return (el && el.value.trim()) ? el.value.trim() : (localStorage.getItem('ds_brand_prefix')||'');
+}
+
+/* Fotos carregadas em memória como base64 (array) */
+let loraPhotosB64 = [];
+
+function atualizarBrandUI(){
+  const loraId = getLoraId();
+  const prefix = localStorage.getItem('ds_brand_prefix')||'';
+  const badge = document.getElementById('brand-badge');
+
+  if(loraId){
+    /* Mostrar estado ativo */
+    const setup = document.getElementById('lora-setup');
+    const ativo = document.getElementById('lora-ativo');
+    if(setup) setup.style.display = 'none';
+    if(ativo) ativo.style.display = 'block';
+    const info = document.getElementById('lora-ativo-info');
+    if(info) info.textContent = 'Character: ' + getLoraName() + ' · ID: ' + (loraId && loraId.length > 8 ? loraId.substring(0,8) + '...' : (loraId || 'pendente'));
+    const prefixEl = document.getElementById('brand-prompt-prefix-ativo');
+    if(prefixEl && !prefixEl.value) prefixEl.value = prefix;
+    if(badge) badge.style.display = 'inline-flex';
+  } else {
+    const setup = document.getElementById('lora-setup');
+    const ativo = document.getElementById('lora-ativo');
+    if(setup) setup.style.display = 'block';
+    if(ativo) ativo.style.display = 'none';
+    if(badge) badge.style.display = prefix ? 'inline-flex' : 'none';
+  }
+}
+
+function processarFotosLora(input){
+  const files = Array.from(input.files);
+  if(!files.length) return;
+
+  const grid = document.getElementById('lora-photos-grid');
+  const count = document.getElementById('lora-photos-count');
+
+  files.forEach(file => {
+    if(loraPhotosB64.length >= 20) return;
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = new Image();
+      img.onload = function(){
+        /* Redimensionar para max 768px */
+        const canvas = document.createElement('canvas');
+        const MAX = 768;
+        let w = img.width, h = img.height;
+        if(w > MAX || h > MAX){
+          if(w > h){ h = Math.round(h*MAX/w); w = MAX; }
+          else { w = Math.round(w*MAX/h); h = MAX; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const b64 = canvas.toDataURL('image/jpeg', 0.88);
+        loraPhotosB64.push(b64);
+
+        /* Thumb no grid */
+        const thumb = document.createElement('div');
+        thumb.style.cssText = 'width:52px;height:52px;border-radius:6px;overflow:hidden;border:0.5px solid #e0d8cc;flex-shrink:0';
+        thumb.innerHTML = `<img src="${b64}" style="width:100%;height:100%;object-fit:cover">`;
+        grid.appendChild(thumb);
+
+        /* Contagem */
+        const n = loraPhotosB64.length;
+        count.textContent = `${n} foto${n>1?'s':''} carregada${n>1?'s':''} ${n>=8?'â pronto para registrar':'â adicione mais '+(8-n)+' para o mínimo'}`;
+        count.style.color = n >= 8 ? '#27500a' : '#854f0b';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function registrarCharacterLora(){
+  const fpKey = getFpKey();
+  if(!fpKey){ alert('Insira a chave Freepik antes de registrar.'); return; }
+  if(loraPhotosB64.length < 8){ alert('Carregue pelo menos 8 fotos antes de registrar.'); return; }
+
+  const btn = document.getElementById('btn-registrar-lora');
+  const sp = document.getElementById('sp-lora');
+  const lbl = document.getElementById('lora-btn-label');
+  const progressDiv = document.getElementById('lora-training-progress');
+  const bar = document.getElementById('lora-bar');
+  const statusEl = document.getElementById('lora-training-status');
+
+  btn.disabled = true;
+  sp.style.display = 'inline-block';
+  lbl.textContent = 'Enviando fotos...';
+  progressDiv.style.display = 'block';
+
+  function setProgress(pct, msg){
+    if(bar) bar.style.width = pct + '%';
+    if(statusEl) statusEl.textContent = msg;
+  }
+
+  try {
+    setProgress(10, 'Enviando fotos para o servidor...');
+
+    /* 1. Enviar fotos para o backend Railway â retorna URLs públicas reais */
+    const uploadResp = await fetch('/api/freepik/upload-photos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        photos: loraPhotosB64.slice(0, 20),
+        session_id: 'roseli-' + Date.now()
+      })
+    });
+
+    if(!uploadResp.ok){
+      const err = await uploadResp.json().catch(()=>({}));
+      throw new Error('Upload de fotos falhou: ' + (err.error || 'HTTP ' + uploadResp.status));
+    }
+
+    const uploadData = await uploadResp.json();
+    const imageUrls = uploadData.urls || [];
+    const sessionId = uploadData.session_id;
+
+    if(!imageUrls.length){
+      throw new Error('Nenhuma URL retornada pelo servidor.');
+    }
+
+    setProgress(20, 'Fotos hospedadas. Registrando no Freepik...');
+
+    /* 2. Enviar URLs reais ao Freepik para treinar o Character LoRA */
+    const loraName = 'roseliv3'; /* nome sem hífens — compatível com @referência Freepik */
+    const postBody = {
+      name: loraName,
+      description: 'Dra. Roseli Perfoll â ginecologista longevidade feminina BC',
+      quality: 'high',
+      gender: 'female',
+      images: imageUrls
+    };
+
+    const postResp = await fetch('/api/freepik/register-lora', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fp_key: fpKey,
+        name: loraName,
+        description: 'Dra. Roseli Perfoll â ginecologista longevidade feminina BC',
+        quality: 'high',
+        gender: 'female',
+        images: imageUrls
+      })
+    });
+
+    if(!postResp.ok){
+      const errData = await postResp.json().catch(()=>({}));
+      throw new Error('Freepik LoRA: ' + (errData?.error || errData?.message || 'HTTP '+postResp.status));
+    }
+
+    const postData = await postResp.json();
+    const taskId = postData?.data?.task_id || null;
+    if(taskId) localStorage.setItem('ds_lora_task_id', taskId);
+
+    if(!taskId){
+      throw new Error('task_id nao retornado: ' + JSON.stringify(postData).substring(0,200));
+    }
+
+    setProgress(30, 'Treinando modelo... pode levar 10-30 minutos');
+    lbl.textContent = 'Treinando...';
+
+    const MAX_TRIES = 120;
+    const INTERVAL = 15000;
+    let tries = 0;
+
+    while(tries < MAX_TRIES){
+      await sleep(INTERVAL);
+      tries++;
+      const pct = Math.min(30 + tries * 0.5, 90);
+      const mins = Math.round(tries * INTERVAL / 60000);
+      setProgress(pct, 'Treinando... ' + mins + ' min' + (mins!==1?' decorridos':' decorrido'));
+
+      const getResp = await fetch('/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
+      if(!getResp.ok){ continue; }
+
+      const getData = await getResp.json();
+      const loras = getData?.data || [];
+      const lora = loras.find(l => l.name === loraName || l.task_id === taskId);
+      if(!lora){ continue; }
+
+      const status = lora.status || 'IN_PROGRESS';
+      if(status === 'FAILED'){
+        throw new Error('Treinamento falhou. Tente com fotos de maior qualidade.');
+      }
+      if(status === 'COMPLETED'){
+        setProgress(100, 'Personagem registrado com sucesso!');
+        const loraId = lora.id || lora.lora_id || loraName;
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_name', loraName);
+        if(sessionId){ fetch('/api/freepik/upload-photos/' + sessionId, { method: 'DELETE' }).catch(()=>{}); }
+        atualizarBrandUI();
+        return;
+      }
+    }
+
+    throw new Error('Tempo limite excedido. Verifique o dashboard Freepik se o treino concluiu.');
+
+  } catch(err){
+    setProgress(0, '');
+    progressDiv.style.display = 'none';
+    alert('Erro: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    sp.style.display = 'none';
+    lbl.textContent = 'Registrar personagem';
+  }
+}
+
+async function listarTreinosAnteriores(){
+  const fpKey = getFpKey();
+  if(!fpKey){ alert('Insira a chave Freepik primeiro.'); return; }
+
+  try {
+    const resp = await fetch('/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
+    const data = await resp.json();
+
+    /* GET /v1/ai/loras retorna { data: { default: [...], customs: [...] } }
+       customs = LoRAs criados pelo usuário (personagens treinados) */
+    const customs = Array.isArray(data?.data?.customs) ? data.data.customs : [];
+    const items = customs.length > 0 ? customs : (Array.isArray(data?.data) ? data.data : (data?.data ? [data.data] : []));
+
+    if(items.length === 0){
+      alert('Nenhum treino encontrado.\n\nResposta completa:\n' + JSON.stringify(data).substring(0,400));
+      return;
+    }
+
+    let msg = '=== TREINOS ENCONTRADOS (' + items.length + ') ===\n\n';
+    items.forEach((t, i) => {
+      const tid = t.task_id || t.id || '?';
+      const status = t.training?.status || t.status || '?';
+      const name = t.name || t.lora_name || '?';
+      const loraId = t.lora_id || t.id || tid;
+      msg += (i+1) + '. ' + name + '\n   id: ' + loraId + '\n   status: ' + status + '\n   type: ' + (t.type||'?') + '\n\n';
+    });
+
+    /* Pegar o mais recente completed automaticamente */
+    const completed = items.filter(t => (t.training?.status || t.status || '').toLowerCase() === 'completed');
+    if(completed.length > 0){
+      const best = completed[completed.length - 1];
+      const loraId = best.lora_id || best.id || best.task_id;
+      const ok = confirm(msg + 'â Encontrado LoRA COMPLETED!\nDeseja ativar o personagem com este LoRA?\n\nlora_id: ' + loraId);
+      if(ok){
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_task_id', best.task_id || String(loraId));
+        localStorage.setItem('ds_lora_name', best.name || 'roseli-perfoll-v2');
+        atualizarBrandUI();
+        alert('Personagem ativado com sucesso!');
+      }
+    } else {
+      const inProgress = items.filter(t => {
+        const s = (t.training?.status || t.status || '').toLowerCase();
+        return s === 'in_progress' || s === 'created' || s === 'processing';
+      });
+      if(inProgress.length > 0){
+        const best = inProgress[inProgress.length - 1];
+        const tid = best.task_id || String(best.id);
+        if(tid){
+          localStorage.setItem('ds_lora_task_id', tid);
+          alert(msg + 'â³ Treino ainda em andamento.\ntask_id salvo: ' + tid + '\n\nTente "Verificar status" em alguns minutos.');
+        } else {
+          alert(msg);
+        }
+      } else {
+        alert(msg);
+      }
+    }
+  } catch(e) {
+    alert('Erro ao buscar treinos: ' + e.message);
+  }
+}
+
+async function verificarStatusLora(){
+  const fpKey = getFpKey();
+  if(!fpKey){ alert('Insira a chave Freepik primeiro.'); return; }
+
+  try {
+    /* Tentar usar task_id salvo para consulta direta */
+    const savedTaskId = localStorage.getItem('ds_lora_task_id');
+    const url = savedTaskId
+      ? '/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey) + '&task_id=' + encodeURIComponent(savedTaskId)
+      : '/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey);
+
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    /* Tratar resposta de task única ou lista */
+    let taskInfo = null;
+    if(data?.data?.task_id){
+      /* Resposta de task única */
+      taskInfo = data.data;
+    } else if(Array.isArray(data?.data)){
+      /* Lista de tasks â pegar a mais recente com status LoRA */
+      taskInfo = data.data[data.data.length - 1];
+    }
+
+    const status = taskInfo?.status || 'desconhecido';
+    const taskId = taskInfo?.task_id || savedTaskId || 'sem ID';
+    const loraId = taskInfo?.lora_id || taskInfo?.id || taskId;
+
+    const msg = 'Status do treinamento: ' + status + '\nTask ID: ' + taskId + '\n\n';
+
+    if(status === 'COMPLETED'){
+      const ok = confirm(msg + 'Treinamento concluído! Clique OK para ativar o personagem.');
+      if(ok){
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_name', 'roseli-perfoll-v2');
+        atualizarBrandUI();
+        alert('Personagem ativado com sucesso!');
+      }
+    } else if(status === 'IN_PROGRESS' || status === 'CREATED'){
+      alert(msg + 'Ainda treinando. Tente novamente em alguns minutos.');
+    } else {
+      alert(msg + 'Resposta completa:\n' + JSON.stringify(data).substring(0, 300));
+    }
+  } catch(e) {
+    alert('Erro ao verificar: ' + e.message);
+  }
+}
+
+function resetarLora(){
+  if(!confirm('Remover o personagem registrado? Você precisará registrar novamente.')) return;
+  localStorage.removeItem('ds_lora_id');
+  localStorage.removeItem('ds_lora_name');
+  loraPhotosB64 = [];
+  const grid = document.getElementById('lora-photos-grid');
+  if(grid) grid.innerHTML = '';
+  const count = document.getElementById('lora-photos-count');
+  if(count) count.textContent = '';
+  atualizarBrandUI();
+}
+
+/* ID manual â para quando o treinamento foi feito mas o polling expirou */
+function definirLoraManual(){
+  const id = prompt('Cole o ID do personagem do dashboard Freepik:');
+  if(!id) return;
+  localStorage.setItem('ds_lora_id', id.trim());
+  localStorage.setItem('ds_lora_name', 'dra-roseli-perfoll');
+  atualizarBrandUI();
+}
+
+async function gerarBrandPrompt(){
+  const btn = event.target;
+  btn.textContent = 'Gerando...';
+  btn.disabled = true;
+  try {
+    const raw = await callClaude(
+      'Você cria brand prompts para geração de imagem AI. Responda APENAS com o prompt em inglês, sem explicações, máximo 120 palavras.',
+      `Crie um brand prompt prefix para ser injetado no início de TODOS os prompts de geração de imagem para este cliente.
+O objetivo é garantir consistência visual de marca em todas as imagens geradas.
+IMPORTANTE: NÃO descrever roupas ou acessórios específicos â apenas estilo fotográfico, paleta, iluminação e mood.
+
+CLIENTE: Dra. Roseli Perfoll â Ginecologista especialista em longevidade feminina
+PALETA: Gold #d8c01c, Warm White #F5F0E8, Dark Brown #1A1410
+MOOD: Elegante, acolhedor, empoderador, científico sem ser frio
+ARQUÉTIPO: Expedition Guide
+PÚBLICO: Mulheres brasileiras 40â65 anos, classe média-alta
+ESTILO: Editorial fotográfico, minimalista, Instagram premium de saúde feminina
+EVITAR: Mencionar roupas específicas, jaleco, poses clichê, fundo branco puro, estética de farmácia`
+    );
+    const textarea = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+    if(textarea) textarea.value = raw.trim();
+  } catch(e) {
+    const textarea = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+    if(textarea) textarea.value = 'Editorial photography, warm gold (#d8c01c) and cream white (#F5F0E8) color palette, soft directional natural lighting, elegant minimalist Brazilian medical wellness aesthetic, empowering feminine healthcare atmosphere, premium Instagram quality, dark earth tone accents';
+  }
+  btn.textContent = 'Gerar brand prompt';
+  btn.disabled = false;
+}
+
+function salvarBrandContext(){
+  const el = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+  const prefix = el ? el.value.trim() : '';
+  if(prefix) localStorage.setItem('ds_brand_prefix', prefix);
+  atualizarBrandUI();
+  alert('Brand context salvo!');
+}
+
+function salvarBrandContextAtivo(){
+  salvarBrandContext();
+}
+
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   FREEPIK â geração assíncrona com polling
+   Fluxo: POST â task_id â GET (polling) até completed
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
+async function gerarFreepik(){
+  const fpKey = getFpKey();
+  if(!fpKey){ alert('Insira sua chave Freepik API acima antes de gerar imagens.'); return; }
+
+  const btn = document.getElementById('btn-freepik');
+  const sp = document.getElementById('sp-fp');
+  const label = document.getElementById('btn-fp-label');
+  const container = document.getElementById('freepik-results');
+
+  btn.disabled = true;
+  sp.style.display = 'inline-block';
+  label.textContent = 'Traduzindo briefing...';
+
+  /* 1. Traduzir briefing para prompt visual em inglês */
+  const briefingEl = document.querySelector('[data-briefing]');
+  const briefingText = briefingEl ? briefingEl.textContent : (state.ultimoBriefingVisual||'');
+
+  let prompt;
+  try {
+    const brandPrefix = getBrandPrefix();
+    const promptTraduzido = await callClaude(
+      'Você converte briefings criativos em prompts fotográficos diretos para geração de imagem com IA. Responda APENAS com o prompt em inglês, sem explicações, sem aspas, máximo 160 palavras.',
+      `Converta este briefing em um prompt fotográfico literal para geração de imagem AI (Freepik).
+O prompt deve descrever ELEMENTOS VISUAIS CONCRETOS: pessoas, ambiente, iluminação, cores, estilo fotográfico.
+NÃO use metáforas. NÃO mencione Desert Crossing ou jornada. Use inglês.
+Contexto: post Instagram para médica ginecologista, longevidade feminina, público mulheres 40-65 anos.
+Tema: ${state.tema || 'saúde hormonal feminina'}
+BRIEFING: ${briefingText.substring(0,500)}`
+    );
+    /* Brand prefix + cena gerada = prompt final */
+    const scenePrompt = promptTraduzido.trim().replace(/^["']|["']$/g,'');
+    prompt = brandPrefix
+      ? brandPrefix.trim() + ', ' + scenePrompt
+      : scenePrompt;
+    prompt = prompt.substring(0, 900);
+  } catch(e) {
+    prompt = 'Editorial photography, warm gold and cream white color palette, soft directional lighting, elegant minimalist Brazilian medical wellness aesthetic, empowering feminine healthcare, professional woman aged 50, premium Instagram quality';
+  }
+
+  /* Mostrar progresso */
+  container.innerHTML = `
+    <div class="fp-progress">
+      <div style="font-size:12px;color:#888;margin-bottom:.3rem"><strong>Prompt:</strong> ${prompt}</div>
+      <div class="fp-bar-track"><div class="fp-bar-fill" id="fp-bar" style="width:5%"></div></div>
+      <div class="fp-status" id="fp-status">Enviando para Freepik...</div>
+    </div>`;
+
+  function setProgress(pct, msg){
+    const bar = document.getElementById('fp-bar');
+    const st = document.getElementById('fp-status');
+    if(bar) bar.style.width = pct+'%';
+    if(st) st.textContent = msg;
+  }
+
+  label.textContent = 'Gerando...';
+
+  try {
+    /* 2. POST â endpoint Mystic (recomendado pelo Freepik, assíncrono garantido)
+       Docs: POST /v1/ai/mystic â retorna data.task_id + data.status = "IN_PROGRESS"
+       Polling: GET /v1/ai/mystic/{task_id} â data.status = "COMPLETED" + data.generated = [url] */
+    setProgress(15, 'Enviando para Freepik Mystic...');
+
+    const loraId = getLoraId();
+    const loraName = getLoraName();
+
+    const postBody = {
+      prompt: prompt,
+      aspect_ratio: 'social_post_4_5',
+      filter_nsfw: true,
+      styling: {
+        colors: [
+          { color: '#d8c01c', weight: 0.55 },
+          { color: '#F5F0E8', weight: 0.45 }
+        ]
+      }
+    };
+
+    if(loraId){
+      /* Character LoRA ativo.
+         NOTA: Freepik para de parsear @nome no primeiro hifen.
+         Nomes com hifens causam erro "Invalid character name".
+         Fallback automatico para model:realism.
+         Para usar o personagem, resetar e registrar com nome sem hifens (ex: roseliv3). */
+      const hasHyphen = loraName.includes('-');
+      if(!hasHyphen){
+        postBody.prompt = '@' + loraName + ' ' + prompt;
+        postBody.styling.characters = [{ id: loraId, strength: 0.85 }];
+        setProgress(15, 'Aplicando personagem da Dra. Roseli...');
+      } else {
+        btn.disabled = false;
+        sp.style.display = 'none';
+        label.textContent = 'Gerar imagens no Freepik';
+        container.innerHTML = '<div style="font-size:13px;color:#854f0b;background:#faeeda;padding:.8rem 1rem;border-radius:8px;border-left:3px solid #d48000;line-height:1.6">'
+          + '<strong>Personagem com nome incompativel</strong><br>'
+          + 'O personagem atual (' + loraName + ') contem hifens — incompativel com @referencia Freepik.<br><br>'
+          + '<strong>Para corrigir (1x):</strong><br>'
+          + '1. Clique em Resetar no painel Brand Context<br>'
+          + '2. Faca upload das fotos da Dra. Roseli (min. 8)<br>'
+          + '3. Clique em Registrar personagem — o nome sera roseliv3 automaticamente'
+          + '</div>';
+        return;
+      }
+    } else {
+      /* Sem LoRA - modo padrao */
+      postBody.model = 'realism';
+      postBody.resolution = '2k';
+      setProgress(15, 'Gerando imagem...');
+    }
+
+    const postResp = await fetch('/api/freepik/generate-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fp_key: fpKey, ...postBody })
+    });
+
+    if(!postResp.ok){
+      const errData = await postResp.json().catch(()=>({}));
+      const errMsg = errData?.message || errData?.error || errData?.detail || ('HTTP '+postResp.status);
+      throw new Error('Freepik: ' + errMsg);
+    }
+
+    const postData = await postResp.json();
+    /* Estrutura confirmada: { data: { task_id: "...", status: "IN_PROGRESS", generated: [] } } */
+    const taskId = postData?.data?.task_id || null;
+
+    if(!taskId){
+      throw new Error('task_id não recebido. Resposta: ' + JSON.stringify(postData).substring(0, 200));
+    }
+
+    /* 3. POLLING â GET /v1/ai/mystic/{task_id}
+       Status esperados (maiúsculas): CREATED â IN_PROGRESS â COMPLETED | FAILED */
+    setProgress(25, 'Processando... aguarde ~30 segundos');
+
+    const MAX_TRIES = 25;   /* 25 × 3s = 75s máximo */
+    const INTERVAL_MS = 3000;
+    let tries = 0;
+
+    while(tries < MAX_TRIES){
+      await sleep(INTERVAL_MS);
+      tries++;
+
+      const pct = Math.min(25 + tries * 2.8, 90);
+      setProgress(pct, `Gerando... ${tries * 3}s`);
+
+      const getResp = await fetch(`/api/freepik/check-lora-status?fp_key=${encodeURIComponent(fpKey)}&task_id=${encodeURIComponent(taskId)}`);
+
+      if(!getResp.ok){
+        if(getResp.status === 404 && tries < 3){ continue; }
+        const errData = await getResp.json().catch(()=>({}));
+        throw new Error('Polling: ' + (errData?.message || 'HTTP '+getResp.status));
+      }
+
+      const getData = await getResp.json();
+      const status = getData?.data?.status || 'IN_PROGRESS';
+
+      if(status === 'FAILED'){
+        throw new Error('Freepik reportou FAILED. Verifique os créditos da chave e tente novamente.');
+      }
+
+      if(status === 'COMPLETED'){
+        setProgress(100, 'Imagens geradas!');
+
+        /* Retorna array de URLs: data.generated = ["https://ai-statics.freepik.com/..."] */
+        const images = getData?.data?.generated || [];
+
+        if(!images.length){
+          throw new Error('COMPLETED mas sem imagens. Resposta: ' + JSON.stringify(getData?.data).substring(0,200));
+        }
+
+        renderFreepikImages(images, container);
+        return;
+      }
+      /* status IN_PROGRESS ou CREATED â continua polling */
+    }
+
+    throw new Error(`Tempo limite (${MAX_TRIES * INTERVAL_MS / 1000}s) excedido. Tente novamente.`);
+
+  } catch(err){
+    container.innerHTML = `<div class="alert-error">
+      <strong>Erro Freepik:</strong> ${err.message}
+      <br><br>
+      <span style="font-size:11px">Verifique: chave FPSX correta · plano API com créditos · se persisitir, aguarde 1 min e tente de novo.</span>
+    </div>`;
+  } finally {
+    btn.disabled = false;
+    sp.style.display = 'none';
+    label.textContent = 'Gerar imagens no Freepik';
+  }
+}
+
+function renderFreepikImages(images, container){
+  /* Mystic retorna URLs (não base64). Exibe 3 em grid com botão de download. */
+  let imgHtml = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:.5rem">';
+  images.forEach((img, i) => {
+    /* img pode ser string URL direto ou objeto {url:...} */
+    const src = typeof img === 'string' ? img : (img.url || '');
+    if(!src) return;
+
+    imgHtml += `<div style="border:0.5px solid #e0d8cc;border-radius:8px;overflow:hidden">
+      <img src="${src}" style="width:100%;display:block" crossorigin="anonymous" alt="Variação ${i+1}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div style="display:none;padding:1rem;font-size:12px;color:#888;text-align:center">
+        Erro ao carregar â <a href="${src}" target="_blank" style="color:#b8a016">abrir link</a>
+      </div>
+      <div style="padding:.4rem .6rem;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;color:#888">Variação ${i+1}</span>
+        <a href="${src}" target="_blank" download style="font-size:11px;color:#b8a016;text-decoration:none">Baixar</a>
+      </div>
+    </div>`;
+  });
+  imgHtml += '</div>';
+  container.innerHTML = imgHtml;
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>

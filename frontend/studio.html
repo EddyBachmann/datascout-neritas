@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FeedMax — Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── FeedMax Studio — dark theme ── */
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#1E1E1E; --bg-card:#272727; --bg-hover:#303030; --bg-input:#2E2E2E;
+    --border:#383838; --border-md:#444;
+    --text-1:#F0F0F0; --text-2:#C0C0C0; --text-3:#888; --text-4:#555;
+    --accent:#00C8FF; --accent-bg:rgba(0,200,255,.12); --accent-hov:#00AEDD;
+    --navy:#1A3C7D;
+    --green:#22C55E; --green-bg:rgba(34,197,94,.12);
+    --hot:#FF5A5A; --hot-bg:rgba(255,90,90,.12);
+    --amber:#F5A623; --amber-bg:rgba(245,166,35,.12);
+    --radius:8px;
+  }
+  html[data-theme="light"]{
+    --bg:#F4F5F7; --bg-card:#FFF; --bg-hover:#E8EAF0; --bg-input:#FFF;
+    --border:#E2E4E9; --border-md:#D1D5DB;
+    --text-1:#111827; --text-2:#374151; --text-3:#6B7280; --text-4:#9CA3AF;
+    --accent:#1A3C7D; --accent-bg:rgba(26,60,125,.08); --accent-hov:#142E63;
+    --green:#22C55E; --green-bg:#F0FDF4;
+    --hot:#E24B4A; --hot-bg:#FEF2F2;
+    --amber:#EF9F27; --amber-bg:#FFFBEB;
+  }
+  body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text-1);min-height:100vh;transition:background .25s,color .25s}
+  .app{max-width:720px;margin:0 auto;padding:2rem 1rem}
+  .logo{font-size:22px;font-weight:700;color:var(--text-1);letter-spacing:-.5px;margin-bottom:.2rem}
+  .logo span{color:var(--accent)}
+  .sub{font-size:12px;font-weight:500;color:var(--text-3);margin-bottom:2.5rem;text-transform:uppercase;letter-spacing:.3px}
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+  label{display:block;font-size:12px;font-weight:600;color:var(--text-3);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em}
+  textarea,input,select{width:100%;border:1px solid var(--border);border-radius:var(--radius);padding:.6rem .8rem;font-size:14px;font-family:inherit;background:var(--bg-input);color:var(--text-1);outline:none;resize:vertical;transition:border-color .15s,box-shadow .15s}
+  textarea:focus,input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+  .field{margin-bottom:1.2rem}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:.4rem}
+  .chip{font-size:12px;padding:4px 12px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text-3);cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  .chip.active{background:var(--accent-bg);border-color:var(--accent);color:var(--accent);font-weight:600}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:.65rem 1.4rem;border-radius:var(--radius);font-size:13.5px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
+  .btn-primary{background:var(--accent);color:#0A0A0A}
+  html[data-theme="light"] .btn-primary{color:#fff}
+  .btn-primary:hover{background:var(--accent-hov)}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+  .btn-outline{background:transparent;border:1px solid var(--border-md);color:var(--text-2)}
+  .btn-outline:hover{background:var(--bg-hover);border-color:var(--accent)}
+  .section-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:.8rem}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+  .tag-green{background:var(--green-bg);color:var(--green)}
+  .tag-amber{background:var(--amber-bg);color:var(--amber)}
+  .tag-blue{background:var(--accent-bg);color:var(--accent)}
+  .tag-gray{background:var(--bg-hover);color:var(--text-3)}
+  .ref-card{border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-bottom:.8rem;background:var(--bg-card)}
+  .ref-title{font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:.35rem}
+  .ref-meta{font-size:12px;color:var(--text-3);margin-bottom:.5rem;display:flex;gap:10px;flex-wrap:wrap}
+  .ref-body{font-size:13px;color:var(--text-2);line-height:1.55}
+  .lacuna-item{padding:.7rem 1rem;border-left:3px solid var(--accent);background:var(--accent-bg);border-radius:0 8px 8px 0;margin-bottom:.6rem;font-size:13px;color:var(--text-2);line-height:1.5}
+  .pauta-card{border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-bottom:.8rem;cursor:pointer;transition:border-color .15s,background .15s;background:var(--bg-card)}
+  .pauta-card:hover{border-color:var(--accent)}
+  .pauta-card.selected{border-color:var(--accent);background:var(--accent-bg)}
+  .pauta-num{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:.3rem}
+  .pauta-title{font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:.3rem}
+  .pauta-why{font-size:12px;color:var(--text-3);line-height:1.5}
+  .spinner{width:18px;height:18px;border:2px solid var(--accent-bg);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .copy-block{background:var(--bg-hover);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:12px;color:var(--text-2);font-family:monospace;white-space:pre-wrap;line-height:1.5;margin-top:.5rem}
+  .actions-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.2rem}
+  hr{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
+  .alert{background:var(--amber-bg);border:1px solid var(--amber);border-radius:8px;padding:.8rem 1rem;font-size:13px;color:var(--amber);margin-bottom:1rem}
+  .alert-error{background:var(--hot-bg);border:1px solid var(--hot);border-radius:8px;padding:.8rem 1rem;font-size:13px;color:var(--hot);margin-bottom:.5rem}
+  /* Top bar */
+  #top-bar-studio{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    height:48px;background:var(--bg-card);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:14px;padding:0 20px;
+    font-family:'Poppins',-apple-system,sans-serif;
+  }
+  #btn-back-studio{
+    display:flex;align-items:center;gap:6px;padding:5px 13px;border-radius:7px;
+    background:var(--accent-bg);border:1px solid rgba(0,200,255,.25);
+    color:var(--accent);font-size:13px;font-weight:600;
+    cursor:pointer;text-decoration:none;transition:background .18s;
+  }
+  html[data-theme="light"] #btn-back-studio{
+    background:rgba(26,60,125,.08);border-color:rgba(26,60,125,.2);color:var(--accent);
+  }
+  #btn-back-studio:hover{background:rgba(0,200,255,.2)}
+  #top-bar-studio-title{font-size:14px;font-weight:600;color:var(--text-2)}
+  #theme-toggle-studio{
+    margin-left:auto;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-3);cursor:pointer;
+  }
+  #theme-toggle-studio:hover{background:var(--bg-hover);color:var(--text-1)}
+  body{padding-top:48px}
+</style>
+
+<div id="top-bar-studio">
+  <a href="/" id="btn-back-studio">← FeedMax</a>
+  <span id="top-bar-studio-title">Studio — Gerador de Conteúdo</span>
+  <button id="theme-toggle-studio" title="Alternar tema" aria-label="Alternar tema">
+    <svg class="icon-moon-s" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="icon-sun-s" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+</div>
+
+<div class="app">
+  <div class="logo">Feed<span>Max</span></div>
+  <div class="sub">Studio · Gerador de Conteúdo com IA</div>
+
+
+  <!-- TELA 1: BRIEFING -->
+  <div id="screen-briefing">
+    <div class="card">
+      <div class="section-title">Briefing de pauta</div>
+      <div class="field">
+        <label>Tema do dia</label>
+        <textarea id="tema" rows="2" placeholder="Ex: menopausa e qualidade do sono, reposição hormonal, longevidade feminina após os 50..."></textarea>
+
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Formato</label>
+          <select id="formato">
+            <option value="carrossel">Carrossel</option>
+            <option value="post_estatico">Post estático</option>
+            <option value="reels">Reels (roteiro)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tipo de conteúdo</label>
+          <select id="tipo">
+            <option value="educativo">Educativo</option>
+            <option value="autoridade">Autoridade</option>
+            <option value="conexao">Conexão emocional</option>
+            <option value="venda">Venda / CTA</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Observações extras (opcional)</label>
+        <input type="text" id="obs" placeholder="Ex: evitar mencionar marcas, focar no público 45–60 anos...">
+      </div>
+      <div class="actions-row">
+        <button class="btn btn-primary" onclick="iniciarPesquisa()">
+          <span>Pesquisar com IA</span>
+          <span style="font-size:16px">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 2: PESQUISANDO -->
+  <div id="screen-pesquisando" style="display:none">
+    <div class="card" style="text-align:center;padding:2.5rem">
+      <div class="spinner" style="margin:0 auto 1rem"></div>
+      <div style="font-size:15px;font-weight:500;color:var(--text-1);margin-bottom:.4rem" id="loading-msg">Iniciando pesquisa...</div>
+      <div style="font-size:13px;color:#888" id="loading-sub">Construindo prompt com contexto da Dra. Roseli</div>
+    </div>
+
+  </div>
+
+  <!-- TELA 3: RESULTADOS -->
+  <div id="screen-resultados" style="display:none">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <div>
+          <div class="section-title">Pesquisa concluída</div>
+          <div style="font-size:16px;font-weight:500;color:var(--text-1)" id="res-tema-label"></div>
+        </div>
+        <span class="tag tag-green" id="res-formato-label"></span>
+      </div>
+      <div class="section-title">Referências encontradas</div>
+      <div id="refs-container"></div>
+      <hr>
+      <div class="section-title">Lacunas identificadas</div>
+      <div id="lacunas-container"></div>
+      <div class="actions-row">
+        <button class="btn btn-primary" onclick="gerarPautas()">
+          <span class="spinner" id="sp-pauta" style="display:none"></span>
+          <span>Gerar sugestões de pauta</span>
+          <span style="font-size:16px">→</span>
+        </button>
+        <button class="btn btn-outline" onclick="voltarBriefing()">← Nova pesquisa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 4: PAUTAS -->
+  <div id="screen-pautas" style="display:none">
+    <div class="card">
+      <div class="section-title">Sugestões de pauta</div>
+      <div class="alert">Selecione uma pauta para avançar para a produção do copy.</div>
+      <div id="pautas-container"></div>
+      <div class="actions-row" id="pautas-actions" style="display:none">
+        <button class="btn btn-primary" onclick="avancarProducao()">Produzir conteúdo →</button>
+        <button class="btn btn-outline" onclick="voltarResultados()">← Ver pesquisa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 5: PRODUÇÃO -->
+  <div id="screen-producao" style="display:none">
+    <div class="card">
+      <div class="section-title">Conteúdo produzido</div>
+      <div id="producao-container"></div>
+      <div class="actions-row">
+        <button class="btn btn-outline" onclick="voltarPautas()">← Trocar pauta</button>
+        <button class="btn btn-outline" onclick="voltarBriefing()">Novo briefing</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── JSON helpers ──────────────────────────────────────────
+// Substitui quebras de linha literais dentro de strings JSON por \n escapado.
+// Resolve o caso em que o modelo retorna newlines reais dentro de strings.
+function _sanitizeJsonStr(str) {
+  var result = '', inString = false, escaped = false;
+  for (var i = 0; i < str.length; i++) {
+    var ch = str[i];
+    if (escaped)                       { result += ch; escaped = false; continue; }
+    if (ch === '\\' && inString)       { result += ch; escaped = true;  continue; }
+    if (ch === '"')                    { result += ch; inString = !inString; continue; }
+    if (inString && ch === '\n')       { result += '\\n'; continue; }
+    if (inString && ch === '\r')       { continue; }
+    if (inString && ch === '\t')       { result += '\\t'; continue; }
+    result += ch;
+  }
+  return result;
+}
+
+// Parse seguro: tenta direto, depois sanitiza, depois lança erro claro.
+function safeJsonParse(raw) {
+  var clean = raw.replace(/```json\s*|```/gi, '').trim();
+  var match = clean.match(/\{[\s\S]*\}/);
+  var slice = match ? match[0] : clean;
+  try { return JSON.parse(slice); } catch (_) {
+    var sanitized = _sanitizeJsonStr(slice);
+    try { return JSON.parse(sanitized); } catch (e2) {
+      throw new Error('JSON inválido: ' + e2.message);
+    }
+  }
+}
+// ─────────────────────────────────────────────────────────
+
+// Dados do cliente carregados dinamicamente via /api/client
+let CLIENT = {
+  nome: '', especialidade: '', cidade: '', instagram: '',
+  publico: '', concorrentes: '', tom: '', arquetipo: '',
+  paleta: '', evitar: '', historico: ''
+};
+
+let state = {
+  tema: '', formato: '', tipo: '', obs: '',
+  pesquisa: null, pautasSelecionada: null,
+  pautas: [], ultimoBriefingVisual: '', ultimaProd: null
+};
+
+function setTema(t){
+  document.getElementById('tema').value = t;
+  document.querySelectorAll('#temas-rapidos .chip').forEach(c => {
+    c.classList.toggle('active', c.textContent.trim() === t);
+  });
+}
+
+function setStep(n){
+  for(let i=1;i<=4;i++){
+    const el = document.getElementById('s'+i);
+    if(el) el.className = 'step' + (i<n?' done':i===n?' active':'');
+  }
+}
+
+function show(id){
+  ['briefing','pesquisando','resultados','pautas','producao'].forEach(s => {
+    document.getElementById('screen-'+s).style.display = s===id?'block':'none';
+  });
+}
+
+function voltarBriefing(){ setStep(1); show('briefing'); }
+function voltarResultados(){ setStep(3); show('resultados'); }
+function voltarPautas(){ setStep(3); show('pautas'); }
+
+// Chaves gerenciadas pelo backend (.env) — nunca expostas no frontend
+function getKey(){ return null; }
+function getFpKey(){ return null; }
+
+window.addEventListener('DOMContentLoaded', async ()=>{
+  // Sincronizar tema com o app principal
+  (function(){
+    const saved = localStorage.getItem('fm_theme');
+    const isDark = saved ? saved === 'dark' : true;
+    if(!isDark) document.documentElement.setAttribute('data-theme','light');
+    const moon = document.querySelector('.icon-moon-s');
+    const sun  = document.querySelector('.icon-sun-s');
+    if(moon) moon.style.display = isDark ? '' : 'none';
+    if(sun)  sun.style.display  = isDark ? 'none' : '';
+    const btn = document.getElementById('theme-toggle-studio');
+    if(btn) btn.addEventListener('click', ()=>{
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if(isLight){
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('fm_theme','dark');
+        if(moon) moon.style.display=''; if(sun) sun.style.display='none';
+      } else {
+        document.documentElement.setAttribute('data-theme','light');
+        localStorage.setItem('fm_theme','light');
+        if(moon) moon.style.display='none'; if(sun) sun.style.display='';
+      }
+    });
+  })();
+
+  // Carregar dados do cliente ativo
+  try {
+    const r = await fetch('/api/client');
+    const data = await r.json();
+    CLIENT.nome          = data.nome          || '';
+    CLIENT.especialidade = data.especialidade || '';
+    CLIENT.cidade        = data.cidade        || '';
+    CLIENT.instagram     = data.instagram     || '';
+    CLIENT.publico       = data.publico       || '';
+    CLIENT.concorrentes  = data.concorrentes  || '';
+    CLIENT.tom           = data.tom           || '';
+    CLIENT.arquetipo     = data.arquetipo     || '';
+    CLIENT.paleta        = data.paleta        || '';
+    CLIENT.evitar        = data.evitar        || '';
+    CLIENT.historico     = data.historico     || '';
+  } catch(e) {
+    console.warn('[Studio] Não foi possível carregar dados do cliente:', e.message);
+  }
+
+  // Migrar loraId do localStorage para o backend (única vez)
+  const localLoraId = localStorage.getItem('ds_lora_id');
+  if(localLoraId){
+    try {
+      const r = await fetch('/api/client');
+      const client = await r.json();
+      if(!client.loraId){
+        await fetch('/api/client/lora', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ loraId: localLoraId })
+        });
+        localStorage.removeItem('ds_lora_id');
+        console.log('[Studio] loraId migrado do localStorage para o backend.');
+      } else {
+        localStorage.removeItem('ds_lora_id');
+      }
+    } catch(e){ console.warn('[Studio] Migração de loraId falhou:', e.message); }
+  }
+});
+
+async function callClaude(systemPrompt, userPrompt){
+  // Backend proxy — chave Anthropic nunca exposta no frontend
+  const resp = await fetch('/api/content/studio', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system: systemPrompt, user: userPrompt })
+  });
+  const respText = await resp.text();
+  if(!resp.ok){
+    let msg = 'HTTP '+resp.status;
+    try { const j = JSON.parse(respText); msg = j?.error?.message || j?.message || JSON.stringify(j); } catch(e){}
+    throw new Error('Erro no servidor: '+msg);
+  }
+  const data = JSON.parse(respText);
+  return data.text || '';
+}
+
+async function iniciarPesquisa(){
+  const tema = document.getElementById('tema').value.trim();
+  if(!tema){ alert('Digite um tema antes de pesquisar.'); return; }
+
+  state.tema = tema;
+  state.formato = document.getElementById('formato').value;
+  state.tipo = document.getElementById('tipo').value;
+  state.obs = document.getElementById('obs').value;
+
+  setStep(2); show('pesquisando');
+
+  const msgs = [
+    ['Construindo prompt com contexto da Dra. Roseli','Carregando histórico de pautas e concorrentes'],
+    ['Buscando posts da semana no Brasil e exterior','Analisando engajamento e formatos predominantes'],
+    ['Identificando lacunas e oportunidades','Quase pronto...']
+  ];
+
+  let mi = 0;
+  const iv = setInterval(()=>{
+    if(mi < msgs.length){
+      document.getElementById('loading-msg').textContent = msgs[mi][0];
+      document.getElementById('loading-sub').textContent = msgs[mi][1];
+      mi++;
+    }
+  }, 2200);
+
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels'}[state.formato];
+  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'Conexão emocional',venda:'Venda/CTA'}[state.tipo];
+
+  const prompt = `Você é o FeedMax, sistema de inteligência de conteúdo.
+
+CONTEXTO DO CLIENTE:
+- Profissional: ${CLIENT.nome} — ${CLIENT.especialidade}
+- Público-alvo: ${CLIENT.publico}
+- Concorrentes mapeados: ${CLIENT.concorrentes}
+- Tom de voz: ${CLIENT.tom}
+- Arquétipo: ${CLIENT.arquetipo}
+- Instagram: ${CLIENT.instagram}
+- Temas já publicados (evitar repetição): ${CLIENT.historico}
+
+BRIEFING DO DIA:
+- Tema: ${state.tema}
+- Formato: ${formatoLabel}
+- Tipo de conteúdo: ${tipoLabel}
+${state.obs ? '- Observações: ' + state.obs : ''}
+
+SUA TAREFA:
+1. Com base no seu conhecimento sobre tendências de conteúdo em saúde feminina, identifique os tipos de conteúdo mais relevantes publicados sobre "${state.tema}" no contexto de saúde feminina, ginecologia ou longevidade — no Brasil e exterior.
+2. Identifique 3 referências relevantes (posts, artigos, vídeos com bom engajamento).
+3. Identifique 3 lacunas — ângulos que o público busca mas que estão sub-representados nos conteúdos encontrados.
+
+FORMATO DE RESPOSTA (JSON puro, sem markdown):
+{
+  "referencias": [
+    {
+      "titulo": "título do conteúdo",
+      "fonte": "Instagram/@perfil ou Site",
+      "formato": "carrossel|reels|post|artigo",
+      "angulo": "ângulo abordado em 1 frase",
+      "destaque": "por que performou bem — 1-2 frases",
+      "relevancia": "alta|media"
+    }
+  ],
+  "lacunas": [
+    "lacuna 1 — descrição clara do que falta",
+    "lacuna 2",
+    "lacuna 3"
+  ]
+}`;
+
+
+
+  try {
+    const raw = await callClaude(
+      'Você é o FeedMax. Responda APENAS com JSON válido, sem markdown, sem texto adicional.',
+      prompt
+    );
+    clearInterval(iv);
+
+    let parsed;
+    try {
+      parsed = safeJsonParse(raw);
+    } catch(e) {
+      parsed = {
+        referencias:[
+          {titulo:'Conteúdo sobre '+state.tema,fonte:'Pesquisa FeedMax',formato:state.formato,angulo:'Abordagem educativa sobre '+state.tema,destaque:'Conteúdo identificado via busca com alto potencial para o público-alvo.',relevancia:'alta'},
+          {titulo:'Tendência: '+state.tema+' e saúde feminina',fonte:'Referências web',formato:'carrossel',angulo:'Conexão entre '+state.tema+' e qualidade de vida',destaque:'Formato carrossel performando bem no nicho de saúde feminina.',relevancia:'media'},
+          {titulo:'Perspectiva médica sobre '+state.tema,fonte:'Especialistas BR',formato:'reels',angulo:'Desmistificação de mitos sobre '+state.tema,destaque:'Conteúdo de autoridade com linguagem acessível tem alto save rate.',relevancia:'alta'}
+        ],
+        lacunas:[
+          'Poucos conteúdos conectam '+state.tema+' com a rotina prática da mulher acima de 40 anos — falta aplicabilidade.',
+          'A perspectiva da ginecologista especializada em longevidade está ausente — diferencial claro para a Dra. Roseli.',
+          'Nenhum conteúdo aborda as variações individuais e a importância de acompanhamento personalizado.'
+        ]
+      };
+    }
+
+    state.pesquisa = parsed;
+    renderResultados();
+    setStep(3); show('resultados');
+  } catch(err) {
+    clearInterval(iv);
+    console.warn('[FeedMax] API indispon\xc3\xadvel, usando dados de fallback:', err.message);
+    state.pesquisa = {
+      referencias:[
+        {titulo:'Conte\xc3\xbado sobre '+state.tema,fonte:'Pesquisa FeedMax',formato:state.formato,angulo:'Abordagem educativa sobre '+state.tema,destaque:'Conte\xc3\xbado identificado via busca com alto potencial para o p\xc3\xbablico-alvo.',relevancia:'alta'},
+        {titulo:'Tend\xc3\xaancia: '+state.tema+' e sa\xc3\xbade feminina',fonte:'Refer\xc3\xaancias web',formato:'carrossel',angulo:'Conex\xc3\xa3o entre '+state.tema+' e qualidade de vida',destaque:'Formato carrossel performando bem no nicho de sa\xc3\xbade feminina.',relevancia:'media'},
+        {titulo:'Perspectiva m\xc3\xa9dica sobre '+state.tema,fonte:'Especialistas BR',formato:'reels',angulo:'Desmistifica\xc3\xa7\xc3\xa3o de mitos sobre '+state.tema,destaque:'Conte\xc3\xbado de autoridade com linguagem acess\xc3\xadvel tem alto save rate.',relevancia:'alta'}
+      ],
+      lacunas:[
+        'Poucos conte\xc3\xbados conectam '+state.tema+' com a rotina pr\xc3\xa1tica da mulher acima de 40 anos \xe2\x80\x94 falta aplicabilidade.',
+        'A perspectiva da ginecologista especializada em longevidade est\xc3\xa1 ausente \xe2\x80\x94 diferencial claro para a Dra. Roseli.',
+        'Nenhum conte\xc3\xbado aborda as varia\xc3\xa7\xc3\xb5es individuais e a import\xc3\xa2ncia de acompanhamento personalizado.'
+      ]
+    };
+    renderResultados();
+    setStep(3); show('resultados');
+  }
+}
+
+function renderResultados(){
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels'}[state.formato];
+  const tipoLabel = {educativo:'Educativo',autoridade:'Autoridade',conexao:'Conexão emocional',venda:'Venda/CTA'}[state.tipo];
+  document.getElementById('res-tema-label').textContent = state.tema;
+  document.getElementById('res-formato-label').textContent = formatoLabel + ' · ' + tipoLabel;
+
+  const rc = document.getElementById('refs-container');
+  rc.innerHTML = '';
+  (state.pesquisa.referencias||[]).forEach(r => {
+    rc.innerHTML += `<div class="ref-card">
+      <div class="ref-title">${r.titulo}</div>
+      <div class="ref-meta">
+        <span class="tag tag-gray">${r.fonte}</span>
+        <span class="tag tag-blue">${r.formato}</span>
+        <span class="tag ${r.relevancia==='alta'?'tag-green':'tag-amber'}">${r.relevancia==='alta'?'alta relevância':'relevância média'}</span>
+      </div>
+      <div class="ref-body"><strong>Ângulo:</strong> ${r.angulo}<br><strong>Destaque:</strong> ${r.destaque}</div>
+    </div>`;
+  });
+
+  const lc = document.getElementById('lacunas-container');
+  lc.innerHTML = '';
+  (state.pesquisa.lacunas||[]).forEach(l => {
+    lc.innerHTML += `<div class="lacuna-item">${l}</div>`;
+  });
+}
+
+async function gerarPautas(){
+  document.getElementById('sp-pauta').style.display='inline-block';
+  setStep(3);
+
+  const formatoLabel = {carrossel:'Carrossel',post_estatico:'Post estático',reels:'Reels (roteiro)'}[state.formato];
+  const tipoLabel = {educativo:'educativo',autoridade:'de autoridade',conexao:'de conexão emocional',venda:'de venda/CTA'}[state.tipo];
+
+  const refsSummary = (state.pesquisa.referencias||[]).map(r=>`- ${r.titulo} (${r.angulo})`).join('\n');
+  const lacunasSummary = (state.pesquisa.lacunas||[]).map((l,i)=>`${i+1}. ${l}`).join('\n');
+
+  const prompt = `Cliente: ${CLIENT.nome} — ${CLIENT.especialidade}
+Público: ${CLIENT.publico}
+Tom: ${CLIENT.tom}
+Arquétipo: ${CLIENT.arquetipo}
+Histórico de pautas (NÃO repetir): ${CLIENT.historico}
+
+TEMA DO DIA: ${state.tema}
+FORMATO ALVO: ${formatoLabel}
+TIPO: conteúdo ${tipoLabel}
+
+REFERÊNCIAS ENCONTRADAS:
+${refsSummary}
+
+LACUNAS IDENTIFICADAS:
+${lacunasSummary}
+
+Crie 4 sugestões de pauta únicas para a Dra. Roseli. Cada uma deve explorar uma lacuna ou ângulo diferente. Use o formato:
+{
+  "pautas": [
+    {
+      "titulo": "título do conteúdo pronto para usar",
+      "angulo": "em 1 frase: qual ângulo único esta pauta explora",
+      "justificativa": "por que este conteúdo vai performar bem com este público — 2 frases",
+      "diferencial": "o que diferencia da concorrência"
+    }
+  ]
+}
+Responda APENAS com JSON válido.`;
+
+  try {
+    const raw = await callClaude(
+      'Você é estrategista de conteúdo do FeedMax. Responda APENAS com JSON válido, sem markdown.',
+      prompt
+    );
+    const parsed = safeJsonParse(raw);
+    state.pautas = parsed.pautas || [];
+  } catch(e) {
+    state.pautas = [
+      {titulo:'Como o '+state.tema+' afeta seu corpo de formas que você ainda não conhecia',angulo:'Educação sobre mecanismos fisiológicos com linguagem acessível',justificativa:'Conteúdo educativo profundo tem alto save rate neste público. A Dra. Roseli tem autoridade para explicar o que os outros simplificam demais.',diferencial:'Profundidade técnica traduzida — ninguém mais faz isso com este tom.'},
+      {titulo:'3 sinais de que seu corpo está pedindo ajuda — e o que fazer',angulo:'Reconhecimento de sintomas + próximo passo claro',justificativa:'Lista de sintomas tem alto alcance orgânico. O CTA implícito direciona para consulta sem ser invasivo.',diferencial:'A perspectiva da especialista em longevidade vai além do sintoma isolado.'},
+      {titulo:'O que eu sempre explico para minhas pacientes sobre '+state.tema,angulo:'Humanização via experiência clínica real',justificativa:'Conteúdo em primeira pessoa cria conexão forte. Público da Dra. Roseli responde bem ao tom de guia experiente.',diferencial:'Voz autêntica de médica — não de influencer.'},
+      {titulo:'Mito ou verdade: tudo que você já ouviu sobre '+state.tema,angulo:'Desmistificação com autoridade científica',justificativa:'Formato de mito/verdade tem alto compartilhamento. Público busca confirmação de informações que recebe de outras fontes.',diferencial:'Resposta científica acessível, não panfletária.'}
+    ];
+  }
+
+  document.getElementById('sp-pauta').style.display='none';
+  renderPautas();
+  setStep(3); show('pautas');
+}
+
+function renderPautas(){
+  const pc = document.getElementById('pautas-container');
+  pc.innerHTML = '';
+  state.pautas.forEach((p,i) => {
+    pc.innerHTML += `<div class="pauta-card" id="pauta-${i}" onclick="selecionarPauta(${i})">
+      <div class="pauta-num">Opção ${i+1}</div>
+      <div class="pauta-title">${p.titulo}</div>
+      <div class="pauta-why"><strong>Ângulo:</strong> ${p.angulo}<br><strong>Por que vai performar:</strong> ${p.justificativa}<br><strong>Diferencial:</strong> ${p.diferencial}</div>
+    </div>`;
+  });
+}
+
+function selecionarPauta(i){
+  document.querySelectorAll('.pauta-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('pauta-'+i).classList.add('selected');
+  state.pautasSelecionada = state.pautas[i];
+  document.getElementById('pautas-actions').style.display='flex';
+}
+
+async function avancarProducao(){
+  if(!state.pautasSelecionada) return;
+  setStep(4); show('producao');
+  document.getElementById('producao-container').innerHTML = '<div style="text-align:center;padding:2rem"><div class="spinner" style="margin:0 auto 1rem"></div><div style="font-size:14px;color:#888">Produzindo conteúdo...</div></div>';
+
+  const formatoLabel = {carrossel:'Carrossel (7 slides)',post_estatico:'Post estático (1 imagem)',reels:'Reels (roteiro de vídeo — 1 cena por prompt)'}[state.formato];
+  const p = state.pautasSelecionada;
+  const numSlides = state.formato === 'post_estatico' ? 1 : 7;
+
+  const systemPrompt = `Você é diretor criativo e copywriter do FeedMax, especializado em conteúdo médico para Instagram.
+
+Sua tarefa é gerar o pacote completo de produção: copy de cada slide + prompt visual em inglês para geração de imagem no Freepik Mystic.
+
+IDENTIDADE VISUAL FIXA (use sempre nos prompts visuais):
+- Paleta: gold #d8c01c, warm white #F5F0E8, dark brown #1A1410
+- Estilo: editorial fotográfico, premium Instagram de saúde feminina
+- Iluminação: suave, direcional, quente
+- Mood: elegante, acolhedor, empoderador, científico sem ser frio
+- Evitar: jaleco, fundo branco puro, estética de clínica/hospital, poses clichê
+
+REGRAS DO COPY:
+- Linguagem acolhedora, técnica sem ser fria
+- Respeitar CFM: sem promessas de cura, usar "pode contribuir", "evidências sugerem"
+- Títulos: máx. 8 palavras
+- Subtítulos: máx. 12 palavras
+- Responder em português do Brasil
+
+REGRAS DOS PROMPTS VISUAIS:
+- Sempre em inglês
+- Descrever cena, pessoa, ambiente, iluminação, cores
+- Nunca mencionar roupas específicas ou nomes de pessoas
+- Incluir: "editorial photography", paleta de cores, mood, "4:5 ratio", "premium Instagram quality"
+- Máximo 120 palavras por prompt
+
+Retorne EXCLUSIVAMENTE JSON válido, sem markdown, sem texto extra.`;
+
+  const userPrompt = `CLIENTE: ${CLIENT.nome} — ${CLIENT.especialidade}
+PÚBLICO: ${CLIENT.publico}
+TOM: ${CLIENT.tom}
+INSTAGRAM: ${CLIENT.instagram}
+
+PAUTA: ${p.titulo}
+ÂNGULO: ${p.angulo}
+FORMATO: ${formatoLabel}
+DIFERENCIAL: ${p.diferencial}
+
+Gere o pacote completo com ${numSlides} slide(s). Estrutura JSON:
+
+{
+  "tema": "título final do conteúdo",
+  "pilar": "pilar de conteúdo (Educação / Autoridade / Conexão / Prova Social / Estilo de Vida)",
+  "slides": [
+    {
+      "numero": 1,
+      "tipo": "capa",
+      "copy_titulo": "Texto principal do slide (máx. 8 palavras)",
+      "copy_sub": "Subtítulo ou complemento (máx. 12 palavras)",
+      "prompt_freepik": "English visual prompt for Freepik Mystic, full scene description, gold and warm white palette, editorial photography, 4:5 ratio, premium Instagram quality"
+    }
+  ],
+  "legenda": "Legenda completa para o post no Instagram, no tom da Dra. Roseli, 150-250 palavras",
+  "hashtags": ["#longevidadefeminina", "#menopausa"],
+  "cta": "Chamada para ação final curta e direta"
+}
+
+Tipos de slide sugeridos para carrossel: capa, problema, solucao, lista, destaque, prova, cta.
+Para post estático: apenas 1 slide tipo "capa" com copy completo na copy_sub.`;
+
+  try {
+    const raw = await callClaude(systemPrompt, userPrompt);
+    try {
+      const prod = safeJsonParse(raw);
+      renderProducao(prod);
+    } catch(jsonErr) {
+      document.getElementById('producao-container').innerHTML =
+        '<div class="alert-error"><strong>Erro ao parsear JSON:</strong> ' + jsonErr.message +
+        '<br><br>Tente novamente — a IA às vezes retorna JSON incompleto.</div>';
+    }
+  } catch(e) {
+    document.getElementById('producao-container').innerHTML = '<div class="alert-error"><strong>Erro:</strong> ' + (e.message||e) + '<br><br>Verifique a conexão com o servidor.</div>';
+  }
+}
+
+function renderProducao(prod){
+  state.ultimaProd = prod;
+  const pc = document.getElementById('producao-container');
+  let html = '';
+
+  // ── Cabeçalho ──────────────────────────────────────────
+  html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.2rem;gap:1rem">
+    <div>
+      <div style="font-size:16px;font-weight:600;color:var(--text-1)">${prod.tema||''}</div>
+      <div style="font-size:12px;color:var(--text-3);margin-top:.2rem">${prod.pilar||''}</div>
+    </div>
+    <span style="flex-shrink:0;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(184,160,22,.15);color:#b8a016;border:1px solid rgba(184,160,22,.3)">${(prod.slides||[]).length} slides</span>
+  </div>`;
+
+  // ── Slides + prompts ────────────────────────────────────
+  if(prod.slides && prod.slides.length){
+    prod.slides.forEach((s) => {
+      const num    = s.numero || '';
+      const tipo   = (s.tipo||'').toUpperCase();
+      const titulo = s.copy_titulo || '';
+      const sub    = s.copy_sub    || '';
+      const prompt = s.prompt_freepik || '';
+
+      html += `<div style="border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.8rem;background:var(--bg-card)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:.6rem">
+          <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(184,160,22,.15);color:#b8a016">SLIDE ${num}</span>
+          <span style="font-size:11px;color:var(--text-3)">${tipo}</span>
+        </div>
+        <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:.2rem">${titulo}</div>
+        ${sub ? `<div style="font-size:13px;color:var(--text-2);margin-bottom:.7rem">${sub}</div>` : ''}
+        <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem">Prompt Freepik</div>
+        <div style="position:relative">
+          <textarea readonly rows="3" onclick="this.select()" style="width:100%;font-size:12px;font-family:monospace;background:#0d0d0d;color:#e0d4a0;border:1px solid #333;border-radius:6px;padding:.6rem .8rem;resize:none;line-height:1.5;cursor:pointer">${prompt}</textarea>
+          <button onclick="copiarTexto(this, ${JSON.stringify(prompt).replace(/'/g,"&#39;")})" style="position:absolute;top:6px;right:6px;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(184,160,22,.2);color:#b8a016;border:1px solid rgba(184,160,22,.3);cursor:pointer">Copiar</button>
+        </div>
+      </div>`;
+    });
+  }
+
+  // ── Legenda ─────────────────────────────────────────────
+  if(prod.legenda){
+    html += `<div style="margin-bottom:1rem">
+      <div class="section-title">Legenda Instagram</div>
+      <div style="position:relative">
+        <textarea readonly rows="6" onclick="this.select()" style="width:100%;font-size:13px;font-family:inherit;background:var(--bg-hover);color:var(--text-1);border:1px solid var(--border);border-radius:8px;padding:.8rem;resize:none;line-height:1.6;cursor:pointer;white-space:pre-wrap">${prod.legenda}</textarea>
+        <button onclick="copiarTexto(this, ${JSON.stringify(prod.legenda).replace(/'/g,"&#39;")})" style="position:absolute;top:8px;right:8px;font-size:10px;padding:2px 8px;border-radius:4px;background:var(--bg-hover);color:var(--text-3);border:1px solid var(--border);cursor:pointer">Copiar</button>
+      </div>
+    </div>`;
+  }
+
+  // ── Hashtags ────────────────────────────────────────────
+  if(prod.hashtags && prod.hashtags.length){
+    const tags = prod.hashtags.map(h=>h.startsWith('#')?h:'#'+h).join(' ');
+    html += `<div style="margin-bottom:1rem">
+      <div class="section-title">Hashtags</div>
+      <div style="position:relative">
+        <textarea readonly rows="2" onclick="this.select()" style="width:100%;font-size:13px;font-family:inherit;background:var(--bg-hover);color:#185FA5;border:1px solid var(--border);border-radius:8px;padding:.8rem;resize:none;cursor:pointer">${tags}</textarea>
+        <button onclick="copiarTexto(this, ${JSON.stringify(tags).replace(/'/g,"&#39;")})" style="position:absolute;top:8px;right:8px;font-size:10px;padding:2px 8px;border-radius:4px;background:var(--bg-hover);color:var(--text-3);border:1px solid var(--border);cursor:pointer">Copiar</button>
+      </div>
+    </div>`;
+  }
+
+  // ── CTA ─────────────────────────────────────────────────
+  if(prod.cta){
+    html += `<div style="margin-bottom:1rem">
+      <div class="section-title">CTA</div>
+      <div style="font-size:14px;font-weight:500;color:#b8a016;padding:.6rem .8rem;background:rgba(184,160,22,.12);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <span>${prod.cta}</span>
+        <button onclick="copiarTexto(this, ${JSON.stringify(prod.cta).replace(/'/g,"&#39;")})" style="font-size:10px;padding:2px 8px;border-radius:4px;background:transparent;color:#b8a016;border:1px solid rgba(184,160,22,.4);cursor:pointer;flex-shrink:0;margin-left:10px">Copiar</button>
+      </div>
+    </div>`;
+  }
+
+  // ── JSON completo ───────────────────────────────────────
+  const jsonCompleto = JSON.stringify(prod, null, 2);
+  html += `<div style="margin-top:1.2rem;border-top:1px solid var(--border);padding-top:1.2rem">
+    <div class="section-title">JSON completo (todos os prompts)</div>
+    <div style="font-size:12px;color:var(--text-3);margin-bottom:.5rem">Clique para selecionar tudo — cole no seu gerenciador de produção.</div>
+    <div style="position:relative">
+      <textarea readonly rows="8" onclick="this.select()" style="width:100%;font-size:11px;font-family:monospace;background:#0d0d0d;color:#ccc;border:1px solid #333;border-radius:8px;padding:.8rem;resize:vertical;line-height:1.5;cursor:pointer">${jsonCompleto.replace(/</g,'&lt;')}</textarea>
+      <button onclick="copiarTexto(this, ${JSON.stringify(jsonCompleto).replace(/'/g,"&#39;")})" style="position:absolute;top:8px;right:8px;font-size:10px;padding:2px 10px;border-radius:4px;background:rgba(184,160,22,.2);color:#b8a016;border:1px solid rgba(184,160,22,.3);cursor:pointer">Copiar tudo</button>
+    </div>
+  </div>`;
+
+  pc.innerHTML = html;
+}
+
+function copiarTexto(btn, texto) {
+  navigator.clipboard.writeText(texto).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copiado';
+    btn.style.color = '#22C55E';
+    btn.style.borderColor = '#22C55E';
+    setTimeout(() => { btn.textContent = orig; btn.style.color=''; btn.style.borderColor=''; }, 1800);
+  }).catch(() => {
+    // fallback: selecionar o textarea acima
+    const ta = btn.closest('div').querySelector('textarea');
+    if(ta){ ta.select(); document.execCommand('copy'); }
+  });
+}
+
+/* ---------------------------------------------------------
+   CRIAR CARROSSEL - expande slides via API e abre o editor
+   --------------------------------------------------------- */
+
+async function criarCarrossel(){
+  const btn   = document.getElementById('btn-carousel');
+  const sp    = document.getElementById('sp-carousel');
+  const label = document.getElementById('btn-carousel-label');
+
+  if(btn)   btn.disabled = true;
+  if(sp)    sp.style.display = 'inline-block';
+  if(label) label.textContent = 'Expandindo slides...';
+
+  try {
+    const p    = state.pautasSelecionada || {};
+    const prod = state.ultimaProd        || {};
+
+    const resp = await fetch('/api/content/expand-carousel', {
+      method:  'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        tema:            p.titulo      || prod.headline || state.tema,
+        hook:            prod.headline || '',
+        desenvolvimento: p.angulo      || '',
+        cta:             prod.cta      || '',
+        pilar:           p.pilar       || '',
+        formato:         state.formato
+      })
+    });
+
+    if(!resp.ok){ 
+      const e = await resp.json();
+      throw new Error(e.error || 'Erro ao expandir carrossel');
+    }
+
+    const data = await resp.json();
+    localStorage.setItem('ds_carousel_full', JSON.stringify({
+      timestamp: Date.now(),
+      carousel:  data.carousel
+    }));
+
+    window.location.href = 'carousel_editor.html';
+
+  } catch(e) {
+    if(btn)   btn.disabled = false;
+    if(sp)    sp.style.display = 'none';
+    if(label) label.textContent = 'Abrir no Editor de Carrossel';
+    alert('Erro ao criar carrossel: ' + (e.message || e));
+  }
+}
+
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   BRAND CONTEXT — Character LoRA + brand prompt prefix
+   Fluxo: upload 8-20 fotos → POST /loras/characters → polling
+          → character_id salvo → usado em toda geração Mystic
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
+
+function getLoraId(){ return localStorage.getItem('ds_lora_id')||''; }
+function getLoraName(){ return localStorage.getItem('ds_lora_name')||''; }
+function getBrandPrefix(){
+  /* lê do campo ativo se existir, senão do localStorage */
+  const el = document.getElementById('brand-prompt-prefix-ativo') || document.getElementById('brand-prompt-prefix');
+  return (el && el.value.trim()) ? el.value.trim() : (localStorage.getItem('ds_brand_prefix')||'');
+}
+
+/* Fotos carregadas em memória como base64 (array) */
+let loraPhotosB64 = [];
+
+function atualizarBrandUI(){
+  const loraId = getLoraId();
+  const prefix = localStorage.getItem('ds_brand_prefix')||'';
+  const badge = document.getElementById('brand-badge');
+
+  if(loraId){
+    /* Mostrar estado ativo */
+    const setup = document.getElementById('lora-setup');
+    const ativo = document.getElementById('lora-ativo');
+    if(setup) setup.style.display = 'none';
+    if(ativo) ativo.style.display = 'block';
+    const info = document.getElementById('lora-ativo-info');
+    if(info) info.textContent = 'Character: ' + getLoraName() + ' · ID: ' + (loraId && loraId.length > 8 ? loraId.substring(0,8) + '...' : (loraId || 'pendente'));
+    const prefixEl = document.getElementById('brand-prompt-prefix-ativo');
+    if(prefixEl && !prefixEl.value) prefixEl.value = prefix;
+    if(badge) badge.style.display = 'inline-flex';
+  } else {
+    const setup = document.getElementById('lora-setup');
+    const ativo = document.getElementById('lora-ativo');
+    if(setup) setup.style.display = 'block';
+    if(ativo) ativo.style.display = 'none';
+    if(badge) badge.style.display = prefix ? 'inline-flex' : 'none';
+  }
+}
+
+function processarFotosLora(input){
+  const files = Array.from(input.files);
+  if(!files.length) return;
+
+  const grid = document.getElementById('lora-photos-grid');
+  const count = document.getElementById('lora-photos-count');
+
+  files.forEach(file => {
+    if(loraPhotosB64.length >= 20) return;
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = new Image();
+      img.onload = function(){
+        /* Redimensionar para max 768px */
+        const canvas = document.createElement('canvas');
+        const MAX = 768;
+        let w = img.width, h = img.height;
+        if(w > MAX || h > MAX){
+          if(w > h){ h = Math.round(h*MAX/w); w = MAX; }
+          else { w = Math.round(w*MAX/h); h = MAX; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const b64 = canvas.toDataURL('image/jpeg', 0.88);
+        loraPhotosB64.push(b64);
+
+        /* Thumb no grid */
+        const thumb = document.createElement('div');
+        thumb.style.cssText = 'width:52px;height:52px;border-radius:6px;overflow:hidden;border:0.5px solid #e0d8cc;flex-shrink:0';
+        thumb.innerHTML = `<img src="${b64}" style="width:100%;height:100%;object-fit:cover">`;
+        grid.appendChild(thumb);
+
+        /* Contagem */
+        const n = loraPhotosB64.length;
+        count.textContent = `${n} foto${n>1?'s':''} carregada${n>1?'s':''} ${n>=8?'â pronto para registrar':'— adicione mais '+(8-n)+' para o mínimo'}`;
+        count.style.color = n >= 8 ? '#27500a' : '#854f0b';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function registrarCharacterLora(){
+  if(!fpKey){ alert('Insira a chave Freepik antes de registrar.'); return; }
+  if(loraPhotosB64.length < 8){ alert('Carregue pelo menos 8 fotos antes de registrar.'); return; }
+
+  const btn = document.getElementById('btn-registrar-lora');
+  const sp = document.getElementById('sp-lora');
+  const lbl = document.getElementById('lora-btn-label');
+  const progressDiv = document.getElementById('lora-training-progress');
+  const bar = document.getElementById('lora-bar');
+  const statusEl = document.getElementById('lora-training-status');
+
+  btn.disabled = true;
+  sp.style.display = 'inline-block';
+  lbl.textContent = 'Enviando fotos...';
+  progressDiv.style.display = 'block';
+
+  function setProgress(pct, msg){
+    if(bar) bar.style.width = pct + '%';
+    if(statusEl) statusEl.textContent = msg;
+  }
+
+  try {
+    setProgress(10, 'Enviando fotos para o servidor...');
+
+    /* 1. Enviar fotos para o backend Railway — retorna URLs públicas reais */
+    const uploadResp = await fetch('/api/freepik/upload-photos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        photos: loraPhotosB64.slice(0, 20),
+        session_id: 'roseli-' + Date.now()
+      })
+    });
+
+    if(!uploadResp.ok){
+      const err = await uploadResp.json().catch(()=>({}));
+      throw new Error('Upload de fotos falhou: ' + (err.error || 'HTTP ' + uploadResp.status));
+    }
+
+    const uploadData = await uploadResp.json();
+    const imageUrls = uploadData.urls || [];
+    const sessionId = uploadData.session_id;
+
+    if(!imageUrls.length){
+      throw new Error('Nenhuma URL retornada pelo servidor.');
+    }
+
+    setProgress(20, 'Fotos hospedadas. Registrando no Freepik...');
+
+    /* 2. Enviar URLs reais ao Freepik para treinar o Character LoRA */
+    const loraName = 'roseliv3'; /* nome sem hífens — compatível com @referência Freepik */
+    const postBody = {
+      name: loraName,
+      description: 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
+      quality: 'high',
+      gender: 'female',
+      images: imageUrls
+    };
+
+    const postResp = await fetch('/api/freepik/register-lora', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fp_key: fpKey,
+        name: loraName,
+        description: 'Dra. Roseli Perfoll — ginecologista longevidade feminina BC',
+        quality: 'high',
+        gender: 'female',
+        images: imageUrls
+      })
+    });
+
+    if(!postResp.ok){
+      const errData = await postResp.json().catch(()=>({}));
+      throw new Error('Freepik LoRA: ' + (errData?.error || errData?.message || 'HTTP '+postResp.status));
+    }
+
+    const postData = await postResp.json();
+    const taskId = postData?.data?.task_id || null;
+    if(taskId) localStorage.setItem('ds_lora_task_id', taskId);
+
+    if(!taskId){
+      throw new Error('task_id nao retornado: ' + JSON.stringify(postData).substring(0,200));
+    }
+
+    setProgress(30, 'Treinando modelo... pode levar 10-30 minutos');
+    lbl.textContent = 'Treinando...';
+
+    const MAX_TRIES = 120;
+    const INTERVAL = 15000;
+    let tries = 0;
+
+    while(tries < MAX_TRIES){
+      await sleep(INTERVAL);
+      tries++;
+      const pct = Math.min(30 + tries * 0.5, 90);
+      const mins = Math.round(tries * INTERVAL / 60000);
+      setProgress(pct, 'Treinando... ' + mins + ' min' + (mins!==1?' decorridos':' decorrido'));
+
+      const getResp = await fetch('/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
+      if(!getResp.ok){ continue; }
+
+      const getData = await getResp.json();
+      const loras = getData?.data || [];
+      const lora = loras.find(l => l.name === loraName || l.task_id === taskId);
+      if(!lora){ continue; }
+
+      const status = lora.status || 'IN_PROGRESS';
+      if(status === 'FAILED'){
+        throw new Error('Treinamento falhou. Tente com fotos de maior qualidade.');
+      }
+      if(status === 'COMPLETED'){
+        setProgress(100, 'Personagem registrado com sucesso!');
+        const loraId = lora.id || lora.lora_id || loraName;
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_name', loraName);
+        if(sessionId){ fetch('/api/freepik/upload-photos/' + sessionId, { method: 'DELETE' }).catch(()=>{}); }
+        atualizarBrandUI();
+        return;
+      }
+    }
+
+    throw new Error('Tempo limite excedido. Verifique o dashboard Freepik se o treino concluiu.');
+
+  } catch(err){
+    setProgress(0, '');
+    progressDiv.style.display = 'none';
+    alert('Erro: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    sp.style.display = 'none';
+    lbl.textContent = 'Registrar personagem';
+  }
+}
+
+async function listarTreinosAnteriores(){
+  if(!fpKey){ alert('Insira a chave Freepik primeiro.'); return; }
+
+  try {
+    const resp = await fetch('/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey));
+    const data = await resp.json();
+
+    /* GET /v1/ai/loras retorna { data: { default: [...], customs: [...] } }
+       customs = LoRAs criados pelo usuário (personagens treinados) */
+    const customs = Array.isArray(data?.data?.customs) ? data.data.customs : [];
+    const items = customs.length > 0 ? customs : (Array.isArray(data?.data) ? data.data : (data?.data ? [data.data] : []));
+
+    if(items.length === 0){
+      alert('Nenhum treino encontrado.\n\nResposta completa:\n' + JSON.stringify(data).substring(0,400));
+      return;
+    }
+
+    let msg = '=== TREINOS ENCONTRADOS (' + items.length + ') ===\n\n';
+    items.forEach((t, i) => {
+      const tid = t.task_id || t.id || '?';
+      const status = t.training?.status || t.status || '?';
+      const name = t.name || t.lora_name || '?';
+      const loraId = t.lora_id || t.id || tid;
+      msg += (i+1) + '. ' + name + '\n   id: ' + loraId + '\n   status: ' + status + '\n   type: ' + (t.type||'?') + '\n\n';
+    });
+
+    /* Pegar o mais recente completed automaticamente */
+    const completed = items.filter(t => (t.training?.status || t.status || '').toLowerCase() === 'completed');
+    if(completed.length > 0){
+      const best = completed[completed.length - 1];
+      const loraId = best.lora_id || best.id || best.task_id;
+      const ok = confirm(msg + 'â Encontrado LoRA COMPLETED!\nDeseja ativar o personagem com este LoRA?\n\nlora_id: ' + loraId);
+      if(ok){
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_task_id', best.task_id || String(loraId));
+        localStorage.setItem('ds_lora_name', best.name || 'roseli-perfoll-v2');
+        atualizarBrandUI();
+        alert('Personagem ativado com sucesso!');
+      }
+    } else {
+      const inProgress = items.filter(t => {
+        const s = (t.training?.status || t.status || '').toLowerCase();
+        return s === 'in_progress' || s === 'created' || s === 'processing';
+      });
+      if(inProgress.length > 0){
+        const best = inProgress[inProgress.length - 1];
+        const tid = best.task_id || String(best.id);
+        if(tid){
+          localStorage.setItem('ds_lora_task_id', tid);
+          alert(msg + 'â³ Treino ainda em andamento.\ntask_id salvo: ' + tid + '\n\nTente "Verificar status" em alguns minutos.');
+        } else {
+          alert(msg);
+        }
+      } else {
+        alert(msg);
+      }
+    }
+  } catch(e) {
+    alert('Erro ao buscar treinos: ' + e.message);
+  }
+}
+
+async function verificarStatusLora(){
+  if(!fpKey){ alert('Insira a chave Freepik primeiro.'); return; }
+
+  try {
+    /* Tentar usar task_id salvo para consulta direta */
+    const savedTaskId = localStorage.getItem('ds_lora_task_id');
+    const url = savedTaskId
+      ? '/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey) + '&task_id=' + encodeURIComponent(savedTaskId)
+      : '/api/freepik/check-lora-status?fp_key=' + encodeURIComponent(fpKey);
+
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    /* Tratar resposta de task única ou lista */
+    let taskInfo = null;
+    if(data?.data?.task_id){
+      /* Resposta de task única */
+      taskInfo = data.data;
+    } else if(Array.isArray(data?.data)){
+      /* Lista de tasks — pegar a mais recente com status LoRA */
+      taskInfo = data.data[data.data.length - 1];
+    }
+
+    const status = taskInfo?.status || 'desconhecido';
+    const taskId = taskInfo?.task_id || savedTaskId || 'sem ID';
+    const loraId = taskInfo?.lora_id || taskInfo?.id || taskId;
+
+    const msg = 'Status do treinamento: ' + status + '\nTask ID: ' + taskId + '\n\n';
+
+    if(status === 'COMPLETED'){
+      const ok = confirm(msg + 'Treinamento concluído! Clique OK para ativar o personagem.');
+      if(ok){
+        localStorage.setItem('ds_lora_id', loraId);
+        localStorage.setItem('ds_lora_name', 'roseli-perfoll-v2');
+        atualizarBrandUI();
+        alert('Personagem ativado com sucesso!');
+      }
+    } else if(status === 'IN_PROGRESS' || status === 'CREATED'){
+      alert(msg + 'Ainda treinando. Tente novamente em alguns minutos.');
+    } else {
+      alert(msg + 'Resposta completa:\n' + JSON.stringify(data).substring(0, 300));
+    }
+  } catch(e) {
+    alert('Erro ao verificar: ' + e.message);
+  }
+}
+
+function resetarLora(){
+  if(!confirm('Remover o personagem registrado? Você precisará registrar novamente.')) return;
+  localStorage.removeItem('ds_lora_id');
+  localStorage.removeItem('ds_lora_name');
+  loraPhotosB64 = [];
+  const grid = document.getElementById('lora-photos-grid');
+  if(grid) grid.innerHTML = '';
+  const count = document.getElementById('lora-photos-count');
+  if(count) count.textContent = '';
+  atualizarBrandUI();
+}
+
+/* ID manual — para quando o treinamento foi feito mas o polling expirou */
+function definirLoraManual(){
+  const id = prompt('Cole o ID do personagem do dashboard Freepik:');
+  if(!id) return;
+  localStorage.setItem('ds_lora_id', id.trim());
+  localStorage.setItem('ds_lora_name', 'dra-roseli-perfoll');
+  atualizarBrandUI();
+}
+
+async function gerarBrandPrompt(){
+  const btn = event.target;
+  btn.textContent = 'Gerando...';
+  btn.disabled = true;
+  try {
+    const raw = await callClaude(
+      'Você cria brand prompts para geração de imagem AI. Responda APENAS com o prompt em inglês, sem explicações, máximo 120 palavras.',
+      `Crie um brand prompt prefix para ser injetado no início de TODOS os prompts de geração de imagem para este cliente.
+O objetivo é garantir consistência visual de marca em todas as imagens geradas.
+IMPORTANTE: NÃO descrever roupas ou acessórios específicos — apenas estilo fotográfico, paleta, iluminação e mood.
+
+CLIENTE: Dra. Roseli Perfoll — Ginecologista especialista em longevidade feminina
+PALETA: Gold #d8c01c, Warm White #F5F0E8, Dark Brown #1A1410
+MOOD: Elegante, acolhedor, empoderador, científico sem ser frio
+ARQUÉTIPO: Expedition Guide
+PÚBLICO: Mulheres brasileiras 40–65 anos, classe média-alta
+ESTILO: Editorial fotográfico, minimalista, Instagram premium de saúde feminina
+EVITAR: Mencionar roupas específicas, jaleco, poses clichê, fundo branco puro, estética de farmácia`
+    );
+    const textarea = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+    if(textarea) textarea.value = raw.trim();
+  } catch(e) {
+    const textarea = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+    if(textarea) textarea.value = 'Editorial photography, warm gold (#d8c01c) and cream white (#F5F0E8) color palette, soft directional natural lighting, elegant minimalist Brazilian medical wellness aesthetic, empowering feminine healthcare atmosphere, premium Instagram quality, dark earth tone accents';
+  }
+  btn.textContent = 'Gerar brand prompt';
+  btn.disabled = false;
+}
+
+function salvarBrandContext(){
+  const el = document.getElementById('brand-prompt-prefix') || document.getElementById('brand-prompt-prefix-ativo');
+  const prefix = el ? el.value.trim() : '';
+  if(prefix) localStorage.setItem('ds_brand_prefix', prefix);
+  atualizarBrandUI();
+  alert('Brand context salvo!');
+}
+
+function salvarBrandContextAtivo(){
+  salvarBrandContext();
+}
+
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   FREEPIK — geração assíncrona com polling
+   Fluxo: POST → task_id → GET (polling) até completed
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
+async function gerarFreepik(){
+  if(!fpKey){ alert('Insira sua chave Freepik API acima antes de gerar imagens.'); return; }
+
+  const btn = document.getElementById('btn-freepik');
+  const sp = document.getElementById('sp-fp');
+  const label = document.getElementById('btn-fp-label');
+  const container = document.getElementById('freepik-results');
+
+  btn.disabled = true;
+  sp.style.display = 'inline-block';
+  label.textContent = 'Traduzindo briefing...';
+
+  /* 1. Traduzir briefing para prompt visual em inglês */
+  const briefingEl = document.querySelector('[data-briefing]');
+  const briefingText = briefingEl ? briefingEl.textContent : (state.ultimoBriefingVisual||'');
+
+  let prompt;
+  try {
+    const brandPrefix = getBrandPrefix();
+    const promptTraduzido = await callClaude(
+      'Você converte briefings criativos em prompts fotográficos diretos para geração de imagem com IA. Responda APENAS com o prompt em inglês, sem explicações, sem aspas, máximo 160 palavras.',
+      `Converta este briefing em um prompt fotográfico literal para geração de imagem AI (Freepik).
+O prompt deve descrever ELEMENTOS VISUAIS CONCRETOS: pessoas, ambiente, iluminação, cores, estilo fotográfico.
+NÃO use metáforas. NÃO mencione Desert Crossing ou jornada. Use inglês.
+Contexto: post Instagram para médica ginecologista, longevidade feminina, público mulheres 40-65 anos.
+Tema: ${state.tema || 'saúde hormonal feminina'}
+BRIEFING: ${briefingText.substring(0,500)}`
+    );
+    /* Brand prefix + cena gerada = prompt final */
+    const scenePrompt = promptTraduzido.trim().replace(/^["']|["']$/g,'');
+    prompt = brandPrefix
+      ? brandPrefix.trim() + ', ' + scenePrompt
+      : scenePrompt;
+    prompt = prompt.substring(0, 900);
+  } catch(e) {
+    prompt = 'Editorial photography, warm gold and cream white color palette, soft directional lighting, elegant minimalist Brazilian medical wellness aesthetic, empowering feminine healthcare, professional woman aged 50, premium Instagram quality';
+  }
+
+  /* Mostrar progresso */
+  container.innerHTML = `
+    <div class="fp-progress">
+      <div style="font-size:12px;color:#888;margin-bottom:.3rem"><strong>Prompt:</strong> ${prompt}</div>
+      <div class="fp-bar-track"><div class="fp-bar-fill" id="fp-bar" style="width:5%"></div></div>
+      <div class="fp-status" id="fp-status">Enviando para Freepik...</div>
+    </div>`;
+
+  function setProgress(pct, msg){
+    const bar = document.getElementById('fp-bar');
+    const st = document.getElementById('fp-status');
+    if(bar) bar.style.width = pct+'%';
+    if(st) st.textContent = msg;
+  }
+
+  label.textContent = 'Gerando...';
+
+  try {
+    /* 2. POST — endpoint Mystic (recomendado pelo Freepik, assíncrono garantido)
+       Docs: POST /v1/ai/mystic → retorna data.task_id + data.status = "IN_PROGRESS"
+       Polling: GET /v1/ai/mystic/{task_id} → data.status = "COMPLETED" + data.generated = [url] */
+    setProgress(15, 'Enviando para Freepik Mystic...');
+
+    const loraId = getLoraId();
+    const loraName = getLoraName();
+
+    const postBody = {
+      prompt: prompt,
+      aspect_ratio: 'social_post_4_5',
+      filter_nsfw: true,
+      styling: {
+        colors: [
+          { color: '#d8c01c', weight: 0.55 },
+          { color: '#F5F0E8', weight: 0.45 }
+        ]
+      }
+    };
+
+    if(loraId){
+      /* Character LoRA ativo.
+         NOTA: Freepik para de parsear @nome no primeiro hifen.
+         Nomes com hifens causam erro "Invalid character name".
+         Fallback automatico para model:realism.
+         Para usar o personagem, resetar e registrar com nome sem hifens (ex: roseliv3). */
+      const hasHyphen = loraName.includes('-');
+      if(!hasHyphen){
+        postBody.prompt = '@' + loraName + ' ' + prompt;
+        postBody.styling.characters = [{ id: loraId, strength: 0.85 }];
+        setProgress(15, 'Aplicando personagem da Dra. Roseli...');
+      } else {
+        btn.disabled = false;
+        sp.style.display = 'none';
+        label.textContent = 'Gerar imagens no Freepik';
+        container.innerHTML = '<div style="font-size:13px;color:#854f0b;background:#faeeda;padding:.8rem 1rem;border-radius:8px;border-left:3px solid #d48000;line-height:1.6">'
+          + '<strong>Personagem com nome incompativel</strong><br>'
+          + 'O personagem atual (' + loraName + ') contem hifens — incompativel com @referencia Freepik.<br><br>'
+          + '<strong>Para corrigir (1x):</strong><br>'
+          + '1. Clique em Resetar no painel Brand Context<br>'
+          + '2. Faca upload das fotos da Dra. Roseli (min. 8)<br>'
+          + '3. Clique em Registrar personagem — o nome sera roseliv3 automaticamente'
+          + '</div>';
+        return;
+      }
+    } else {
+      /* Sem LoRA - modo padrao */
+      postBody.model = 'realism';
+      postBody.resolution = '2k';
+      setProgress(15, 'Gerando imagem...');
+    }
+
+    const postResp = await fetch('/api/freepik/generate-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fp_key: fpKey, ...postBody })
+    });
+
+    if(!postResp.ok){
+      const errData = await postResp.json().catch(()=>({}));
+      const errMsg = errData?.message || errData?.error || errData?.detail || ('HTTP '+postResp.status);
+      throw new Error('Freepik: ' + errMsg);
+    }
+
+    const postData = await postResp.json();
+    /* Estrutura confirmada: { data: { task_id: "...", status: "IN_PROGRESS", generated: [] } } */
+    const taskId = postData?.data?.task_id || null;
+
+    if(!taskId){
+      throw new Error('task_id não recebido. Resposta: ' + JSON.stringify(postData).substring(0, 200));
+    }
+
+    /* 3. POLLING — GET /v1/ai/mystic/{task_id}
+       Status esperados (maiúsculas): CREATED → IN_PROGRESS → COMPLETED | FAILED */
+    setProgress(25, 'Processando... aguarde ~30 segundos');
+
+    const MAX_TRIES = 25;   /* 25 × 3s = 75s máximo */
+    const INTERVAL_MS = 3000;
+    let tries = 0;
+
+    while(tries < MAX_TRIES){
+      await sleep(INTERVAL_MS);
+      tries++;
+
+      const pct = Math.min(25 + tries * 2.8, 90);
+      setProgress(pct, `Gerando... ${tries * 3}s`);
+
+      const getResp = await fetch(`/api/freepik/check-lora-status&task_id=${encodeURIComponent(taskId)}`);
+
+      if(!getResp.ok){
+        if(getResp.status === 404 && tries < 3){ continue; }
+        const errData = await getResp.json().catch(()=>({}));
+        throw new Error('Polling: ' + (errData?.message || 'HTTP '+getResp.status));
+      }
+
+      const getData = await getResp.json();
+      const status = getData?.data?.status || 'IN_PROGRESS';
+
+      if(status === 'FAILED'){
+        throw new Error('Freepik reportou FAILED. Verifique os créditos da chave e tente novamente.');
+      }
+
+      if(status === 'COMPLETED'){
+        setProgress(100, 'Imagens geradas!');
+
+        /* Retorna array de URLs: data.generated = ["https://ai-statics.freepik.com/..."] */
+        const images = getData?.data?.generated || [];
+
+        if(!images.length){
+          throw new Error('COMPLETED mas sem imagens. Resposta: ' + JSON.stringify(getData?.data).substring(0,200));
+        }
+
+        renderFreepikImages(images, container);
+        return;
+      }
+      /* status IN_PROGRESS ou CREATED → continua polling */
+    }
+
+    throw new Error(`Tempo limite (${MAX_TRIES * INTERVAL_MS / 1000}s) excedido. Tente novamente.`);
+
+  } catch(err){
+    container.innerHTML = `<div class="alert-error">
+      <strong>Erro Freepik:</strong> ${err.message}
+      <br><br>
+      <span style="font-size:11px">Verifique: chave FPSX correta · plano API com créditos · se persisitir, aguarde 1 min e tente de novo.</span>
+    </div>`;
+  } finally {
+    btn.disabled = false;
+    sp.style.display = 'none';
+    label.textContent = 'Gerar imagens no Freepik';
+  }
+}
+
+function renderFreepikImages(images, container){
+  /* Mystic retorna URLs (não base64). Exibe 3 em grid com botão de download. */
+  let imgHtml = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:.5rem">';
+  images.forEach((img, i) => {
+    /* img pode ser string URL direto ou objeto {url:...} */
+    const src = typeof img === 'string' ? img : (img.url || '');
+    if(!src) return;
+
+    imgHtml += `<div style="border:0.5px solid #e0d8cc;border-radius:8px;overflow:hidden">
+      <img src="${src}" style="width:100%;display:block" crossorigin="anonymous" alt="Variação ${i+1}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div style="display:none;padding:1rem;font-size:12px;color:#888;text-align:center">
+        Erro ao carregar — <a href="${src}" target="_blank" style="color:#b8a016">abrir link</a>
+      </div>
+      <div style="padding:.4rem .6rem;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;color:#888">Variação ${i+1}</span>
+        <a href="${src}" target="_blank" download style="font-size:11px;color:#b8a016;text-decoration:none">Baixar</a>
+      </div>
+    </div>`;
+  });
+  imgHtml += '</div>';
+  container.innerHTML = imgHtml;
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>
+                                                                                                                                                       

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeedMax</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00C8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+          <polyline points="16 7 22 7 22 13"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">FeedMax</span>
+        <span class="logo-sub">Social Intelligence</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-view="radar-social">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Radar Social
+      </a>
+      <a href="/studio.html" class="nav-item" id="btn-studio">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Criar Conteudo
+      </a>
+      <a href="#" class="nav-item" data-view="salvas">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Analises Salvas
+      </a>
+    </nav>
+
+    <div class="sidebar-section sidebar-account">
+      <span class="section-label">Conta</span>
+      <a href="#" class="nav-item" data-view="configuracoes">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Configuracoes
+      </a>
+    </div>
+
+    <div class="sidebar-status" id="sidebar-status">
+      <div class="status-dot status-ok"></div>
+      <span>Verificando...</span>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="main-wrapper">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title" id="page-title">Radar Social</h1>
+        <p class="page-subtitle" id="page-subtitle">Inteligencia de concorrentes em redes sociais</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-icon" id="topbar-theme" title="Alternar tema" aria-label="Alternar tema claro/escuro">
+          <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="btn btn-secondary" id="topbar-export">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exportar
+        </button>
+        <button class="btn btn-primary" id="topbar-nova">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Analisar perfil
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="page-content">
+
+      <!-- METRICS -->
+      <div class="metrics-grid" id="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon icon-blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metric-total">0</span>
+            <span class="metric-label">Perfis analisados</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon icon-red">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metric-instagram">0</span>
+            <span class="metric-label">Instagram</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon icon-green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metric-linkedin">0</span>
+            <span class="metric-label">LinkedIn</span>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon icon-amber">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="metric-body">
+            <span class="metric-value" id="metric-avg-score">--</span>
+            <span class="metric-label">Score medio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== RADAR SOCIAL VIEW ===== -->
+      <div id="view-radar-social" class="view active">
+        <div class="filter-bar">
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">Todos</button>
+            <button class="filter-tab" data-filter="instagram">
+              <span class="filter-dot dot-instagram"></span>Instagram
+            </button>
+            <button class="filter-tab" data-filter="linkedin">
+              <span class="filter-dot dot-linkedin"></span>LinkedIn
+            </button>
+          </div>
+          <span class="leads-count" id="profiles-count">0 perfis</span>
+        </div>
+
+        <div id="profiles-grid" class="leads-grid"></div>
+
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon">
+            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <h3>Nenhum perfil analisado</h3>
+          <p>Analise o perfil de um concorrente no Instagram ou LinkedIn para comecar.</p>
+          <button class="btn btn-primary" id="empty-cta">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Analisar primeiro perfil
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== ANALISES SALVAS ===== -->
+      <div id="view-salvas" class="view">
+        <div id="salvas-empty" class="empty-state hidden">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <h3>Nenhuma analise salva</h3>
+          <p>Analise perfis no Radar Social para eles aparecerem aqui.</p>
+        </div>
+        <div id="salvas-grid" class="profiles-grid"></div>
+      </div>
+
+      <!-- ===== CONFIGURACOES ===== -->
+      <div id="view-configuracoes" class="view">
+        <div class="config-panel">
+          <h3 class="config-title">Configuracoes</h3>
+
+          <!-- Brand Setup -->
+          <div class="config-section">
+            <h4>Brand Setup do Cliente</h4>
+            <p class="config-desc">Cadastre o cliente e registre o personagem no Freepik para geração de imagens com rosto preservado. Feito uma única vez por cliente.</p>
+
+            <div class="brand-setup-card" id="brand-setup-card">
+              <!-- Status do personagem -->
+              <div class="brand-status-bar" id="brand-status-bar">
+                <span class="status-dot status-warn"></span>
+                <span id="brand-status-text">Carregando...</span>
+                <button class="btn-link" id="brand-reset-btn" style="display:none" onclick="resetarPersonagem()">Resetar</button>
+              </div>
+
+              <!-- Formulário de dados do cliente -->
+              <div class="brand-form" id="brand-form">
+                <div class="brand-form-row">
+                  <div class="form-group">
+                    <label class="form-label">Nome do cliente</label>
+                    <input type="text" id="bs-nome" class="form-input" placeholder="Ex: Dra. Roseli Perfoll">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Especialidade</label>
+                    <input type="text" id="bs-especialidade" class="form-input" placeholder="Ex: Ginecologia · Longevidade Feminina">
+                  </div>
+                </div>
+                <div class="brand-form-row">
+                  <div class="form-group">
+                    <label class="form-label">Cidade</label>
+                    <input type="text" id="bs-cidade" class="form-input" placeholder="Ex: Balneário Camboriú">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Instagram</label>
+                    <input type="text" id="bs-instagram" class="form-input" placeholder="@handle">
+                  </div>
+                </div>
+                <!-- Identidade Visual -->
+                <div class="config-section-divider" style="margin:16px 0 12px"></div>
+                <h5 style="font-size:12px;font-weight:600;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px">Identidade Visual</h5>
+
+                <div class="brand-form-row">
+                  <div class="form-group">
+                    <label class="form-label">Fundo escuro</label>
+                    <div style="display:flex;gap:6px;align-items:center">
+                      <input type="color" id="bs-iv-bg-escuro-picker" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;border-radius:4px" title="Escolher cor">
+                      <input type="text" id="bs-iv-bg-escuro" class="form-input" placeholder="#1A1410" style="font-family:monospace">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Fundo claro</label>
+                    <div style="display:flex;gap:6px;align-items:center">
+                      <input type="color" id="bs-iv-bg-claro-picker" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;border-radius:4px" title="Escolher cor">
+                      <input type="text" id="bs-iv-bg-claro" class="form-input" placeholder="#F5F0E8" style="font-family:monospace">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="brand-form-row">
+                  <div class="form-group">
+                    <label class="form-label">Cor de acento</label>
+                    <div style="display:flex;gap:6px;align-items:center">
+                      <input type="color" id="bs-iv-acento-picker" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;border-radius:4px" title="Escolher cor">
+                      <input type="text" id="bs-iv-acento" class="form-input" placeholder="#d8c01c" style="font-family:monospace">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Cor do texto</label>
+                    <div style="display:flex;gap:6px;align-items:center">
+                      <input type="color" id="bs-iv-texto-picker" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;border-radius:4px" title="Escolher cor">
+                      <input type="text" id="bs-iv-texto" class="form-input" placeholder="#F5F0E8" style="font-family:monospace">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="brand-form-row">
+                  <div class="form-group">
+                    <label class="form-label">Cor de apoio (muted)</label>
+                    <div style="display:flex;gap:6px;align-items:center">
+                      <input type="color" id="bs-iv-muted-picker" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;border-radius:4px" title="Escolher cor">
+                      <input type="text" id="bs-iv-muted" class="form-input" placeholder="#9A8F7A" style="font-family:monospace">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="brand-form-row">
+                  <div class="form-group">
+                    <label class="form-label">Fonte dos títulos</label>
+                    <input type="text" id="bs-iv-fonte-titulo" class="form-input" placeholder="Ex: Blacker Sans Display">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Fonte do corpo</label>
+                    <input type="text" id="bs-iv-fonte-corpo" class="form-input" placeholder="Ex: RoxboroughCF">
+                  </div>
+                </div>
+
+                <div class="brand-form-row">
+                  <div class="form-group" style="flex:1">
+                    <label class="form-label">Mood (palavras-chave para o gerador de imagens)</label>
+                    <input type="text" id="bs-iv-mood" class="form-input" placeholder="Ex: medical luxury, feminine authority, warm dark">
+                  </div>
+                </div>
+
+                <div class="brand-form-row">
+                  <div class="form-group" style="flex:1">
+                    <label class="form-label">Negativo (o que evitar nas imagens)</label>
+                    <input type="text" id="bs-iv-negativo" class="form-input" placeholder="Ex: neon, cold whites, casual aesthetics">
+                  </div>
+                </div>
+
+                <button class="btn btn-secondary" id="btn-salvar-cliente" onclick="salvarCliente()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Salvar dados do cliente
+                </button>
+              </div>
+
+              <!-- Upload de fotos para LoRA (só aparece após salvar dados) -->
+              <div class="brand-lora-section" id="brand-lora-section" style="display:none">
+                <div class="config-section-divider"></div>
+                <h4 style="font-size:13px;margin-bottom:.4rem">Registrar personagem no Freepik</h4>
+                <p class="config-desc" style="margin-bottom:.8rem">Faça upload de 8 a 20 fotos (closes do rosto, ângulos variados, sem óculos de sol). Feito uma única vez.</p>
+                <div class="brand-upload-zone" id="bs-upload-zone" onclick="document.getElementById('bs-photos-input').click()">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span id="bs-upload-label">Clique para selecionar fotos</span>
+                  <span style="font-size:11px;color:var(--text-4)">JPG ou PNG · mín. 8, máx. 20</span>
+                </div>
+                <input type="file" id="bs-photos-input" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="processarFotosBS(this)">
+                <div id="bs-photos-count" style="font-size:12px;color:var(--text-3);margin-top:.4rem"></div>
+                <button class="btn btn-primary" id="btn-registrar-personagem" onclick="registrarPersonagemBS()" style="margin-top:.8rem;display:none">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Registrar personagem
+                </button>
+                <div id="bs-lora-progress" style="display:none;margin-top:.8rem">
+                  <div style="background:var(--border);border-radius:4px;height:4px"><div id="bs-lora-bar" style="background:var(--accent);height:4px;border-radius:4px;transition:width .5s ease;width:5%"></div></div>
+                  <div id="bs-lora-status" style="font-size:12px;color:var(--text-3);margin-top:.4rem">Iniciando treinamento...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scraping -->
+          <div class="config-section">
+            <h4>Scraping de Redes Sociais</h4>
+            <p class="config-desc">Configure sua chave Apify para scraping real de perfis. Sem a chave, o sistema usa analise inteligente do Claude.</p>
+            <div class="config-status" id="config-apify-status">
+              <span class="status-dot status-warn"></span>
+              <span>Verificando...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CRIAR CONTEUDO ===== -->
+      <div id="view-conteudo" class="view">
+        <div class="studio-tabs">
+          <button class="studio-tab active" data-tab="calendario">Calendario Editorial</button>
+          <button class="studio-tab" data-tab="legenda">Gerar Legenda</button>
+        </div>
+
+        <!-- CALENDARIO -->
+        <div id="studio-calendario" class="studio-panel active">
+          <div class="studio-controls">
+            <div class="studio-control-row">
+              <div class="studio-field">
+                <label class="studio-label">Mes</label>
+                <select id="cal-month" class="studio-select">
+                  <option value="Janeiro">Janeiro</option>
+                  <option value="Fevereiro">Fevereiro</option>
+                  <option value="Marco">Marco</option>
+                  <option value="Abril" selected>Abril</option>
+                  <option value="Maio">Maio</option>
+                  <option value="Junho">Junho</option>
+                  <option value="Julho">Julho</option>
+                  <option value="Agosto">Agosto</option>
+                  <option value="Setembro">Setembro</option>
+                  <option value="Outubro">Outubro</option>
+                  <option value="Novembro">Novembro</option>
+                  <option value="Dezembro">Dezembro</option>
+                </select>
+              </div>
+              <div class="studio-field">
+                <label class="studio-label">Ano</label>
+                <select id="cal-year" class="studio-select">
+                  <option value="2025">2025</option>
+                  <option value="2026" selected>2026</option>
+                  <option value="2027">2027</option>
+                </select>
+              </div>
+              <div class="studio-field studio-field-grow">
+                <label class="studio-label">Foco do mes (opcional)</label>
+                <input type="text" id="cal-focus" class="studio-input" placeholder="Ex: menopausa, longevidade ossea...">
+              </div>
+              <button id="btn-gerar-cal" class="btn btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Gerar Calendario
+              </button>
+            </div>
+          </div>
+          <div id="cal-results" class="studio-results"></div>
+        </div>
+
+        <\!-- LEGENDA -->
+        <div id="studio-legenda" class="studio-panel">
+          <div class="studio-controls">
+            <div class="studio-control-row">
+              <div class="studio-field studio-field-grow">
+                <label class="studio-label">Tema do post</label>
+                <input type="text" id="cap-tema" class="studio-input" placeholder="Ex: menopausa e qualidade do sono...">
+              </div>
+              <div class="studio-field">
+                <label class="studio-label">Formato</label>
+                <select id="cap-formato" class="studio-select">
+                  <option value="Carrossel">Carrossel</option>
+                  <option value="Post estatico">Post estatico</option>
+                  <option value="Reels">Reels</option>
+                  <option value="Stories">Stories</option>
+                </select>
+              </div>
+              <div class="studio-field">
+                <label class="studio-label">Plataforma</label>
+                <select id="cap-plataforma" class="studio-select">
+                  <option value="Instagram">Instagram</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                </select>
+              </div>
+              <button id="btn-gerar-cap" class="btn btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Gerar Legenda
+              </button>
+            </div>
+          </div>
+          <div id="cap-results" class="studio-results"></div>
+        </div>
+      </div>
+    </div>
+    </main>
+  </div>
+
+  <div id="panel-overlay" class="panel-overlay"></div>
+  <div id="detail-panel" class="approach-panel">
+    <div class="panel-header">
+      <div class="panel-company-info">
+        <div id="panel-avatar" class="panel-avatar">??</div>
+        <div>
+          <div id="panel-username" class="panel-company-name">@perfil</div>
+          <div id="panel-platform" class="panel-sector">Instagram</div>
+        </div>
+      </div>
+      <button id="panel-close" class="panel-close-btn" title="Fechar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="panel-score-bar" class="panel-score-bar score-bar-frio">
+      <div class="panel-score-label">Score geral</div>
+      <div>
+        <div id="panel-score" class="panel-score-value">0</div>
+        <div id="panel-engagement-label" class="panel-score-sub">Engajamento: --</div>
+      </div>
+    </div>
+    <div id="panel-body" class="panel-body"></div>
+    <div class="panel-footer">
+      <button id="panel-copy" class="btn btn-secondary">Copiar analise</button>
+      <button id="panel-close-btn2" class="btn btn-secondary">Fechar</button>
+    </div>
+  </div>
+
+  <div id="modal-profile" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Analisar perfil</h3>
+        <button class="modal-close" data-close="modal-profile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-error hidden"></div>
+        <div class="form-group">
+          <label class="form-label">Plataforma</label>
+          <div class="platform-selector">
+            <button class="platform-btn active" data-platform="instagram">Instagram</button>
+            <button class="platform-btn" data-platform="linkedin">LinkedIn</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Username ou URL do perfil</label>
+          <input type="text" id="profile-username" class="form-input" placeholder="@usuario ou instagram.com/usuario">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Dados manuais (opcional)</label>
+          <textarea id="profile-extra" class="form-textarea" rows="3" placeholder="Cole aqui bio, seguidores ou contexto adicional..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close="modal-profile">Cancelar</button>
+        <button id="btn-analyze-profile" class="btn btn-primary"><span>Analisar</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: PACOTE FREEPIK [DATASCOUT] ===== -->
+  <div id="modal-freepik-pkg" class="modal-overlay">
+    <div class="modal" style="max-width:560px;width:100%">
+      <div class="modal-header">
+        <h3>Gerar para Freepik</h3>
+        <button class="modal-close" id="fp-pkg-close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Painel de configuração (visível antes de gerar) -->
+      <div class="modal-body" id="fp-pkg-config">
+        <p style="font-size:13px;color:var(--text-3);margin-bottom:16px">
+          Claude vai gerar o copy dos 7 slides e montar o pacote <code style="background:var(--bg-hover);padding:1px 6px;border-radius:4px;font-size:12px">[DATASCOUT]</code> pronto para colar no Cowork.
+        </p>
+
+        <!-- Toggle personagem -->
+        <div style="margin-bottom:20px">
+          <p style="font-size:12px;font-weight:600;color:var(--text-3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Imagem do carrossel</p>
+          <div style="display:flex;gap:8px" id="fp-pkg-toggle-wrap">
+            <button class="fp-pkg-toggle-btn active" id="fp-btn-sem" onclick="fpPkgSetPersonagem(false)">
+              Sem personagem
+            </button>
+            <button class="fp-pkg-toggle-btn" id="fp-btn-com" onclick="fpPkgSetPersonagem(true)">
+              Com personagem (LoRA)
+            </button>
+          </div>
+          <p style="font-size:11px;color:var(--text-3);margin-top:6px" id="fp-pkg-lora-hint"></p>
+        </div>
+
+        <!-- Tema do post (readonly, exibição) -->
+        <div style="background:var(--bg-hover);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:16px">
+          <p style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Tema</p>
+          <p style="font-size:13px;color:var(--text-1)" id="fp-pkg-tema-label">—</p>
+        </div>
+
+        <div class="modal-error hidden" id="fp-pkg-error"></div>
+      </div>
+
+      <!-- Loading -->
+      <div class="modal-body" id="fp-pkg-loading" style="display:none;text-align:center;padding:32px 24px">
+        <div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px"></div>
+        <p style="font-size:14px;font-weight:600;color:var(--text-1)">Gerando copy com Claude...</p>
+        <p style="font-size:12px;color:var(--text-3);margin-top:4px">Escrevendo os 7 slides</p>
+      </div>
+
+      <!-- Resultado -->
+      <div class="modal-body" id="fp-pkg-result" style="display:none">
+        <p style="font-size:12px;color:var(--text-3);margin-bottom:8px">Copie tudo abaixo e cole no Claude Cowork:</p>
+        <textarea id="fp-pkg-output" readonly
+          style="width:100%;height:320px;background:var(--bg-hover);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:11.5px;color:var(--text-1);resize:none;line-height:1.6"></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <!-- Estado: config -->
+        <div id="fp-pkg-footer-config" style="display:flex;gap:8px;width:100%">
+          <button class="btn btn-secondary" id="fp-pkg-close2">Cancelar</button>
+          <button class="btn btn-primary" id="fp-pkg-gerar" onclick="fpPkgGerar()" style="margin-left:auto">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Gerar pacote
+          </button>
+        </div>
+        <!-- Estado: resultado -->
+        <div id="fp-pkg-footer-result" style="display:none;gap:8px;width:100%">
+          <button class="btn btn-secondary" onclick="fpPkgReset()">← Regerar</button>
+          <button class="btn btn-primary" onclick="fpPkgCopiar()" style="margin-left:auto">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar tudo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
+                                                                                                     
