@@ -21,10 +21,11 @@ const contentRoutes = require('./routes/content');
 const clientRoutes  = require('./routes/client');
 const freepikRoutes = require('./routes/freepik');
 
-app.use('/api/social',  socialRoutes);
-app.use('/api/content', contentRoutes);
-app.use('/api/client',  clientRoutes);
-app.use('/api/freepik', freepikRoutes);
+app.use('/api/social',    socialRoutes);
+app.use('/api/content',  contentRoutes);
+app.use('/api/client',   clientRoutes);
+app.use('/api/freepik',  freepikRoutes);
+app.use('/api/profiles', require('./routes/profiles'));
 
 // Inicializar Apify Client
 const apifyClient = new ApifyClient({

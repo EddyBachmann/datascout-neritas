@@ -109,16 +109,15 @@ const state = {
 
 document.addEventListener('DOMContentLoaded', function() {
   initTheme();
-  loadProfiles();
   setupNavigation();
   setupModals();
   setupFilters();
   setupDetailPanel();
   setupContentStudio();
   setupBrandSetup();
-  renderMetrics();
-  renderProfiles();
   checkHealth();
+  // Carrega perfis do servidor (com fallback para localStorage)
+  loadProfilesFromServer();
 });
 
 // =============================================
@@ -372,6 +371,7 @@ function extractUsername(raw) {
 // PROFILES MANAGEMENT
 // =============================================
 
+// Carrega perfis do localStorage (cache local — usado como fallback)
 function loadProfiles() {
   try {
     var saved = localStorage.getItem('ds_social_profiles');
@@ -383,42 +383,78 @@ function loadProfiles() {
   }
 }
 
+// Carrega perfis do servidor (fonte de verdade) com fallback para localStorage
+function loadProfilesFromServer() {
+  fetch('/api/profiles')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var serverProfiles = Array.isArray(data.profiles) ? data.profiles : [];
+      if (serverProfiles.length > 0) {
+        // Servidor tem dados — usa como fonte de verdade
+        state.profiles = serverProfiles;
+        // Sincroniza localStorage com o servidor
+        try { localStorage.setItem('ds_social_profiles', JSON.stringify(serverProfiles)); } catch(_) {}
+      } else {
+        // Servidor vazio — tenta recuperar do localStorage (primeira vez / volume não configurado)
+        loadProfiles();
+        if (state.profiles.length > 0) {
+          // Migra localStorage para o servidor
+          _syncProfilesToServer(state.profiles);
+        }
+      }
+      renderMetrics();
+      renderProfiles();
+    })
+    .catch(function(e) {
+      // Sem conexão — usa localStorage como fallback
+      console.warn('[FeedMax] loadProfilesFromServer falhou, usando localStorage:', e.message);
+      loadProfiles();
+      renderMetrics();
+      renderProfiles();
+    });
+}
+
 // Flag explícita que autoriza saveProfiles a gravar array vazio.
-// Só é setada em operações legítimas (deleteProfile removendo o último perfil).
-// Qualquer outra tentativa de gravar [] por cima de dados existentes é bloqueada.
 var _allowEmptySave = false;
+
+// Envia perfis para o servidor (fire-and-forget com retry silencioso)
+function _syncProfilesToServer(profiles) {
+  fetch('/api/profiles', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profiles: profiles }),
+  }).catch(function(e) {
+    console.warn('[FeedMax] sync servidor falhou (salvo no localStorage):', e.message);
+  });
+}
 
 function saveProfiles() {
   try {
-    // GUARDA DEFENSIVA: impede sobrescrever localStorage não-vazio com []
-    // quando ninguém setou o flag explícito. Esse é o fail-safe contra
-    // qualquer caminho de código (conhecido ou não) que chame saveProfiles
-    // com state.profiles zerado sem passar pelo deleteProfile.
+    // GUARDA DEFENSIVA: impede sobrescrever dados com array vazio acidentalmente
     if (state.profiles.length === 0 && !_allowEmptySave) {
       var existing = localStorage.getItem('ds_social_profiles');
       if (existing) {
         try {
           var prev = JSON.parse(existing);
           if (Array.isArray(prev) && prev.length > 0) {
-            console.error(
-              '[FeedMax] BLOQUEADO: saveProfiles chamado com array vazio ' +
-              'enquanto localStorage tinha ' + prev.length + ' perfil(s). ' +
-              'Restaurando estado a partir do localStorage.'
-            );
+            console.error('[FeedMax] BLOQUEADO: saveProfiles com array vazio — restaurando.');
             console.trace('[FeedMax] stack trace da chamada bloqueada');
             state.profiles = prev;
             renderMetrics();
             renderProfiles();
             return;
           }
-        } catch (_) { /* se o parse falhar, continua e sobrescreve */ }
+        } catch (_) {}
       }
     }
+    // 1. Salva no localStorage (cache local imediato)
     localStorage.setItem('ds_social_profiles', JSON.stringify(state.profiles));
+    // 2. Sincroniza com o servidor (persistência cross-device)
+    _syncProfilesToServer(state.profiles);
   } catch (e) {
-    console.warn('[FeedMax] localStorage cheio:', e);
+    console.warn('[FeedMax] saveProfiles error:', e);
   } finally {
-    _allowEmptySave = false; // reset sempre após tentativa de save
+    _allowEmptySave = false;
   }
 }
 
